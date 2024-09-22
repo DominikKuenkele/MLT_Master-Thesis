@@ -1,21 +1,15 @@
 \section{Analysis of the emerged languages}
 \label{sec:analysis_language}
-The languages that emerge are analyzed in two ways.
-First, for each language that emerges through successful communication, a score is calculated that represents the similarity of the messages to valid English referring expressions.
-In a second step, several languages are analyzed qualitatively, to determine what certain symbols mean and what they might refer to in the visual scenes.
-\cmtDK[inline]{talks about why and which few languages}
-\cmtDK[inline]{chosen salience order might be due to number of possibilities (more efficient to exclude larger number of distractors instantly)}
-
-To compare the emerged language to English \textbf{quantitatively}, a probing approach is used.
-Probing can be used to analyze and interpret the hidden representations in neural networks.
-Hereby, a second neural model is trained to predict selected linguistic properties on the basis of the hidden representations.
-If this model is successfully able to predict the linguistic properties, the hidden representations are connected to them.
-If second model can't be trained, it indicates that there is no correlation between the hidden representation and the linguistic property.
-In the case of the emerged language, a neural model is trained to translate the messages of the sender into English referring expressions, based on the GRE algorithm by \citet{Dale1995}.
-Recall, that this incremental is based on an order in salience for the attributes.
+The languages that emerge are analyzed quantitatively, using a probing approach.
+Probing can be used to analyze and interpret the hidden representations in neural networks \citep{Conneau2018}.
+Hereby, a second neural model is trained to classify selected linguistic features on the basis of the hidden representations.
+The model is expected to be able to easily fit the linguistic features it classifies for.
+This is considered as evidence that these features are expressed in the underlying hidden representations of the main model.
+In the case of the emerged language, a simple encoder-decoder model is trained to translate the world of the agents, expressed by their messages, into English referring expressions, based on the GRE algorithm by \citet{Dale1995}.
+Recall, that this incremental algorithm is based on an order in salience for the attributes.
 In English, \citet{Dale1995} propose the order of \emph{shape} > \emph{color} > \emph{size}.
 However, there is no policy for the agents, that enforces specifically this order or indeed any salience order.
-For this reason, the emerged languages are compared to all possible salience orders, given the three attributes \emph{shape}, \emph{color} and \emph{size}.
+For this reason, the emerged languages are compared to all six possible salience orders, given the three attributes \emph{shape}, \emph{color} and \emph{size}.
 This will show if first, the languages follow any salience order and secondly, which attributes are more important for the agents to communicate.
 % SD: The probing test is to show how well the emerged language can be trasnlated into English descriptions consistting of labels of scene features using Dale and Reiter idea of incrementality. However, we would need to know now what was the policy of the sender to generate message. Was this similar to Dale and Reiter to enforce longer descriptions?
 % DK: done
@@ -27,9 +21,8 @@ The dimension of the linear layer is kept small to prevent memorizing the datase
 The resulting vector is used as the initial state of the decoder LSTM.
 The decoder LSTM is then trained to produce the English referring expression.
 Both LSTMs have an embedding dimension of $LSTM_e=10$ and a hidden size of $LSTM_{out}=10$, while the linear layer has a size of $l=10$.
-During decoding, teacher forcing is applied.
 The success of the model is validated calculating cross entropy between the models predictions and the target English referring expression.
-Since generalization doesn't play a role for probing, no dropout is applied and the model is trained and validated on the complete dataset; no test or validation split is used.
+Since the probing task only focuses on how well the given messages of the agents can be related to English referring expressions, no dropout is applied, and the model is trained and validated on the complete dataset; no test or validation split is used.
 The models are trained for 200 epochs with a learning rate of $lr=0,004$ and a batch size of 32 samples per batch.
 
 The translation model will learn two characteristics with this setup.
@@ -55,13 +48,7 @@ A loss close to $L_{baseline}$ will lead to 100\%, while a loss as $L_{English}$
 By doing this, all configurations can be compared directly to each other.
 The lower $L_{norm}$, the higher the correlation between the emerged language and English referring expressions.
 
-Tables \ref{tab:probing:discriminator:dale-2} to \ref{tab:probing:attention-predictor:colour} show the normalized losses $L_{norm}$ of the probing for the different tasks on all three datasets.
-Hereby, only languages are listed for experiments in which the agents communicated successfully, that is $L_{norm}$ is lower than 100\%.
-The first thing that can be noticed is that across almost all languages emerged through successful communication, $L_{norm}$ is lower than 100\% with at least one salience order, which shows that they make use of the attributes in some way.
-On the other side, no language reaches an $L_{norm}$ close to 0, that is no language correlates perfectly with English referring expressions.
-The closest is a language with $L_{norm}$ just above 40\%.
-This shows that while many emerged languages have similarities with English, they make use of either other additional visual characteristics in the scenes or use different linguistic structures.
-
+Tables \ref{tab:probing:discriminator:dale-2} to \ref{tab:probing:attention-predictor:colour} will show the normalized losses $L_{norm}$ of the probing for the different tasks on all three datasets.
 In the following paragraphs, languages will be referred to by their message length $n$ and their vocabulary size $|V|$ as $Lang_{n,|V|}$.
 
 % \begin{table}[ht]
@@ -224,6 +211,4 @@ In the following paragraphs, languages will be referred to by their message leng
 % Following, the agents also encode some additional underlying attributes and patterns to the three above defined attributes.
 % % SD: But this is slightly problematic, since we strcutured the world this way to emphasise these attributes visually. Hence, a mapping would indicate that the symbols have good semantics if they can discriminate the colours. But this could have to do with the compisitionality issue, perhaps the system was biased to use single word expressions and hence this interfered with the grounding.
 % % DK: TODO
-
-\cmtDK[inline]{qualitative analysis}
 
