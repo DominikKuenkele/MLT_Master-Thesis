@@ -1,2 +1,58 @@
 \section{Conclusion and future work}
 \label{sec:conclusion}
+
+This thesis aims to study the generation and comprehension of referring expressions in language games.
+Hereby, two agents, a sender and a receiver, are tasked to solve tasks together by learning and communicating messages in an emerged language.
+More specifically, the agents learn to ground referring expressions that describe objects in visual scenes.
+As the agents will exploit all present biases in the datasets, three new artificial datasets are created where these biases are precisely controlled for.
+Objects in the visual scene have three attributes, \emph{shape}, \emph{size} and \emph{color}.
+The target object is uniquely identifiable, while distractors have at least one differing attribute.
+While the 'Dale-2' dataset contains only one distractor, the 'Dale-5' dataset contains four distractors.
+In the 'CLEVR color' dataset, the \emph{color} is the only attribute that is different, while all other attributes are shared between the target object and the distractors.
+The agents are expected to use these specific patterns to refer to a target object and respectively comprehend the generated referring expression.
+All unwanted bias is reduced by randomizing the creation of the visual scenes, so that the neural models can only use the attributes instead.
+
+To validate that neural models are able to use this controlled bias, several neural models are trained to solve tasks on these datasets.
+The results on the \emph{object identification} task show that the models are able to comprehend referring expressions and ground them in bounding boxes, as they can consistently point to the correct target object.
+In the \emph{referring expression generation} tasks, the models can successfully extract visual features and generate referring expressions to discriminate the target object from the distractors.
+While the task is solved very well when presented with bounding boxes, the models struggle more when presented with the complete scene at once, especially when many objects are present.
+However, the scores are far above random guesses and show that the introduced bias in the datasets can be exploited.
+Finally, the models learn to combine geometric information with the extracted visual features in the \emph{reference resolution} task.
+The models only manage to predict precise coordinates of the target object given a referring expression when two objects are present.
+On the other side, when tasked to attend to rougher regions around the target object instead, the models are able to solve the task almost perfectly on all datasets.
+This shows that again that the bias in the dataset is enough to ground referring expressions in a spatial context.
+
+In the next step the two agents are trained on the same tasks.
+The increased complexity in the architecture of the language games shows in the results.
+The agents have more difficulties to solve the tasks.
+However, in almost all tasks, the agents manage to ground some information in referring expressions of the emerged language.
+The datasets and the tasks have hereby the highest influence on the success of grounding referring expressions.
+The simpler 'Dale-2' dataset allows the agents to ground referring expressions the best in their messages.
+While the agents are still able to solve the tasks in many language games on the 'Dale-5' dataset, they have the biggest problems on the 'CLEVR color' dataset.
+The main reason seems to be the increased number of distractors in combination with extracting features from the whole visual scene as opposed to bounding boxes for each object.
+Additionally, the results suggest difference of difficulties between the attributes.
+The \emph{shape} and \emph{size} seem to be grounded easier than the \emph{color}.
+
+Finally, looking closer at the emerged languages, it can be seen that the used referring expressions don't align perfectly with any referring expression that would be common in English.
+Interestingly, as common in English referring expressions, the emerged languages seem to assign a salience order to the attributes.
+On the 'Dale' dataset, the \emph{size} seems to be the most salient attribute, followed by the \emph{shape} and lastly the \emph{color}.
+While the order is different from one used in English, the alignment can be influenced by introducing English referring expressions during training.
+Then the \emph{shape} becomes the most salient attribute.
+For the 'CLEVR color' dataset, unsurprisingly, the most salient attribute is the \emph{color}.
+However, the agents seem to utilize some other patterns apart from the three attributes.
+
+This thesis lies the basis for several future experiments.
+As discussed, some attributes seem to be grounded easier than others.
+Future work could focus on the reasons for this.
+For instance, the agents can be trained on new datasets like the 'CLEVR color' dataset where the only differing attributes are \emph{shape} and \emph{size} respectively.
+
+Secondly, the emerged languages can be studied in more depth.
+While this thesis focuses on an alignment with English referring expression, other linguistic properties like composition could give better insights in how the referring expressions are structured.
+
+Furthermore, at the moment, the sender has the same architecture across all experiments, and the adpated receiver is mainly responsible for the differences in the referring expressions.
+It would be interesting however, how the referring expressions change if the receiver is kept stable, but the sender is variable.
+This could give insights in if one agent has a bigger influence on the structure of referring expressions.
+
+Finally, communication only works in one direction, from the sender to the receiver.
+The emergence of referring expressions is therefore solely based on the final training loss of the receiver.
+It might support the agents to have a bidirectional communication in which the receiver can respond, and the agents can agree directly on referring expressions.
