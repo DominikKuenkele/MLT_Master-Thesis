@@ -1,9 +1,9 @@
 \subsection{Reference resolution}
 \label{sec:langauge-games:reference-resolution}
 \subsubsection*{Setup}
-In the final experiments, the agents are tasked to produced and understand referring expressions only based on the implicit human knowledge present in the scenes, as for example the attributes of the objects.
+In the final experiments, the agents are tasked to produce and understand referring expressions only based on the implicit human knowledge present in the scenes, as for example the attributes of the objects.
 Opposed to the previous experiments, explicit human language information as human referring expressions or one-hot encoded attributes are avoided.
-By this, the agents can't just reuse these human referring expressions, but need to learn to generate them themselves during the language games just based on the visual input.
+By this, the agents can't just reuse these human referring expressions, but they need to learn to generate them themselves during the language games only based on the visual input.
 This is done similarly to the single model reference resolution task, described in Section \ref{sec:reference_resolution}.
 As before, the sender has the same architecture as in the previous language games, encoding the bounding boxes of all objects.
 
@@ -25,7 +25,7 @@ The euclidean distance between the resulting prediction of the center point and 
     % DK: because it's a message sequence of discrete symbols (done)
 \end{figure}
 
-Secondly, in the \textbf{attention reference resolver}, the agents learn to point towards regions in the image, which is based on the \emph{attention reference resolver} described in section \ref{sec:reference_resolution}.
+Secondly, in the \textbf{attention reference resolver}, the agents learn to point towards regions in the image, which is based on the \emph{attention reference resolver} described in Section \ref{sec:reference_resolution}.
 As before, the LSTM is replaced with the \emph{EGG} LSTM to parse the sender's message with the hidden size $h_r=500$ and $e_r=100$.
 The dot product is calculated between each encoded region of the image and the encoded message, and the $softmax$ function is applied subsequently.
 Figure \ref{fig:attention_predictor_game_architecture} shows the architecture.
@@ -47,7 +47,7 @@ The following values for the variables are compared:
     \item $n$: 1, 2, 3, 4,  6
 \end{itemize}
 
-As in section \ref{sec:reference_resolution}, the agents are trained on the 'Dale-2', 'Dale-5' and 'CLEVR color' datasets to test if the agents are able to first communicate a target object and second describe the target object discriminatively with a small vocabulary.
+As in Section \ref{sec:reference_resolution}, the agents are trained on the 'Dale-2', 'Dale-5' and 'CLEVR color' datasets to test if the agents are able to first communicate a target object and secondly describe the target object discriminatively with a small vocabulary.
 The same metrics are used to evaluate the results as described in \ref{sec:reference_resolution}.
 
 \subsection*{Results}
@@ -107,10 +107,10 @@ The same metrics are used to evaluate the results as described in \ref{sec:refer
     \label{tab:results:coordinate-reference-resolver-game}
 \end{table}
 
-Figure \ref{fig:learning-curves_coordinate-predictor} show the learning curves for the \textbf{coordinate reference resolver}.
+Figure \ref{fig:learning-curves_coordinate-predictor} shows the learning curves for the \textbf{coordinate reference resolver}.
 As visible, all configurations perform exactly as the baselines across all datasets.
-The baselines show the predictions of the receiver without information of the sender, and correspond to the structural bias in the dataset.
-This shows, that the agents don't communicate successfully in any of the configurations to solve the task and predict correct coordinates.
+The baselines show the predictions of the receiver without information from the sender, and they correspond to the structural bias in the dataset.
+This shows that the agents don't communicate successfully in any of the configurations to solve the task by predicting correct coordinates.
 Table \ref{tab:results:coordinate-reference-resolver-game} shows the final results after 128.000 games on different datasets.
 When looking at how the agents fare with each dataset, not much general improvement can be seen.
 Most of the configurations don't beat the baseline, independently of the shown dataset.
@@ -118,8 +118,8 @@ If they do, they can improve the mean distance of the predicted coordinates to t
 In other words, the guesses are still not consistently precise on the target objects and the agents instead learn to point towards the center of the scene, as the single models in Section \ref{sec:referring_expression_generation}.
 However, an influence on the accuracy can be identified.
 The accuracy evaluates how many of the predictions are on the target object.
-An increase in the accuracy with a stable mean distance corresponds shows a behavior where the agents make more correct predictions on the target objects, while the wrong predictions a further away from the target object.
-As a conclusion, this can mean, that the agents' predictions, both correct and incorrect are more confident.
+An increase in the accuracy with a stable mean distance shows a behavior where the agents make more correct predictions on the target objects, while the wrong predictions are further away from the target object.
+As a conclusion, this can mean that the agents' predictions, both correct and incorrect are more confident.
 This seems to happen on the 'Dale-2' dataset.
 The mean distance is not improved, but the accuracy reaches in some configurations up to 46,27\%.
 This is an increase of around 13\% compared to the baseline.
@@ -133,8 +133,8 @@ The receiver seems to use this information to focus more on the objects.
 Since there are more distractors present in the 'Dale-5' dataset, the receiver more likely chooses one of those, as again no discriminating information about the target object seems to be transferred.
 
 Lastly, the similar pattern on the mean distance is also visible for the 'CLEVR color' dataset.
-The accuracy of the baseline is already lower to begin, and a sender can lift this score in almost all configurations.
-But as for the other datasets, the final accuracy is still low and reaches a maximum of only 25\%.
+The accuracy of the baseline is already lower to begin with, and a sender can lift this score in almost all configurations.
+But as for the other datasets, the final accuracy is still low, and it reaches a maximum of only 25\%.
 The greater number of distractors seems to raise the complexity of the task even more.
 
 These numbers align with the results of the single model, discussed in Section \ref{sec:referring_expression_generation}.
@@ -143,7 +143,7 @@ The higher complexity for the agents that includes more layers in the model as w
 The second setup in this section, the \textbf{attention reference resolver}, tries to reduce the complexity, by not predicting precise geometric locations, but instead attending to larger areas.
 The learning curves are shown in Figure \ref{fig:learning-curves_attention-predictor}.
 
-As expected, the task is solver better by the agents, and they communicate successfully across all datasets.
+As expected, the task is solved better by the agents, and they communicate successfully across all datasets.
 Compared to the experiments in the previous sections, the learning is still generally slower, and the configurations diverge from the baseline overall later.
 However, when the agents start to learn to communicate, the probability is boosted instantly to a higher level, where it again learns at a slower speed parallel to the baseline.
 On the 'Dale-2' dataset, the boost is around 40\% points.
@@ -155,7 +155,7 @@ Compared to the 'Dale-2' dataset, fewer configurations start to converge, while 
 The smaller number of learning curves makes the analysis more difficult, but the same trend about the vocabulary size and the message length is still visible.
 Interestingly, only one configuration with $|V|=2$ beats the baseline, but behaves relatively unstable over the remaining training.
 On the other hand no configuration with $|V|=100$ is successful.
-This indicates that one symbol too few to encode all meaning, but too many symbols are too difficult to learn.
+This indicates that one symbol is too few to encode all meaning, but too many symbols are too difficult to learn.
 This hypothesis is amplified by the results on the 'CLEVR color' dataset.
 Only two configurations beat the baseline, both with a medium-sized vocabulary size and message length.
 In both cases, the learning takes place relatively late, after 15.000 and 30.000 games respectively.
@@ -230,7 +230,7 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
 
 The final probability masses after 128.000 games are summed up in Table \ref{tab:results:attention-reference-resolver-game}.
 Opposed to the \emph{coordinate reference resolver}, the baseline can already find and attend to the correct regions in many cases.
-The probability mass, that is the sum of the predicted probabilities of all regions of the target object is higher than a uniform distribution (\approx 4,6\%) and a random guess of an object.
+The probability mass, that is the sum of the predicted probabilities of all regions of the target object, is higher than a uniform distribution (\approx 4,6\%) and a random guess of an object.
 It reaches 62,16\% on the 'Dale-2' dataset, 49,61\% on the 'Dale-5' dataset and 41,68\% on the 'CLEVR color' dataset.
 Interestingly, including a sender in the setup can improve the result for all dataset.
 Looking at the 'Dale-2' dataset, almost all configurations beat the baseline and achieve performances of over 90\%, the best configurations reach even 96\%.
@@ -245,7 +245,7 @@ A correlation between $n$ and $|V|$ is not identifiable.
 
 On the 'Dale-5' dataset, the agents already have bigger problems to beat the baseline.
 Only 8 out of 30 configuration perform better and reach probability masses around 76\% to 84\%.
-However, the increase compared to the baseline is with around 30\% points as high as on the 'Dale-2' dataset.
+However, the increase compared to the baseline is as high as on the 'Dale-2' dataset, with around 30\% points.
 Smaller message lengths ($n \in \{1,2,3\}$) as well as a medium-sized vocabulary ($|V| \in \{10,16,50\}$) tend to help the agents more, to solve the task successfully.
 As before, no correlation is visible with the few successful games.
 That the agents struggle more with the 'Dale-5' dataset is not surprising.
@@ -276,7 +276,7 @@ This dataset includes even up to 10 objects present in the scene which increases
         \includegraphics[width=.839\linewidth]{figures/visualization_games_colour_attention.png}
         \label{fig:visualizations_game_colour_attention}
     }
-    \caption{Examples of the \emph{attention reference resolvers'} predictions in games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section, the model is actually seeing after the image is preprocessed. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
+    \caption{Examples of the \emph{attention reference resolvers'} predictions in games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
     \label{fig:visualizations_game_attention}
 \end{figure}
 
@@ -290,12 +290,10 @@ Rather than choosing one of the distractors, the agents usually attend to both o
 This indicates that the receiver is uncertain which object the sender is describing.
 Similar errors also occur on both remaining datasets.
 In contrast, the share of errors of the latter type is drastically higher.
-Looking at the results on the 'Dale-5' dataset (see Figure \ref{fig:visualizations_game_dale-5_attention}), the model focusses usually on several objects at once.
+Looking at the results on the 'Dale-5' dataset (see Figure \ref{fig:visualizations_game_dale-5_attention}), the model usually focuses on several objects at once.
 While a general pattern is difficult to identify, the receiver tends to confuse the target object with distractors that share multiple attributes with each other.
 In the central and right image, the wrongly identified distractors share both \emph{size} and \emph{shape} with the target object.
 Finally, on the 'CLEVR color' dataset, no overall reason for the errors can be identified in the qualitative analysis.
-
-
 
 % SD: This identifies that the problem lies in how the sender encodes the messages; what is its policy to generate longer strings or reuse the word. Without a policy the sender will never be motivated to encode longer messages and therefore rely on single-word expressions.
 % SD: The second problem is the size of these networks. We should also test smaller embedding sizes than 10. Practice shows that the embedding sizes can be even several magnitues smaller than the vocabulary sizes, cf. the Bengio paper and word2vec.

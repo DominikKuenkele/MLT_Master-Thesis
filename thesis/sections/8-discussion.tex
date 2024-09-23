@@ -1,54 +1,122 @@
 \section{Discussion}
 \label{sec:discussion}
 
-As outlined in the introduction, two main research questions are to be answered by this thesis.
+As outlined in the introduction, two main research questions are to be answered in this thesis.
 First, what are the limits of the agent's architectures, the environment, and the input representations on successfully grounding referring expressions in language games?
 Secondly, to what degree do the emerged languages align with referring expressions in a natural language like English, and what constraints can be imposed on the environment and the agents themselves that languages align?
 This section discusses the results of the previous sections in the context of these two questions.
 
-discuss that success of task should require referring expressions (and limits of it)
+In every experiment, the results are compared to a baseline in which the sender is sending random symbols in the messages.
+By doing this, it can be determined if a successful communication emerged between the agents.
+When the agents beat the baseline, the sender needs to have sent at least some information which the receiver could interpret in the context of the task.
+However, it is more difficult to understand what the agents communicated exactly.
+More specifically, it can't easily be seen if the agents exchange referring expressions or other types of messages based on the visual inputs.
+To resolve this problem, this thesis aims to control what the agents can communicate by introducing a very specific bias to the dataset.
+The only way for the sender to communicate a target object should be by using the attributes \emph{shape}, \emph{size} and \emph{color}, and hence by generating referring expressions.
+While it can't be completely guaranteed that the agents don't make use of any other unseen biases in the dataset, it will be assumed that a successful communication that solves the tasks is based on exchanged referring expressions in the emerged languages.
+This hypothesis is supported by the analysis of emerged languages that show a certain alignment with English referring expressions for almost all emerged languages.
 
-The central question this thesis grapples with revolves around the limits of the agent's architectures, the environment, and the input representations in successfully grounding referring expressions in language games. The objective is to understand how these factors influence the emergence of referring expressions in artificial languages.
+The central question in this thesis revolves around the limits of the agent's architectures, the environment, and the input representations in successfully grounding referring expressions in language games. The objective is to understand how these factors influence the emergence of referring expressions in artificial languages.
 
-The most significant impact on successfully grounding referring expression comes from environment, the agents are exposed to.
-This includes both the task, the agents need to solve, and the dataset, the agents are shown.
-It is evident that while some tasks can easily be solved, the agents struggle often with more complex tasks.
+The most significant impact on successfully grounding referring expression comes from the \textbf{environment}, the agents are exposed to.
+This includes both the task, the agents need to solve, and the dataset, the agents are presented.
+It is evident that while some tasks can easily be solved, the agents struggle often with more complex datasets and more complex tasks.
 
-The object identification, described in section \ref{sec:language-games:identification} is the least complex task as agents hereby only need to discriminate between multiple objects.
+The agents were presented with three different \textbf{datasets}.
+Both 'Dale' datasets include a similar bias, namely that the target object can be discriminated using the three attributes \emph{shape}, \emph{size} and \emph{color}.
+However, as the 'Dale-2' dataset only contains one distractor object, the minimum length of a discriminating referring expression is relatively short; fewer attributes are necessary to uniquely identify the target object.
+On the other side, the 'Dale-5' dataset includes four distractors and, on average, the referring expressions need to be based on more attributes.
+Agents therefore need to learn to ground multiple attributes at once in one referring expression which makes the task much harder.
+This can be seen as well in the results across all experiments.
+When shown scenes from the 'Dale-2' dataset, the agents can consistently beat the baseline, and often achieve almost perfect scores on the object identification and reference resolution tasks.
+In other words, the agents are able to successfully ground referring expressions to discriminate the target object from the distractor.
+
+When the agents are presented with scenes from the 'Dale-5' dataset, a different pattern emerges.
+First, while the number of successful communications decreases, still many agent configurations are able to solve the tasks to some extent.
+Again, this shows that the agents are able to ground referring expressions in an emerged language.
+However, the metrics for most tasks are lower than on the 'Dale-2' dataset.
+This suggests, that the emerged referring expressions don't include all necessary elements to uniquely refer to the target object.
+Some necessary information to solve the task perfectly is not communicated from the sender to the receiver.
+Results from the referring expression generation tasks in Section \ref{sec:referring-expression-generation-game} suggest that the reason for this difference are the different attributes.
+While the \emph{shape} seems to be learned quickly, the agents struggle more with the \emph{size} and especially the \emph{color}.
+This can be seen for both the 'Dale-2' and 'Dale-5' dataset; the effect is even stronger on the 'Dale-2' dataset.
+As discussed above, on the 'Dale-2' dataset often only one or two attributes are necessary to discriminate the target object.
+This results in a focus on the \emph{shape} that is identified always perfectly, and a smaller focus on a secondary attribute, \emph{color}, which is identified correctly oftentimes.
+As more discriminating attributes are necessary on the 'Dale-5' dataset, predictions of all attributes beat the baseline.
+Still, the \emph{shape} is the attribute that is most often identified correctly, followed by the \emph{color} and finally the \emph{size}.
+These results however don't allow conclusions, why certain attributes are preferred over others.
+This would need to be studied in future work.
+
+Finally, the 'CLEVR color' dataset gives insights in how much bias is needed that agents can ground referring expressions.
+The objects can only be discriminated using one attribute, the \emph{color}.
+Instead of 48 possible combinations, the scene can only include a maximum of 8 possible different objects.
+This apparently increases the difficulty for the agents to generate and comprehend referring expressions.
+Across all experiments, the agents struggle the most on this dataset.
+While the object identification and the reference resolution tasks can be solved, the scores are lower compared to the other datasets.
+On top, much fewer agent configuration are able to successfully communicate and few languages emerge.
+On the reference resolution task, discussed in Section \ref{sec:langauge-games:reference-resolution}, even only one configuration can beat the baseline.
+This is a surprising result, as one could expect that fewer combinations in the dataset would make it easier for the agents to ground their referring expressions.
+
+However, there could be several reasons, explaining this phenomenon.
+First, the \emph{color} attribute itself is a difficult attribute to ground and the agents struggle to extract the visual features from the scenes.
+This explanation is also supported by the results on the 'Dale' datasets, where the agents usually prefer the \emph{shape} and \emph{size} over the \emph{color}.
+Secondly, the number of possible values of each attribute could have impact the learning.
+There are eight different colors, compared to only two sizes and three shapes.
+This could make it harder for the agents to ground each \emph{color} to a referring expressions than it might be for the \emph{shape} and \emph{size}.
+Future work would need to focus on this hypothesis, by comparing for instance additional datasets, where the only discriminating attributes are \emph{shape} or \emph{size}, or by changing the number of possible colors.
+
+Additionally to the datasets, the \textbf{task} itself has a major impact on the agents' capabilities to ground referring expressions in their messages.
+The object identification task, described in Section \ref{sec:language-games:identification} is the least complex task as agents hereby only need to discriminate between multiple objects.
 Both sender and receiver are only presented with bounding boxes that include single objects as opposed to whole scenes with all objects.
 The agents are able to solve this task almost perfectly, compared to a baseline, which implies that the sender must have communicated a grounded referring expression.
 The complexity increases when more objects are added to the scene, slowing the process of emergence but not preventing it.
-If only one attribute, such as color, can be used for discrimination, the task becomes harder to solve, and emergence is slower, but referring expressions still emerge, beating the baseline.
+If only one attribute, such as the \emph{color}, can be used for discrimination, the task becomes harder to solve, and emergence is slower, but referring expressions still emerge, beating the baseline.
 
-The task of referring expression generation is already of higher complexity (section \ref{sec:referring-expression-generation-game}).
+The task of referring expression generation is already of higher complexity (Section \ref{sec:referring-expression-generation-game}).
 Instead of only comprehending referring expressions, the receiver on top needs to generate referring expression on his own.
 For this, he needs to learn a complete new vocabulary (English attributes) and arrange them in the correct order.
-However, opposed to the previous task, the gold label referring expressions inject bias into the agents during training.
+However, opposed to the previous task, the gold label referring expressions inject new bias into the task during training.
 The agents might use this bias, to align their own emerged referring expressions with given English referring expressions, hence facilitating the grounding of emerged referring expressions.
 The results of the experiments show that this hypothesis holds only to a certain extent.
 The agents are able to beat the baseline in certain configurations, showing that referring expressions are communicated.
-However, in a closer look, it can be seen, that the agents only focus on the \emph{shape} and \emph{color} in their final referring expressions, whereas only the \emph{shape} can be predicted consistently.
+However, in a closer look, it can be seen that the agents only focus on the \emph{shape} and \emph{color} in their final referring expressions, whereas only the \emph{shape} can be predicted consistently.
 The agents are therefore not completely able to make use of the given bias in their own communication, possibly communicating only some attributes.
-Results of the single models in section \ref{sec:referring_expression_generation} suggest that it is not only the added complexity of the agents' communication, but the task itself that prevents the agents from successfully grounding referring expressions.
+Results of the single models in Section \ref{sec:referring_expression_generation} suggest that it is not only the added complexity of the agents' communication, but the task itself that prevents the agents from successfully grounding referring expressions.
 This is especially eminent for the \emph{masked RE generator}, that achieves similar results with a similar setup and input representations.
 In future work, this fact would need to be analyzed more deeply to understand why this bias doesn't help the agents as expected.
 
-In the final task in section \ref{sec:langauge-games:reference-resolution}, the agents need to solve the most complex task.
+In the final task in Section \ref{sec:langauge-games:reference-resolution}, the agents need to solve the most complex task.
+Hereby, the agents need to both resolve referring expressions and ground them in geometric features in the scenes.
+The main fact that can be concluded from the experiments is that grounding in geometric features works only to a certain extent.
+As soon as the agents are tasked to predict pixel precise locations in the scenes, they are not able to generate referring expressions.
+This is especially apparent when compared to the single models in Section \ref{sec:reference_resolution}.
+While the single model already struggles across the datasets, it is able to solve it on the 'Dale-2' dataset, showing that the architecture is generally able to combine visual and geometric features.
+However, when agents are tasked to solve the task together by grounding referring expressions in an emerged language, the fail to do so.
+In no case, the sender communicates any meaningful information to the receiver.
+This suggests that the feedback that the receiver gets during training can't be propagated to the sender as it likely contains too precise geometric information.
+When reducing the needed geometric precision by predicting regions instead of coordinates, the agents are suddenly able to easily solve the task.
+As the feedback during training can be linked better to the visual features in each region, the receiver can likely pass this information better on to the sender, and a language can emerge.
+As expected, a more complex scene with more objects challenges the agents more.
+However, with every dataset, there is at least one agent configuration, that is able to solve the task with successful communication, showing that a less precise task can help to agents to ground referring expressions.
 
-Object resolution is the most complex task, requiring agents to translate extracted visual features into geometric information. When the task is too complex, such as predicting precise coordinates, agents fail to solve it, as extracting highly precise geometric information from visual features is too challenging. The task becomes more manageable when rougher regions need to be predicted. With only a few objects, agents are very successful, and referring expressions emerge. Still, with more objects and only one attribute to discriminate, the emergence of referring expressions is almost non-existent.
+\textbf{Input representations} significantly impact the emergence of referring expressions.
+More referring expressions seem to emerge when agents are shown bounding boxes, each containing one object, versus complete scenes that include all objects.
+This might be because agents do not need to separate the objects from one another but can directly extract features.
+However, this conclusion is limited as the only setup where the receiver sees bounding boxes is the object identification task.
+Preliminary experiments have shown that when the sender is shown complete scenes as well, almost no other task can be solved, and no referring expressions emerge.
+Only when the sender sees bounding boxes, the agents are successful.
 
-Input representations significantly impact the emergence of referring expressions. More referring expressions seem to emerge when agents are shown bounding boxes, each containing one object, versus complete scenes that include all objects. This might be because agents do not need to separate the objects from one another but can directly extract features. However, this conclusion is limited as the only setup where the receiver sees bounding boxes is the object identification task. Preliminary experiments show that when the sender is shown complete scenes, almost no other task can be solved, and no referring expressions emerge. Only when the sender sees bounding boxes, the agents are successful.
+The \textbf{agent's architectures} has the least impact on the successful grounding of referring expressions.
+However, the architecture is inherently tied to the task to solve and is challenging to evaluate independently.
+For instance, for the referring expression generation, the agents need to generate a sequence of tokens, requiring a much more complex architecture, like LSTMs, than a simpler dot product for the object identification task.
+However, results show minimal differences when the sizes of specific layers in the agents are adjusted.
+Changing, for instance, the hidden and embedding size of the sender LSTM, has almost no impact on the emergence of referring expressions, and the same applies to image embedding sizes or dimensions of the output layers.
 
-Agent's architecture has the least impact on the successful grounding of referring expressions. However, the architecture is inherently tied to the task to solve and is challenging to evaluate independently. For instance, in referring expression generation, the agents need to generate a sequence of tokens, requiring a much more complex architecture, like LSTMs, than a simpler dot product for the object identification task. However, results show minimal differences when the sizes of specific layers in the agents are adjusted. Changing, for instance, the hidden and embedding size of the sender LSTM, has almost no impact on the emergence of referring expressions, and the same applies to image embedding sizes or dimensions of the output layers.
-
-In conclusion, the environment and input representations have a significant impact on the successful grounding of referring expressions in language games, while the agent's architecture plays a less critical role. These findings offer valuable insights into the limits and potential of grounding referring expressions in artificial languages, paving the way for further research in this field.
-
-Looking at the results of the experiments conducted in section \ref{sec:language-games}, one can see that there is a high variability in the agents successfully grounding referring expressions.
-The main
-
+In conclusion, the environment and input representations have a significant impact on the successful grounding of referring expressions in language games, while the agent's architecture plays a less critical role.
+These findings offer valuable insights into the limits and potential of grounding referring expressions in artificial languages, paving the way for further research in this field.
 
 The analysis of the emerged languages gives an insight in when emerged languages align with English.
-Especially, the analysis focuses on two properties.
+The analysis focuses on two properties.
 Do the emerged languages make use of the same attributes \emph{shape}, \emph{color} and \emph{size}, and if yes, in which environments?
 Do the emerges languages follow an incremental approach to specify attributes, or at least give them different importance?
 To answer the first question, the results show that the agents are relying not only on these attributes by default.
@@ -60,24 +128,45 @@ Changes in the tasks and the constraints of communication on the other hand can 
 
 One heavy influence on the usage of these attributes is the given space to transfer information.
 If the space is very small, the languages tend to rely on other patterns.
-More specifically that applies to a vocabulary size $|V|=2$
+More specifically that applies to a vocabulary size $|V|=2$.
+While still able to solve the tasks to a certain extent, the emerged languages tend to align less with the English referring expressions.
+This agrees with the fact that only one symbol (and the \emph{<eos>} token) can't represent all possible values of the attributes, even with a sequence length of six symbols.
+The agents are therefore forced to exploit other biases in the visual scenes that are less diverse to generate referring expressions.
+What biases these are, needs to be conducted with more experiments.
 
-Hereby, major difference can be seen in the usage of each attribute.
+The message length has a lower impact on the alignment with English referring expressions.
+Across all message lengths, languages emerge that align better and others that align worse.
+Hereby, it is especially interesting that the probing approach doesn't highlight almost any interaction between vocabulary size $|V|$ and message length $n$.
+One might expect that a smaller vocabulary would require longer messages and vice versa.
+The results however suggest that there is no connection.
+A deeper correlation analysis would be required to prove this hypothesis.
+
+A major difference can be seen in the usage of each attribute.
 While the \emph{shape} and \emph{size} seems to be used relatively consistently across all tasks and datasets, the agents have the biggest problem with the \emph{color} attribute.
 This attribute is used very few for the 'Dale' datasets.
-Even on the 'CLEVR color' dataset, where it is the only discriminating attribute, the emerged languages seem to use it only in combination with another unseen bias.
+Even on the 'CLEVR color' dataset where it is the only discriminating attribute, the emerged languages seem to use it only in combination with another unseen bias.
+As discussed in the previous sections, a reason for the preference of certain attributes over other attributes can't be concluded by the conducted experiments.
+In future work, this aspect would need be studied deeper.
 
-
-When analyzing if the agents follow and incremental approach, one can see that this is mainly the case.
-One attribute is used more often than the second which is more frequent than the last.
-While the probing approach doesn't give an answer if the agents exactly follow an incremental policy, it shows that they give each attribute different a salience.
-Interestingly, one dominant salience order can be identified across almost all tasks, when the agents are shown a 'Dale' dataset.
+When analyzing if the agents follow and incremental approach, one can see that this is indeed mainly the case.
+One attribute is used more often than the second which again appears more frequent than the last.
+While the probing approach doesn't give an answer if the agents exactly follow an incremental policy, it shows that they give each attribute a different salience.
+Interestingly, one dominant salience order can be identified across almost all tasks when the agents are shown a 'Dale' dataset.
 The most important attribute in this order is the \emph{size}, followed by the \emph{shape} and finally the \emph{color}.
 In few cases, a salience order of '\emph{shape} > \emph{size} > \emph{color}' emerges.
 However, the environment of the agents impacts the emerged salience order.
 Introducing more ambiguity by adding more distractors to the scene ('Dale-5' vs 'Dale-2' dataset) makes the second attribute more important in the emerged languages, and in some cases even swaps the importance of \emph{size} and \emph{shape}.
 When the \emph{color} is the only discriminating attribute in the 'CLEVR color' dataset, it becomes the most important attribute.
-Finally, showing the receiver English referring expressions as in the referring expression generation task pushes the agents to use a different salience order.
+A possible reason for this preferred salience order might be the number of values for each attribute.
+As there are only two \emph{sizes} and three \emph{shapes}, they might be easier to learn for the agents and to ground in a referring expression.
+The agents are exposed to more scenes with the same attribute and the learning is reinforces.
+The opposite applies to the eight \emph{colors}, that correspond to fewer samples for each \emph{color}.
+
+Finally, showing English referring expressions to the receiver during training as in the referring expression generation task pushes the agents to use a different salience order.
 Here, the \emph{shape} is now the most important attribute, followed by the \emph{size}, and the \emph{color} is only slightly less important.
 While the emerged languages don't use the exact same order as the one identified by \citet{Dale1995} in English of '\emph{shape} > \emph{color} > \emph{size}', it still seems to be heavily influenced.
+This doesn't come as a surprise, as this type of training introduces a new bias that the agents are able to exploit.
 
+In conclusion, the results show that the emerged languages don't align perfectly with English referring expressions, and especially not with a $Lang_{3,16}$ that is used in English.
+However, when given a big enough vocabulary size, the emerged languages start to align better, focussing on the attributes \emph{shape} and \emph{size}.
+Presenting the receiver with English referring expressions during training aligns the used salience order of the emerged language even more with the one used in English.

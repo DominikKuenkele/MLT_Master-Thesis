@@ -1,14 +1,14 @@
 \section{Analysis of the emerged languages}
 \label{sec:analysis_language}
-The languages that emerge are analyzed quantitatively, using a probing approach.
+The languages that emerge are analyzed quantitatively using a probing approach.
 Probing can be used to analyze and interpret the hidden representations in neural networks \citep{Conneau2018}.
 Hereby, a second neural model is trained to classify selected linguistic features on the basis of the hidden representations.
 The model is expected to be able to easily fit the linguistic features it classifies for.
-This is considered as evidence that these features are expressed in the underlying hidden representations of the main model.
+This is considered evidence that these features are expressed in the underlying hidden representations of the main model.
 In the case of the emerged language, a simple encoder-decoder model is trained to translate the world of the agents, expressed by their messages, into English referring expressions, based on the GRE algorithm by \citet{Dale1995}.
-Recall, that this incremental algorithm is based on an order in salience for the attributes.
+Recall that this incremental algorithm is based on an order in salience for the attributes.
 In English, \citet{Dale1995} propose the order of \emph{shape} > \emph{color} > \emph{size}.
-However, there is no policy for the agents, that enforces specifically this order or indeed any salience order.
+However, there is no policy for the agents that enforces specifically this order or indeed any salience order.
 For this reason, the emerged languages are compared to all six possible salience orders, given the three attributes \emph{shape}, \emph{color} and \emph{size}.
 This will show if first, the languages follow any salience order and secondly, which attributes are more important for the agents to communicate.
 % SD: The probing test is to show how well the emerged language can be trasnlated into English descriptions consistting of labels of scene features using Dale and Reiter idea of incrementality. However, we would need to know now what was the policy of the sender to generate message. Was this similar to Dale and Reiter to enforce longer descriptions?
@@ -17,7 +17,7 @@ This will show if first, the languages follow any salience order and secondly, w
 The probing model consists of an encoder LSTM, one linear layer and a decoder LSTM.
 The encoder LSTM encodes the messages of the emerged language.
 Its final hidden state is used as a representation of the meaning of the complete message and passed through the linear layer, which learns an abstract representation of the message.
-The dimension of the linear layer is kept small to prevent memorizing the dataset and force the model to find abstract connections between the input and the target.
+The dimension of the linear layer is kept small to prevent memorizing the dataset and to force the model to find abstract connections between the input and the target.
 The resulting vector is used as the initial state of the decoder LSTM.
 The decoder LSTM is then trained to produce the English referring expression.
 Both LSTMs have an embedding dimension of $LSTM_e=10$ and a hidden size of $LSTM_{out}=10$, while the linear layer has a size of $l=10$.
@@ -25,13 +25,13 @@ The success of the model is validated calculating cross entropy between the mode
 Since the probing task only focuses on how well the given messages of the agents can be related to English referring expressions, no dropout is applied, and the model is trained and validated on the complete dataset; no test or validation split is used.
 The models are trained for 200 epochs with a learning rate of $lr=0,004$ and a batch size of 32 samples per batch.
 
-The translation model will learn two characteristics with this setup.
-First, it can learn to find correlations between the emerged language and the English referring expressions, which is the goal of the probing.
+The translation model can learn two characteristics with this setup.
+First, it can learn to find alignments between the emerged language and the English referring expressions, which is the goal of the probing.
 But secondly, it can as well learn underlying patterns in the English referring expressions that are independent of the emerged language.
 For instance, it can learn that the referring expressions are likely to be two symbols long, or that for instance 'cube' is the most common shape.
-This second characteristic will lead to a low loss during training, even though there are no connections to the emerged language.
-In this test, only the first characteristic is interesting and would show the correlation between the emerged language and English referring expressions.
-For that reason, two reference baselines are calculated for each salience order of the attributes, to eliminate the influence of the second characteristic.
+This second characteristic leads to a low loss during training, even though there are no connections to the emerged language.
+In this test, only the first characteristic is interesting and shows the alignment between the emerged language and English referring expressions.
+For that reason, two reference baselines are calculated for each salience order of the attributes, so to eliminate the influence of the second characteristic.
 % SD: Baselines?
 % DK: (done)
 The first baseline $L_{baseline}$ uses a non-informative input for the encoder LSTM, more specifically it always receives a vector of zeros and therefore can't learn any meaningful representation in the linear layer; the input for the decoder LSTM is the same for every sample.
@@ -40,15 +40,15 @@ The resulting loss is the highest possible loss the model can achieve, independe
 Resulting, if the emergent language is connected to English, the loss will be lower than this baseline.
 If not, the loss will be as high as this baseline.
 On the other side, the lowest possible loss $L_{English}$ is calculated, by using the English referring expressions as both input and target.
-This verifies that the model is able to learn an abstract representation from the input and the resulting loss should be close to zero (since the input is perfectly correlated to the target).
-These two references are used, to normalize the results of the actual emergent languages $L_{em}$, using the formula $L_{norm} = \frac{L_{em}-L_{English}}{L_{baseline} - L_{English}}$.
+This verifies that the model is able to learn an abstract representation from the input and the resulting loss should be close to zero (since the input is perfectly aligned with the target).
+These two references are used to normalize the results of the actual emergent languages $L_{em}$, using the formula $L_{norm} = \frac{L_{em}-L_{English}}{L_{baseline} - L_{English}}$.
 A loss close to $L_{baseline}$ will lead to 100\%, while a loss as $L_{English}$ will lead to 0\%.
 % SD: Is this encessary? But when and where is this loss using 0 inouts calculated?
 % DK: TODO, QUESTION
 By doing this, all configurations can be compared directly to each other.
-The lower $L_{norm}$, the higher the correlation between the emerged language and English referring expressions.
+The lower $L_{norm}$, the higher the alignment between the emerged language and English referring expressions.
 
-Tables \ref{tab:probing:discriminator:dale-2} to \ref{tab:probing:attention-predictor:colour} will show the normalized losses $L_{norm}$ of the probing for the different tasks on all three datasets.
+Tables \ref{tab:probing:discriminator:dale-2} to \ref{tab:probing:attention-predictor:colour} show the normalized losses $L_{norm}$ of the probing for the different tasks on all three datasets.
 In the following paragraphs, languages will be referred to by their message length $n$ and their vocabulary size $|V|$ as $Lang_{n,|V|}$.
 
 % \begin{table}[ht]

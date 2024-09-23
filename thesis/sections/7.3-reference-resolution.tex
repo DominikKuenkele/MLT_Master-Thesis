@@ -29,18 +29,18 @@
         {6} & {50}  & \textcolor{red}{91,9\%}           & \textcolor{red}{96,28\%}          & \textbf{76,04\%}         & \textbf{69,86\%}         & \textcolor{red}{92,81\%} & {85,2\%}                 \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attention prediction games} on the 'Dale-2' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attention prediction games} on the 'Dale-2' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:attention-predictor:dale-2}
 \end{table}
 
 Finally, Tables \ref{tab:probing:attention-predictor:dale-2} to \ref{tab:probing:attention-predictor:colour} show the similarities between the emerged languages on the \emph{attention prediction games} and English referring expressions.
-On the 'Dale-2' dataset, one can see that most of the emerged languages correlate to English in some way.
-The least correlating language is $Lang_{1,100}$ with 86,13\% towards the salience order 'Sh > Si > C'.
+On the 'Dale-2' dataset, one can see that most of the emerged languages align to English in some way.
+The least aligned language is $Lang_{1,100}$ with 86,13\% towards the salience order 'Sh > Si > C'.
 Hereby, a strong influence of the message length $n$ and vocabulary size $|V|$ can be extracted.
 Languages with short messages of $n \in \{1,2\}$ are less connected to English referring expressions.
-With $n=2$, larger vocabulary sizes can bring the loss down below 80\% as seen for the languages $Lang_{2,50}$ and $Lang_{2,100}$.
-Languages with $n \geq 3$ are correlated more, whereas languages with $n=3$ perform the best.
-Looking at the vocabulary size, one can see that again a vocabulary size of $|V|=2$ will make the emerged language different from English.
+With $n=2$, larger vocabulary sizes can bring the loss below 80\% as seen for the languages $Lang_{2,50}$ and $Lang_{2,100}$.
+Languages with $n \geq 3$ are aligned more, whereas languages with $n=3$ perform the best.
+Looking at the vocabulary size, one can see that again a vocabulary size of $|V|=2$ render the emerged language more different from English.
 A vocabulary size of $|V|=10$ seems to provide the most similar languages ($Lang_{3,10}$, $Lang_{4,10}$) for larger $n$, but larger vocabularies of $|V| \in \{50,100\}$ are only few percent points higher.
 When given languages with $n=6$, the agents can utilize them only in few cases with medium-sized vocabularies, but if they do, the emerged languages are very similar.
 
@@ -64,14 +64,14 @@ This can be seen in the large margin between the losses of the salience orders w
         {6} & {10}  & \textcolor{red}{93,4\%}           & {86,51\%}            & \textcolor{red}{\textbf{91,64\%}} & {84,03\%}            & {82,51\%}            & {80,06\%}            \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attention prediction games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attention prediction games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:attention-predictor:dale-5}
 \end{table}
 
-On the 'Dale-5' dataset, mach fewer languages emerge and those that do emerge have a much lower correlation to English referring expressions than languages on the 'Dale-2' dataset.
+On the 'Dale-5' dataset, much fewer languages emerge and those that do emerge have a much lower alignment to English referring expressions than languages on the 'Dale-2' dataset.
 The losses for salience orders 'Sh > Si > C' and 'Si > Sh > C' are much closer, meaning both \emph{size} and \emph{shape} are used similarly often in the messages.
 The \emph{size} is hereby slightly more important with a lower loss of 1\% to 4\% points.
-The color plays a larger role than on the 'Dale-2' dataset, but is still the least important attribute.
+The \emph{color} plays a larger role than on the 'Dale-2' dataset, but it is still the least important attribute.
 
 The emerged languages are making use of shorter messages.
 The most similar languages use a message length of $n=2$ followed by $n=3$
@@ -88,7 +88,7 @@ However, no conclusive argument about this dependency can be made, as too few la
         {4} & {10}  & \textcolor{red}{98,88\%} & \textcolor{red}{98,75\%} & \textcolor{red}{97,23\%} & \textcolor{red}{96,67\%} & \textcolor{red}{97,18\%} & \textcolor{red}{96,75\%} \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attention prediction games} on the 'CLEVR color' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attention prediction games} on the 'CLEVR color' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:attention-predictor:colour}
 \end{table}
 
@@ -99,5 +99,5 @@ This indicates that the sender is communicating meaningful information to the se
 This is however not visible in the results of the probing model.
 None of the two emerged languages has high similarities with any salience order in English.
 Interestingly, the lowest (but still very high) normalized losses of 95\% to 96\% are not based on the only discriminating attribute \emph{color}, but rather on the non-discriminating attributes \emph{shape} and \emph{size}.
-That suggests that the agents make use of other underlying structural patterns than the defined attributes to communicate and solve the task.
+It suggests that the agents make use of other underlying structural patterns rather than the defined attributes to communicate and solve the task.
 However, these patterns seem to be difficult to exploit as only two configurations achieve it and both don't solve the task with high accuracy.

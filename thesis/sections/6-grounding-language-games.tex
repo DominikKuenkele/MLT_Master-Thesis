@@ -6,7 +6,7 @@ However, every task is solved by two neural networks that communicate through a 
 % DK: TODO
 
 The language games in this research have an asymmetric setup.
-One agent, the sender is shown some information and needs to generate a message.
+One agent, the sender, is shown some information and needs to generate a message.
 This message is received by the second agent, the receiver.
 The receiver needs to parse this message and combine it with the same information that the sender was presented with.
 The receiver then makes a prediction, which is compared to the ground truth.
@@ -29,7 +29,7 @@ Again, a shorter message requires more compression, while the longer message all
 As the experiments before, three different tasks are set up.
 For the \emph{object identification} task, the agents play discrimination games similar to the setup in \citep{Lazaridou2017}.
 For the \emph{RE generation} task, the receiver needs to generate a human language referring expression based on the emerged language referring expression by the sender.
-Since, it is possible that the agents simply learn to align these two languages, the agents are tasked to point towards the center coordinates of the target object in the final task, the \emph{reference resolution} task.
+Since it is possible that the agents simply learn to align these two languages, the agents are tasked to point towards the center coordinates of the target object in the final task, the \emph{reference resolution} task.
 For all three setups, the sender uses the same setup and only the receiver is switched.
 By this, differences in the produced referring expression in the message by the sender are only dependent on the receiver's ability to solve the different tasks.
 In particular, the impact of the task on the emerged language can be analyzed in more detail.
@@ -41,17 +41,16 @@ Hence, for both training and testing a certain number of samples are randomly dr
 In these experiments, the dataset consists of 10.000 scenes in total.
 To train the agents, 128.000 games are played (using 128.000 randomly drawn samples from the dataset) with a batch size of 32 samples.
 To retrieve the samples of the emerged language, after the agents are trained, they are frozen and play 2.048 games with randomly drawn samples from the dataset.
-This yields 2.048 interactions that will be used to analyze the emerged language.
+This yields 2.048 interactions that are used to analyze the emerged language.
 
-
-Across all experiments, the same restriction on the vocabulary and the produced messages are compared.
+Across all experiments, the same restrictions on the vocabulary and the produced messages are compared.
 First, five different vocabulary sizes $|V|$ are tested: 2, 10, 16, 50 and 100 symbols.
 Notice that these vocabularies include the \emph{<eos>} token which signals the end of the message.
 A vocabulary of two symbols therefore consists effectively of only one token that can be learned by the agents.
 The center of attention lies on the vocabularies with 16 and 50 symbols.
-The vocabulary with 16 symbols corresponds the 13 attributes the objects can have and align with human language referring expressions.
-However, a smaller vocabulary size increases the pressure to converge on meaning, which is my also 10 and 2 symbols are tested.
-On the other side, the agents might instead of a compositional language learn to assign one symbol with every combination of attributes.
+The vocabulary with 16 symbols corresponds to the 13 attributes the objects can have and it aligns with human language referring expressions.
+However, a smaller vocabulary size increases the pressure to converge on meaning, which is why also 10 and 2 symbols are tested.
+On the other side, the agents might learn to assign one symbol with every combination of attributes instead of a compositional language.
 This results in $2 * 3 * 8 = 42$ unique combinations, which corresponds to the vocabulary with 50 symbols.
 Furthermore, a vocabulary of 100 symbols is used to test the effect of a much bigger bottleneck.
 

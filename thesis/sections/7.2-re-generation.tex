@@ -31,23 +31,23 @@
         {6} & {100} & {86,44\%}                & \textcolor{red}{\textbf{92,76\%}} & {65,59\%}                & {65,93\%}                & \textcolor{red}{92,42\%} & {82,16\%}                \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{referring expression generation games} on the 'Dale-2' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{referring expression generation games} on the 'Dale-2' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:re-generator:dale-2}
 \end{table}
 
 Tables \ref{tab:probing:re-generator:dale-2} and \ref{tab:probing:re-generator:dale-5} show the results of the probing on the emerged languages of the \emph{referring expression generation games}.
-This is the only task, where the final task for the agents is to generate English referring expressions with the salience order 'Sh > C > Si'.
+This is the only task where the final task for the agents is to generate English referring expressions with the salience order 'Sh > C > Si'.
 English referring expressions are therefore explicitly passed to the agents as correct labels during training.
-One can therefore expect the agents to align their own language with the target referring expressions and a high correlation with the salience order 'Sh > C > Si' is expected.
+One can then expect the agents to align their own language with the target referring expressions, and a high alignment with the salience order 'Sh > C > Si' is expected.
 Looking at the results, this is partially confirmed for the 'Dale-2' dataset.
-Some emerged languages reach with a normalized loss of 49,22\% one of the highest correlations to English referring expressions across all emerged languages in this thesis.
-However, the salience order with the highest correlation is 'Sh > Si > C', and values the \emph{size} more than the \emph{color}, instead of the reversed way as in the training data of the agents.
+Some emerged languages reach one of the highest alignments to English referring expressions  with a normalized loss of 49,22\% across all emerged languages in this thesis.
+However, the salience order with the highest alignment is 'Sh > Si > C', and it values the \emph{size} more than the \emph{color}, instead of the reversed way as in the training data of the agents.
 The color seems, as in the previous task, not as important to communicate as the other attributes.
 While the \emph{size} plays a bigger role, the \emph{shape} is the central attribute in the communication.
 This fact is interesting for two reasons:
-First, the \emph{shape} being the most important attribute in the messages aligns with the receiver's generated referring expressions where the \emph{shape} was predicted almost perfectly.
-The receiver therefore seems to make use of the sender's ability to extract the \emph{shape} from the images and reproduces what the sender communicated.
-However, without a deeper analysis, it can't be ruled out that the receiver extracts the \emph{shape} themselves from the image, and uses the sender's message only to determine the correct target object in the scene.
+first, the \emph{shape} being the most important attribute in the messages aligns with the receiver's generated referring expressions where the \emph{shape} was predicted almost perfectly.
+The receiver therefore seems to make use of the sender's ability to extract the \emph{shape} from the images and it reproduces what the sender communicated.
+However, without a deeper analysis, it can't be ruled out that the receiver extracts the \emph{shape} themselves from the image, and it uses the sender's message only to determine the correct target object in the scene.
 Secondly, this does not apply directly to the \emph{size} and the \emph{color}.
 The \emph{size} seems to be communicated often by the sender to discriminate the target object.
 On the other hand, as the target referring expression uses the salience order 'Sh > C > Si', the shape is only needed to be generated in $\frac{1}{3} * \frac{1}{8} \approx 4,2\%$ of the samples.
@@ -56,12 +56,12 @@ The \emph{color} is not important in the agents' communication, but the receiver
 This shows that the agents actually don't align their own language with the target referring expression.
 The communication of the target object between the agents seems to be a separate step from the receiver's generation of the referring expression.
 
-Looking at the influence of the message length, one can see that the language is the least correlated to the salience order 'Sh > Si > C' with $n=1$.
+Looking at the influence of the message length, one can see that the language is the least aligned to the salience order 'Sh > Si > C' with $n=1$.
 Still, even with these short messages, the loss can go down to 66,82\%.
 With $n>1$, almost all languages have a loss of below 70\%, while at least one configuration is even lower than 60\%.
-Hereby, languages with $n \in \{3,4\}$ have the highest correlation to English.
-Languages with the highest correlation also mostly make use of a medium-sized vocabulary of $|V| \in \{10,16\}$ as for example $Lang_{2,10}$, $Lang_{3,16}$, $Lang_{4,16}$ and $Lang_{6,10}$.
-While larger vocabularies, can still correlate relatively much with English referring expressions, languages with $|V|=2$ are much less similar.
+Hereby, languages with $n \in \{3,4\}$ have the highest alignment to English.
+Languages with the highest alignment also mostly make use of a medium-sized vocabulary of $|V| \in \{10,16\}$ as for example $Lang_{2,10}$, $Lang_{3,16}$, $Lang_{4,16}$ and $Lang_{6,10}$.
+While larger vocabularies can still align relatively much with English referring expressions, languages with $|V|=2$ are much less similar.
 
 \begin{table}[ht]
     \centering
@@ -88,31 +88,31 @@ While larger vocabularies, can still correlate relatively much with English refe
         {6} & {50}  & \textbf{80,39\%}         & \textbf{87,85\%}         & \textbf{75,01\%}         & \textbf{68,71\%}     & \textbf{84,54\%}         & \textbf{72,93\%}         \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{referring expression generation games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{referring expression generation games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:re-generator:dale-5}
 \end{table}
 
 On the 'Dale-5' dataset, the emerged languages again resemble the English referring expressions less.
 While the dominant salience order is 'Sh > Si > C' as on the 'Dale-2' dataset, the \emph{color} plays a bigger role.
 This effect is the same as for the discrimination games, and can be explained by the higher number of distractors.
-While the loss for the salience order 'Sh > Si > C' is lower than 70\% for two languages, it stays between 70\% and 80\% for most.
+While the loss for the salience order 'Sh > Si > C' is lower than 70\% for two languages, it stays between 70\% and 80\% for most languages.
 Interesting now is that all attributes are communicated by the sender, while the receiver is also generating the correct attributes in the referring expression.
 Opposed to the 'Dale-2' dataset, the need for \emph{size} and \emph{color} is much bigger to discriminate the target object in any salience order, due to the larger number of distractors.
 
-$Lang_{6,50}$ is the emerged language, with which the agents can achieve the best results on the task.
-While the receiver achieves high precision and recall scores on each attribute (recall Tables \ref{tab:results:re-generator-game_size-shape} and \ref{tab:results:re-generator-game_color}), each attribute also plays a bigger role in the message be the sender.
-Indeed, one can see a correlation between the predictions of the receiver and the usage of attributes in emerged language.
+$Lang_{6,50}$ is the emerged language with which the agents can achieve the best results on the task.
+While the receiver achieves high precision and recall scores on each attribute (recall Tables \ref{tab:results:re-generator-game_size-shape} and \ref{tab:results:re-generator-game_color}), each attribute also plays a bigger role in the message by the sender.
+Indeed, one can see an alignment between the predictions of the receiver and the usage of attributes in emerged language.
 A more frequent usage of an attribute in the emerged language leads to a more accurate generation of this attribute in the final referring expression.
 
-As for the previous analyses, a vocabulary size of $|V|=2$ seems to be too small for the agents to use similar referring expressions like in English.
-Additionally to $|V| \in \{10,16\}$, also a vocabulary size of $|V|=50$ now helps the agents to create to most resembling languages.
-Only the language $L_{3,100}$ emerges, that utilizes a vocabulary of $|V|=100$ and it correlates similarly to English as $L_{3,50}$ and slightly worse than $L_{3,10}$.
+As for the previous analyses, a vocabulary size of $|V|=2$ seems to be too small for the agents to use similar referring expressions as in English.
+Additionally to $|V| \in \{10,16\}$, also a vocabulary size of $|V|=50$ now helps the agents to create more resembling languages.
+Only the language $L_{3,100}$ emerges, that utilizes a vocabulary of $|V|=100$, and it aligns similarly to English as $L_{3,50}$ and slightly worse than $L_{3,10}$.
 
 Looking at the message length, a larger $n$ brings the emerged languages close to English referring expressions.
 With $n=1$ the normalized loss remains above 74,74\%.
 With growing $n$, the loss decreases, and even gets lower than 70\% for $n \in \{4,6\}$.
-However, while $Lang_{6,50}$ is the language with the highest correlation, it is one of only two languages that emerged with $n=6$.
-This indicates that agents struggle with so few contraint, but if they do converge to a language, it makes use of similar structures as English.
+However, while $Lang_{6,50}$ is the language with the highest alignment, it is one of only two languages that emerged with $n=6$.
+This indicates that agents struggle with so few contsraints, but if they do converge to a language, it makes use of similar structures as English.
 
 \begin{table}[ht]
     \centering
@@ -146,29 +146,29 @@ This indicates that agents struggle with so few contraint, but if they do conver
         {6} & {100} & {89,84\%}                & {89,81\%}                & {69,75\%}                & {60,55\%}                & {65,19\%}                 & {54,93\%}                 \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attribute generation games} on the 'Dale-2' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attribute generation games} on the 'Dale-2' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:attribute-generator:dale-2}
 \end{table}
 
 Tables \ref{tab:probing:attribute-generator:dale-2} to \ref{tab:probing:attribute-generator:colour} show the results for the probing of the emerged languages in the \emph{attribute generation games}.
 The first detail that can be seen is the difference of the results between the 'Dale' datasets and the 'CLEVR color' dataset.
 On the 'Dale' dataset, the \emph{color} plays no or only a small role in the languages.
-While most of the emerged languages correlate to the salience order 'Si > Sh > C', languages with the lowest loss correlate to the salience order 'Sh > Si > C'.
+While most of the emerged languages align with the salience order 'Si > Sh > C', languages with the lowest loss align with the salience order 'Sh > Si > C'.
 These indeed achieve the lowest loss across all experiments and tasks in this thesis.
 
 When looking closer on the results for the 'Dale-2' dataset, the influence of $n$ and $|V|$ is less clear.
-While high correlations to English can be achieved with any $n$, the normalized loss remains consistently low only with $n \geq 2$.
+While high alignments with English can be achieved with any $n$, the normalized loss remains consistently low only with $n \geq 2$.
 Hereby, a medium vocabulary size of $|V| \in \{10,16\}$ provides the best results (for instance $Lang_{3,10}$, $Lang_{3,16}$, $Lang_{4,16}$, $Lang_{6,10}$ and $Lang_{6,16}$).
 However, also large vocabularies of $|V| \in \{50,100\}$ can give low losses as seen in $Lang_{2,100}$, $Lang_{4,50}$, $Lang_{4,100}$ and $Lang_{6,100}$.
-This is nonetheless less consistent.
-When given a vocabulary with $|V|=2$, the emerged languages have almost always a relatively low correlation to English.
+This is anyway less consistent.
+When given a vocabulary with $|V|=2$, the emerged languages have almost always a relatively low alignment with English.
 
 A similar detail to the emerged languages of the \emph{referring expression games} is as well visible here.
 Some languages as for instance $Lang_{2,100}$, $Lang_{6,2}$ and $Lang_{6,10}$ achieve similar losses for the salience orders 'Sh > Si > C' and 'Si > Sh > C' which indicates that the \emph{size} and the \emph{shape} are used equally often in the messages.
 Interestingly, this doesn't have any effect on the final predictions of the receiver.
 No big difference can be identified for games where the agents make use of these languages or of languages with only one dominant attribute.
 Indeed, the parsing of the sender's message seems not to be directly connected to the final prediction of the attributes by the receiver.
-While the \emph{size} is almost always communicated as the most important attribute, it is never predicted correctly by the receiver, as the accuracy of the \emph{size} lies aroudnd 52\%.
+While the \emph{size} is almost always communicated as the most important attribute, it is never predicted correctly by the receiver, as the accuracy of the \emph{size} lies around 52\%.
 The opposite applies to the \emph{color}.
 This indicates that the sender's message is only used to extract the target object from the image, but the extraction of the attributes for the final prediction is a separate step.
 
@@ -204,7 +204,7 @@ This indicates that the sender's message is only used to extract the target obje
         {6} & {100} & {82,09\%}                & {80,73\%}                & {77,42\%}                & {65,3\%}                 & {75,52\%}                & {64,52\%}                \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attribute generation games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attribute generation games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:attribute-generator:dale-5}
 \end{table}
 
@@ -212,12 +212,12 @@ As expected, Table \ref{tab:probing:attribute-generator:dale-5} shows that the \
 Still, the dominant salience order is 'Si > Sh > C', in some cases 'Sh > Si > C'.
 As opposed to the 'Dale-2' dataset, both salience orders have almost always a similarly low loss which indicates that the \emph{size} and \emph{shape} are equally important.
 
-Looking at the influence of the message length $n$, one can see, that languages with $n=1$ tend to have the worst correlation to English referring expressions.
+Looking at the influence of the message length $n$, one can see that languages with $n=1$ tend to have the worst alignment with English referring expressions.
 While there are few outliers, languages with $n \geq 2$ perform similarly.
 The same applies as well to the vocabulary size $|V|$.
 When the agents are given a very small vocabulary with $|V|=2$, the resulting languages look very different from English.
-An increase to $|V|=10$, lets the agents produce the most similar languages.
-Increasing it further tends to lower the correlation slightly, but stays mostly still around 65\%.
+An increase to $|V|=10$ lets the agents produce the most similar languages.
+Increasing it further tends to lower the alignment slightly, but stays mostly still around 65\%.
 
 \begin{table}[ht]
     \centering
@@ -231,23 +231,23 @@ Increasing it further tends to lower the correlation slightly, but stays mostly 
         {6} & {2}   & {83,25\%}                & {83,23\%}                & {87,74\%}            & {88,95\%}            & {85,38\%}                & {88,87\%}            \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attribute generation games} on the 'CLEVR color' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{attribute generation games} on the 'CLEVR color' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:attribute-generator:colour}
 \end{table}
 
-Finally on the 'CLEVR color' dataset, only very few languages emerge.
-As expected, the most of them correlate with salience orders that have the \emph{color} as its most important attribute.
+Finally, on the 'CLEVR color' dataset, only very few languages emerge.
+As expected, the most of them align with salience orders that have the \emph{color} as its most important attribute.
 The one exception is $Lang_{1,2}$ with the salience order 'Sh > C > Si' that doesn't rely on the \emph{color} at all.
 However, looking at the results of the receiver's predictions in Table \ref{tab:results:attribute-predictor-game}, one can see that this configuration doesn't beat the baseline and the communication doesn't seem to help to solve the task.
 
-Looking at the remaining languages, the losses for the salience orders 'C > Sh > Si' and 'C > Si > Sh' are almost equal, which indicates, that the \emph{size} and \emph{color} are (not) used equally often.
-However, that correlation in between 70\% to 83\% is relatively low compared to the correlations of down to below 50\% on the 'Dale' datasets.
+Looking at the remaining languages, the losses for the salience orders 'C > Sh > Si' and 'C > Si > Sh' are almost equal, which indicates that the \emph{size} and \emph{color} are (not) used equally often.
+However, that alignment in between 70\% to 83\% is relatively low compared to the alignments that reach below 50\% on the 'Dale' datasets.
 This can be confirmed by the accuracies of the \emph{color} attribute of the receivers' predictions.
-Configurations, where a language between the agents emerges perform only around 1\% higher than the baseline of 90\% with no communication.
+Configurations where a language between the agents emerges perform only around 1\% higher than the baseline of 90\% with no communication.
 The receiver can solve the task almost on their own and the messages of the sender only help in few cases.
 The sender seems to be only needed to communicate very specific information instead of always communicating the \emph{color}.
-This could for instance be specific \emph{colors}, the receiver struggles with, or other underlying structural patterns.
-This results in a different language and the lower correlation to English referring expressions.
+For instance, the receiver could struggle with specific \emph{colors} or other underlying structural patterns.
+This results in a different language and in the lower alignment to English referring expressions.
 
-The languages with the lowest correlation have a medium-sized vocabulary of $|V| \in \{10,16\}$ and are relatively short with $n \in \{1,3\}$.
-While the language $Lang_{6,2}$ emerges that uses a small vocabulary with long messages, the normalized loss is much higher.
+The languages with the lowest alignment have a medium-sized vocabulary of $|V| \in \{10,16\}$ and are relatively short with $n \in \{1,3\}$.
+While the language $Lang_{6,2}$ emerges which uses a small vocabulary with long messages, the normalized loss is much higher.

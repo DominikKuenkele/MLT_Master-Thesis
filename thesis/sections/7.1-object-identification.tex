@@ -47,15 +47,15 @@ This applies for example to $Lang_{3,2}$, where the loss for 'Sh > Si > C' is 74
 The same can be seen for instance for $Lang_{3,16}$ in the other direction.
 This difference indicates that the agents are relying mostly on the most important attribute of this salience order to discriminate the target object.
 If the $L_{norm}$ for instance were similar for the salience orders 'Sh > Si > C' and 'Si > Sh > C', this would mean that the emerged language could be connected to both salience orders in the same way.
-Following, the agents would use the \emph{shape} as often as \emph{size} to discriminate the objects.
+As a consequence, the agents would use the \emph{shape} as often as the \emph{size} to discriminate the objects.
 This is however only the case on the 'Dale-2' dataset when the loss is higher (for instance languages $Lang_{2,16}$, $Lang_{2,100}$ or $Lang_{6,16}$).
 Since the lowest $L_{norm}$ with 74,54\% is still very high compared to a complete alignment (0\%), the agents seem to encode additionally other information in their messages.
 
-Looking at the influence of $n$ and $|V|$, one can see that across almost all values, there is at least some alignment with one salience order.
+Looking at the influence of $n$ and $|V|$, one can see that there is at least some alignment with one salience order across almost all values.
 The alignment seems to be best with $n \in \{3,4\}$, where the loss can reach down 74,54\%.
 Hereby, the most important attribute in the messages seems to be the \emph{size}.
 For the remaining message lengths $n$, the loss stays mostly between 80\% and 85\%.
-For $n \in \{2,6\}$ the \emph{shape} seems to be the most dominant attribute, while for $n=1$ the \emph{size} and \emph{shape} seem to have a similar importance.
+For $n \in \{2,6\}$ the \emph{shape} seems to be the most dominant attribute, while for $n=1$ the \emph{size} and the \emph{shape} seem to have a similar importance.
 The influence of the vocabulary size $|V|$ is not as clear.
 Small to medium-sized vocabularies seem to promote better alignments with English referring expressions, but also languages with $|V|=100$ can reach losses of around 80\%.
 
@@ -88,7 +88,7 @@ Small to medium-sized vocabularies seem to promote better alignments with Englis
         {6} & {100} & {86,15\%}                & {82,19\%}                & {83,56\%}                & {75,56\%}                & {77,76\%}            & {72,47\%}            \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{discrimination games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{discrimination games} on the 'Dale-5' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:discriminator:dale-5}
 \end{table}
 
@@ -98,11 +98,11 @@ In the best cases, it even reaches down to 67,15\%.
 Again, the \emph{size} and the \emph{shape} are mostly communicated between the agents, but the \emph{color} now plays a bigger role in the messages.
 The agents seem to need to rely on more attributes to discriminate the target object.
 This aligns also with English referring expressions, where the average length of the referring expressions across the whole 'Dale-5' dataset is longer than for the 'Dale-2' dataset.
-However, opposed to the 'Dale-2' dataset, there are almost no languages, where there is one dominant attribute.
+However, opposed to the 'Dale-2' dataset, there are almost no languages where there is one dominant attribute.
 More often the loss is similar for two salience orders with different primary attributes.
 For instance the salience orders 'Sh > Si > C' and 'Si > Sh > C' both provide losses around 70\% for $Lang_{6,16}$.
 Only the languages $Lang_{2,16}$, $Lang_{4,10}$, $Lang_{4,50}$ and $Lang_{6,100}$ have differences of more than 3\% points for these salience orders.
-This indicates, that the agents make use of both \emph{shape} and \emph{size} similarly often, while the \emph{color} is used for much fewer images.
+This indicates that the agents make use of both \emph{shape} and \emph{size} similarly often, while the \emph{color} is used for much fewer images.
 
 When the agents are able to produce longer messages, their languages seem to have more similarities with possible English languages.
 With $n>1$ the agents produce languages that can have losses lower than 70\% for the salience order 'Si > Sh > C'.
@@ -129,17 +129,17 @@ The best results are produced with $|V| \in \{10,16\}$ for longer messages (for 
         {6} & {2}   & {84,21\%}                & {84,02\%}                & {88,41\%}                & {89,77\%}                & {86,61\%}                & {89,35\%}                \\
         \bottomrule
     \end{tabular}
-    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{discrimination games} on the 'CLEVR color' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages, with which the agents could successfully solve the task.}
+    \caption{Normalized losses $L_{norm}$ of the probing model on emerged languages of the \emph{discrimination games} on the 'CLEVR color' dataset. The emerged languages are probed with different salience orders where 'C' corresponds to the \emph{color}, 'Sh' to the \emph{shape} and 'Si' to the \emph{size}. The table only includes languages with which the agents could successfully solve the task.}
     \label{tab:probing:discriminator:colour}
 \end{table}
 
-Finally on the 'CLEVR color' dataset, much fewer languages emerge (see Table \ref{tab:probing:discriminator:colour}).
+Finally, on the 'CLEVR color' dataset, much fewer languages emerge (see Table \ref{tab:probing:discriminator:colour}).
 Those languages that emerge have very different levels of alignment with English.
 While three languages stay above 90\% for all salience orders, most of them stay between 80\% and 90\%.
 Four languages even get below 80\% for the salience orders where the \emph{color} is the most important attribute.
 One of those even reaches 66,51\%, the best alignment across all emerged languages on the discrimination task.
 Unsurprisingly, the \emph{color} is now the most important attribute.
-The loss with the remaining salience orders is still relatively low, but this is likely due to the fact, that the color occurs in any referring expression as it is the only discriminating attribute.
+The loss with the remaining salience orders is still relatively low, but this is likely due to the fact that the color occurs in any referring expression as it is the only discriminating attribute.
 The probing model can therefore easily connect this pattern to the emerged language.
 As expected, the losses for 'Sh > Si > C' and 'Si > Sh > C' are almost the same, which indicates that the agents make (no) use of both \emph{shape} and \emph{size} in the same way.
 

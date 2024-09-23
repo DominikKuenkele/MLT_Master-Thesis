@@ -169,7 +169,7 @@ For instance, one image encoder module uses CNNs while another image encoder mod
 These can simply be exchanged in an agent's model without needing to adapt the whole agent.
 Consequently, the experiments stay comparable, since the differences are only added or removed submodules.
 
-The feature extractors described in section \ref{sec:feature-extractors} are not enough to be solely used to encode the images used in this thesis.
+The feature extractors described in Section \ref{sec:feature-extractors} are not enough to be solely used to encode the images used in this thesis.
 Even though final layers that contain very task and domain specific knowledge can be removed, the previous layers still don't contain any information about the new domain and task.
 For this reason they need to be extended with further layers that are not frozen and can learn and store information about the new domain by connecting the pretrained general knowledge with the specific task.
 These additional layers on top of the feature extractors that make up the \emph{image encoder} submodule, however, are always trained from scratch for each of the experiments and tasks.
