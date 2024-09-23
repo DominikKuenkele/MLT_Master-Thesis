@@ -20,9 +20,9 @@ However, the scores are far above random guesses and show that the introduced bi
 Finally, the models learn to combine geometric information with the extracted visual features in the \emph{reference resolution} task.
 The models only manage to predict precise coordinates of the target object given a referring expression when two objects are present.
 On the other side, when tasked to attend to rougher regions around the target object instead, the models are able to solve the task almost perfectly on all datasets.
-This shows that again that the bias in the dataset is enough to ground referring expressions in a spatial context.
+This shows again that the bias in the dataset is enough to ground referring expressions in a spatial context.
 
-In the next step the two agents are trained on the same tasks.
+In the next step, the two agents are trained on the same tasks.
 The increased complexity in the architecture of the language games shows in the results.
 The agents have more difficulties to solve the tasks.
 However, in almost all tasks, the agents manage to ground some information in referring expressions of the emerged language.
@@ -30,20 +30,20 @@ The datasets and the tasks have hereby the highest influence on the success of g
 The simpler 'Dale-2' dataset allows the agents to ground referring expressions the best in their messages.
 While the agents are still able to solve the tasks in many language games on the 'Dale-5' dataset, they have the biggest problems on the 'CLEVR color' dataset.
 The main reason seems to be the increased number of distractors in combination with extracting features from the whole visual scene as opposed to bounding boxes for each object.
-Additionally, the results suggest difference of difficulties between the attributes.
+Additionally, the results suggest a difference of difficulty to ground each attributes.
 The \emph{shape} and \emph{size} seem to be grounded easier than the \emph{color}.
 
 Finally, looking closer at the emerged languages, it can be seen that the used referring expressions don't align perfectly with any referring expression that would be common in English.
 Interestingly, as common in English referring expressions, the emerged languages seem to assign a salience order to the attributes.
 On the 'Dale' dataset, the \emph{size} seems to be the most salient attribute, followed by the \emph{shape} and lastly the \emph{color}.
 While the order is different from one used in English, the alignment can be influenced by introducing English referring expressions during training.
-Then the \emph{shape} becomes the most salient attribute.
+Then, the \emph{shape} becomes the most salient attribute.
 For the 'CLEVR color' dataset, unsurprisingly, the most salient attribute is the \emph{color}.
 However, the agents seem to utilize some other patterns apart from the three attributes.
 
 This thesis lies the basis for several future experiments.
 As discussed, some attributes seem to be grounded easier than others.
-Future work could focus on the reasons for this.
+Future work should focus on the reasons for this.
 For instance, the agents can be trained on new datasets like the 'CLEVR color' dataset where the only differing attributes are \emph{shape} and \emph{size} respectively.
 
 Secondly, the emerged languages can be studied in more depth.
@@ -51,7 +51,7 @@ While this thesis focuses on an alignment with English referring expression, oth
 
 Furthermore, at the moment, the sender has the same architecture across all experiments, and the adpated receiver is mainly responsible for the differences in the referring expressions.
 It would be interesting however, how the referring expressions change if the receiver is kept stable, but the sender is variable.
-This could give insights in if one agent has a bigger influence on the structure of referring expressions.
+This could give insights about the influence that each agent has on the structure of referring expressions.
 
 Finally, communication only works in one direction, from the sender to the receiver.
 The emergence of referring expressions is therefore solely based on the final training loss of the receiver.
