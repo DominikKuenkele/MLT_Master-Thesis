@@ -67,6 +67,8 @@
 
 
 \section{Introduction}
+
+
 Agents interact with the physical world through their actions and perception, and with other agents through language.
 Their sensors and actuators allow them to sample the world and their own state using measures that are continuous in nature such as intensity of light, distance, angles, velocity and others which can be measured with a high degree of accuracy.
 On the other hand, the language that is used to communicate with other agents is based on representations that are composed of a limited set of discrete and arbitrarily chosen symbols.
@@ -82,7 +84,7 @@ The novelty of our work, compared with the previous work with this setup \citep{
 
 \section{Dataset}
 % complete control to have emergent languages.
-For this research we extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes. \footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}}
+For this research we extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}}
 By this, the objects in the generated images are controlled to have different human-recognizable attributes, namely the \emph{shape}, \emph{size} and \emph{color}.
 These attributes also correspond to referring expressions in natural language such as English.
 
@@ -214,13 +216,9 @@ Training the agents like this should therefore highlight the regions in the imag
 To calculate the loss, the $softmax$ function is applied over the prediction and compared to the ground truth matrix $A$ using \emph{binary cross entropy}.
 
 %TODO e? and h? and o?
-% TODO params langauge games
 The experiments are conducted with the following hyperparameters: a learning rate of $2\times10^{-4}$, a temperature for the Gumbel-Softmax relaxation of 1 and \emph{Adam} \citep{Kingma2015} as optimizer.
-The following values for the variables are compared:
-\begin{itemize}
-        \item $|V|$: 2, 10, 16, 50, 100
-        \item $n$: 1, 2, 3, 4,  6
-\end{itemize}
+A total of 128.000 games are played.
+Furthermore, we allow message lengths of $n \in \{1,2,3,4,6\}$ and provide vocabulary sizes of $|V| \in \{2,10,16,50,100\}$.
 
 The agents are evaluated on the summed predicted probability for the regions in the target area, the probability mass.
 In particular, the predicted matrix, consisting of probabilities for each region is multiplied with the ground truth matrix $A$, consisting of only ones and zeros.
@@ -263,7 +261,7 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
                 \includegraphics[width=0.485\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
                 \label{fig:learning-curve_attention-predictor_colour_vocab-size}
         }
-        \caption{Learning curves of all attention reference resolver games on each dataset.The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black.}
+        \caption{Learning curves of all languages games on each dataset. The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black.}
         \label{fig:learning-curves_attention-predictor}
 \end{figure}
 
@@ -330,11 +328,11 @@ Hereby, only two configurations perform better than the baseline and reach a pro
 Both utilize a medium message length of $n \in \{3,4\}$ and a medium-sized vocabulary of $|V| \in \{10,16\}$.
 Interestingly, several configurations with short message lengths of $n \in \{1,2\}$ perform worse than the baseline.
 This indicates that there is communication between the agents, but it rather distracts the receiver from the target object towards the distractors.
-The same argument for a more difficult task when more objects are involved can be made for the 'CLEVR color' dataset.
+The same point for a more difficult task when more objects are involved can be made for the 'CLEVR color' dataset.
 This dataset includes even up to 10 objects present in the scene which increases the likelihood that the receiver focuses on a wrong object.
 
 Appendix \ref{app:attention-errors} shows examples of the wrongly identified regions on each dataset.
-These are predictions by the agents that are wrong even thoug a language emerged successfully.
+These are predictions by the agents that are wrong even though a language emerged successfully.
 Main problems seemed to be target objects not being in the actual frame of the scene that the receiver was processing.
 However, in several cases (as in the central image), especially for the 'Dale-5' dataset, all objects are visible, and the agents still don't attend solely on the target object.
 Rather than choosing one of the distractors, the agents usually attend to both objects relatively equally.
@@ -522,6 +520,16 @@ While more complex referring expressions challenge the model slightly more, it s
 
 
 \section{Discussion and Conclusion}
+This paper explored how artificial neural networks can learn referential grounding of entities in 3D scenes through language games. We extended the CLEVR dataset with new artificially generated scenes, allowing for more controlled variations in object attributes and their overlaps. Our experiments systematically compared different setups of language games using the EGG framework.
+
+In the central experiment, where two agents solved a referring task, we observed that agents were able to learn to communicate and significantly boost their performance over a baseline of random messages. This boost was more pronounced on simpler datasets like 'Dale-2' (around 40\% points) compared to more complex ones like 'Dale-5' (around 30\% points) and 'CLEVR color' (less consistent, with only two configurations beating the baseline). We found that smaller vocabulary sizes and message lengths generally led to faster learning, although very small vocabularies could also be too restrictive. The 'Dale-5' and 'CLEVR color' datasets posed greater challenges, likely due to the increased number of distractors and the need to encode more complex information for unique object identification. Errors in attention prediction often involved the receiver being uncertain between the target and distractors sharing multiple attributes.
+
+Two additional experiments investigated the sender and receiver models in isolation, introducing explicit natural language bias. For the referring expression generation (sender) task, the model successfully extracted discriminative features and produced referring expressions. Performance was highly dependent on the number of distractors, with the 'Dale-2' dataset yielding near-perfect accuracy (99\%), while 'Dale-5' and 'CLEVR color' showed lower accuracies (69\% and 93\% respectively). The model found it easier to identify shape than color, and especially size, which we attribute to the increasing complexity of discrimination with more distractors and the nature of the incremental GRE-algorithm used for generating referring expressions.
+
+In the referring expression resolution (receiver) task, the models demonstrated a strong ability to understand natural language referring expressions and ground them in the target object within the image. High probability masses (over 90\% in most cases) were achieved across all datasets, indicating that the attention reference resolver effectively connected the encoded referring expressions with specific regions in the image. Even with more complex referring expressions and a higher number of distractors, the receiver models maintained high accuracy in focusing on the correct object.
+
+In conclusion, our work demonstrates the efficacy of language games for learning referential grounding in visual scenes. While the complexity of the scene and the number of distractors significantly impact the learning process and the performance of the emergent language, the models show a robust ability to learn and utilize communicative signals. The insights gained from analyzing the sender and receiver models separately highlight the challenges in generating precise referring expressions in complex environments and the robustness of the attention mechanism in resolving them. Future work could explore more dynamic and interactive language games, as well as investigate the emergence of more compositional and human-like language structures.
+
 
 % Entries for the entire Anthology, followed by custom entries
 \bibliography{custom}
