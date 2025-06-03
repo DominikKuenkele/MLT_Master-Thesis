@@ -33,7 +33,7 @@
 %%%%%
 
 
-\title{Referring through language games}
+\title{Learning to Refer: How Scene Complexity Affects Emergent Communication in Neural Agents}
 
 % Author information can be set in various styles:
 % For several authors from the same institution:
@@ -67,7 +67,6 @@
   We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
 \end{abstract}
 
-
 \section{Introduction}
 Agents interact with the physical world through their actions and perception, and with other agents through language.
 Their sensors and actuators allow them to sample the world and their own state using measures that are continuous in nature such as intensity of light, distance, angles, velocity and others which can be measured with a high degree of accuracy.
@@ -86,9 +85,28 @@ Our work is  a study of how increasing the complexity of the scene and therefore
 \section{Background}
 
 \section{Dataset}
+
+\begin{figure*}[!htbp]
+        \centering
+        \subfigure['CLEVR color', \emph{small brown cylinder}]{
+                \includegraphics[width=0.3\linewidth]{figures/CLEVR_color.png}
+                \label{fig:clevr-color}
+        }
+        \subfigure['Dale-2', \emph{small green cylinder}]{
+                \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-2.png}
+                \label{fig:clevr-dale-2}
+        }
+        \subfigure['Dale-5', \emph{large purple cylinder}]{
+                \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-5.png}
+                \label{fig:clevr-dale-5}
+        }
+        \caption{Example images of each dataset, with the target object specified.}
+        \label{fig:clevr-examples}
+\end{figure*}
+
 % complete control to have emergent languages.
 % For this research
-We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{Reference to a git repository.} % \href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}}
+We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{Source code on GitHub}}
 By this, the objects in the generated images are controlled to have different human-recognizable attributes, namely the \emph{shape}, \emph{size} and \emph{color}.
 These attributes also correspond to referring expressions in natural language such as English which effectively biases the agents to learn a language that is comparable to a human language.
 
@@ -102,24 +120,6 @@ Using these rules, we generate three datasets with the following contraints:
 (i) the size of the generated images is 480x320 pixels;
 (ii) 10.000 images are created for each of the datasets;
 (iii) each image contains a maximum of 10 objects, that are not intersecting, have the same minimum distance between objects and are at least partially visible from the camera.
-
-\begin{figure}[ht]
-        \centering
-        \subfigure['CLEVR color', \emph{small brown cylinder}]{
-                \includegraphics[width=0.43\linewidth]{figures/CLEVR_color.png}
-                \label{fig:clevr-color}
-        } \\
-        \subfigure['Dale-2', \emph{small green cylinder}]{
-                \includegraphics[width=0.43\linewidth]{figures/CLEVR_dale-2.png}
-                \label{fig:clevr-dale-2}
-        }
-        \subfigure['Dale-5', \emph{large purple cylinder}]{
-                \includegraphics[width=0.43\linewidth]{figures/CLEVR_dale-5.png}
-                \label{fig:clevr-dale-5}
-        }
-        \caption{Example images of each dataset, with the target object specified.}
-        \label{fig:clevr-examples}
-\end{figure}
 
 \subsection{CLEVR color}
 The first generated dataset is called 'CLEVR color', in which the target object is identifiable by just the color.
@@ -174,8 +174,8 @@ As the discrete sampled categorical distribtion of the message can't be differen
 \section{Experiments}
 \subsection{Attending in a language game}
 \subsubsection*{Setup}
-In the central experiment, two agents need to solve a referring task together.
-The receiver needs to 'point' to the target object in the visual scene.
+Two agents are tasked to solve a referring problem together.
+The receiver needs to 'point' to the target object in the visual scene that the sender is describing.
 However, only the sender is aware of which of the shown objects is the target object.
 To solve the task correctly the sender is required to generate a referring expression about the target object through the discrete channel while the receiver needs to resolve it.
 The experiment is set up in a way that avoids explicit human language information as human referring expressions or one-hot encoded attributes.
@@ -190,12 +190,7 @@ Messages by the sender can only be based on the highly controlled implicit bias 
 
 Figure \ref{fig:attention_predictor_game_architecture} shows the simplified architecture of the language game.
 The sender is given a set of bounding boxes of all objects in the scene, whereas the target object is always the first bounding box and the distractors are shuffled.
-The features of each bounding box is extracted using ResNet-101 and projected to an image embedding dimension $e$ with a linear layer.
-All encoded bounding boxes are concatenated and again compressed to the decoder output dimension $LSTM_o$ using another linear layer.
-This representation of all objects serves as the initial hidden state of an LSTM, which generates the referring expression.
-Tokens used in the LSTM are embedded with embedding dimension $LSTM_e$.
-During training, teacher forcing is applied by using embeddings of the ground truth tokens as the input sequence for the LSTM, instead of the output of the LSTM.
-
+The features of each bounding box are extracted using ResNet-101, combined and passed to an LSTM to produce a message.
 The receiver is shown the whole scene including the spatial information.
 Given the sender's message, the task is to predict the region around target object.
 For this, the image is divided into 14$\times$14 regions.
@@ -212,16 +207,14 @@ The model is then tasked to predict the matrix $A = (a_{ij})$, where:
 The image is encoded using a combination of ResNet-101 and several convolutional layers described in Section \ref{sec:image-processing}.
 The resulting matrix has 128$\times$14$\times$14 dimension, corresponding to the 14$\times$14 regions.
 
-The sender's message is decoded using an LSTM with a hidden size $h_r=500$ and $e_r=100$.
-The dot product is calculated between each encoded region of the image and the encoded message, and the $softmax$ function is applied subsequently, which results in a 14$\times$14 matrix.
+The sender's message is decoded using an LSTM and the dot product is calculated between each encoded region of the image and the encoded message.
+The $softmax$ function is applied subsequently, which results in a 14$\times$14 matrix.
 This emphasizes the correlation between the message and each region.
 A high dot product for a region indicates a high correlation between the message and the specific region, while a low dot product indicates the opposite.
 Training the agents like this should therefore highlight the regions in the image that are described by the sender, namely the region around the target object.
 To calculate the loss, the $softmax$ function is applied over the prediction and compared to the ground truth matrix $A$ using \emph{binary cross entropy}.
+More details can be found in Appendix \ref{app:technical-details-language-games}.
 
-%TODO e? and h? and o?
-% TODO params langauge games
-The experiments are conducted with the following hyperparameters: a learning rate of $2\times10^{-4}$, a temperature for the Gumbel-Softmax relaxation of 1 and \emph{Adam} \citep{Kingma2015} as optimizer.
 The following values for the variables are compared:
 \begin{itemize}
         \item $|V|$: 2, 10, 16, 50, 100
@@ -257,25 +250,26 @@ This hypothesis is amplified by the results on the 'CLEVR color' dataset.
 Only two configurations beat the baseline, both with a medium-sized vocabulary size and message length.
 In both cases, the learning takes place relatively late, after 15.000 and 30.000 games respectively.
 
-\begin{figure}[ht!]
+\begin{figure*}[ht!]
         \centering
         \subfigure['Dale-2' dataset with different $|V|$ highlighted]{
-                \includegraphics[width=0.485\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
+                \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
                 \label{fig:learning-curve_attention-predictor_dale-2_vocab-size}
         }
         \subfigure['Dale-5' dataset with different $|V|$ highlighted]{
-                \includegraphics[width=0.485\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}
+                \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}
                 \label{fig:learning-curve_attention-predictor_dale-5_vocab-size}
         }
         \subfigure['CLEVR color' dataset with different $|V|$ highlighted]{
-                \includegraphics[width=0.485\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
+                \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
                 \label{fig:learning-curve_attention-predictor_colour_vocab-size}
         }
-        \caption{Learning curves of all attention reference resolver games on each dataset.The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black.}
+        \caption{Learning curves of all attention reference resolver games on each dataset.The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black. The graphs with the same color correspond to different message lengths $n$.}
         \label{fig:learning-curves_attention-predictor}
-\end{figure}
+\end{figure*}
 
 % SD 2025-06-02 19:33:31 +0200: Add explanations what different versions of the same coloured curve mean.
+% DK 2025-06-03 10:00:00 +0200: (done)
 
 % SD 2025-06-02 19:38:22 +0200: To save space put the figures sides-by-side. I normally use minipage
 %
@@ -296,6 +290,7 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
 %      \end{center}
 %    \end{minipage}%
 % \end{center}
+% DK 2025-06-03 10:00:00 +0200: (done)
 
 
 \begin{table}[ht]
@@ -307,32 +302,33 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
                 $n$                           & $|V|$     & \textbf{$P$ mass}                   & \textbf{$P$ mass}                   & \textbf{$P$ mass}                  \\\midrule
                 \multicolumn{2}{c|}{baseline} & {62,16\%} & {49,61\%}                           & {41,68\%}                                                                \\\midrule
                 {2}                           & {2}       & {92,27\%}                           & \textcolor{red}{52,15\%}            & \textcolor{red}{33,64\%}           \\
-                {2}                           & {10}      & \textbf{96,16\%}                    & {80,26\%}                           & \textcolor{red}{36,53\%}           \\
-                {2}                           & {16}      & {95,84\%}                           & \textbf{84,03\%}                    & \textcolor{red}{39,65\%}           \\
-                {2}                           & {50}      & {93,78\%}                           & \textcolor{red}{52,24\%}            & \textcolor{red}{39,56\%}           \\
-                {2}                           & {100}     & {92,43\%}                           & \textcolor{red}{53,23\%}            & \textcolor{red}{37,68\%}           \\
                 {3}                           & {2}       & {94,52\%}                           & \textcolor{red}{51,97\%}            & \textcolor{red}{37,09\%}           \\
-                {3}                           & {10}      & {94,9\%}                            & \textcolor{red}{53,47\%}            & \textcolor{red}{38,24\%}           \\
-                {3}                           & {16}      & {94,59\%}                           & \textbf{81,46\%}                    & \textbf{67,88\%}                   \\
-                {3}                           & {50}      & {93,88\%}                           & {79,65\%}                           & \textcolor{red}{40,36\%}           \\
-                {3}                           & {100}     & {95,25\%}                           & \textcolor{red}{48,52\%}            & \textcolor{red}{42,55\%}           \\
                 {4}                           & {2}       & {89,15\%}                           & \textcolor{red}{51,98\%}            & \textcolor{red}{39,68\%}           \\
-                {4}                           & {10}      & \textbf{96,08\%}                    & \textcolor{red}{48,03\%}            & \textbf{64,31\%}                   \\
-                {4}                           & {16}      & {94,14\%}                           & \textcolor{red}{49,81\%}            & \textcolor{red}{40,84\%}           \\
-                {4}                           & {50}      & \textbf{96,24\%}                    & \textcolor{red}{48,79\%}            & \textcolor{red}{43,61\%}           \\
-                {4}                           & {100}     & {95,55\%}                           & \textcolor{red}{49,65\%}            & \textcolor{red}{42,85\%}           \\
                 {6}                           & {2}       & \textcolor{red}{59,68\%}            & \textcolor{red}{53,57\%}            & \textcolor{red}{38,43\%}           \\
+                {2}                           & {10}      & \textbf{96,16\%}                    & {80,26\%}                           & \textcolor{red}{36,53\%}           \\
+                {3}                           & {10}      & {94,9\%}                            & \textcolor{red}{53,47\%}            & \textcolor{red}{38,24\%}           \\
+                {2}                           & {16}      & {95,84\%}                           & \textbf{84,03\%}                    & \textcolor{red}{39,65\%}           \\
+                {4}                           & {10}      & \textbf{96,08\%}                    & \textcolor{red}{48,03\%}            & \textbf{64,31\%}                   \\
+                {3}                           & {16}      & {94,59\%}                           & \textbf{81,46\%}                    & \textbf{67,88\%}                   \\
                 {6}                           & {10}      & \textcolor{red}{63,46\%}            & \textbf{82,12\%}                    & \textcolor{red}{40,11\%}           \\
+                {4}                           & {16}      & {94,14\%}                           & \textcolor{red}{49,81\%}            & \textcolor{red}{40,84\%}           \\
                 {6}                           & {16}      & {95,86\%}                           & \textcolor{red}{50,71\%}            & \textcolor{red}{40,61\%}           \\
+                {2}                           & {50}      & {93,78\%}                           & \textcolor{red}{52,24\%}            & \textcolor{red}{39,56\%}           \\
+                {3}                           & {50}      & {93,88\%}                           & {79,65\%}                           & \textcolor{red}{40,36\%}           \\
+                {2}                           & {100}     & {92,43\%}                           & \textcolor{red}{53,23\%}            & \textcolor{red}{37,68\%}           \\
+                {4}                           & {50}      & \textbf{96,24\%}                    & \textcolor{red}{48,79\%}            & \textcolor{red}{43,61\%}           \\
+                {3}                           & {100}     & {95,25\%}                           & \textcolor{red}{48,52\%}            & \textcolor{red}{42,55\%}           \\
                 {6}                           & {50}      & {91,27\%}                           & \textcolor{red}{52,55\%}            & \textcolor{red}{40,21\%}           \\
+                {4}                           & {100}     & {95,55\%}                           & \textcolor{red}{49,65\%}            & \textcolor{red}{42,85\%}           \\
                 {6}                           & {100}     & \textcolor{red}{60,27\%}            & \textcolor{red}{46,92\%}            & \textcolor{red}{41,98\%}           \\
                 \bottomrule
         \end{tabular}
-        \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes.}
+        \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes. Results in red didn't pass the baseline. The results are sorted by the product of $n$ and $|V|$ which corresponds to available space for the message. The best results are achieved with a medium-sized messages space across all datasets.}
         \label{tab:results:attention-reference-resolver-game}
 \end{table}
 
 % SD 2025-06-02 19:58:12 +0200: An idea: if we multiply n * V we get the number of possible cominations, right? If we rankend the results this way they would be comperable and show the interaction between the vocabulary size and message length.
+% DK 2025-06-03 10:00:00 +0200: (done)
 
 The final probability masses after 128.000 games are summed up in Table \ref{tab:results:attention-reference-resolver-game}.
 Interestingly, the baseline can already find and attend to the correct regions in many cases without the help of the sender.
@@ -370,7 +366,9 @@ This dataset includes even up to 10 objects present in the scene which increases
 
 Appendix \ref{app:attention-errors} shows examples of the wrongly identified regions on each dataset.
 These are predictions by the agents that are wrong even thoug a language emerged successfully.
-Main problems seemed to be target objects not being in the actual frame of the scene that the receiver was processing. % SD 2025-06-02 20:10:47 +0200: How could this happen? The scene has been trimmed, right?
+Main problems seemed to be target objects not being in the actual frame of the scene that the receiver was processing.
+This happens due to center cropping the image to prepare it for the ResNet model. % SD 2025-06-02 20:10:47 +0200: How could this happen? The scene has been trimmed, right?
+% DK 2025-06-03 10:00:00 +0200: (done)
 However, in several cases (as in the central image), especially for the 'Dale-5' dataset, all objects are visible, and the agents still don't attend solely on the target object.
 Rather than choosing one of the distractors, the agents usually attend to both objects relatively equally.
 This indicates that the receiver is uncertain which object the sender is describing.
@@ -391,12 +389,12 @@ The referring expressions for the target object are generated using the incremen
 % TODO incremental?
 By this, the model needs to describe the target object with respect to the distractor objects.
 
-\begin{figure}[ht]
-        \centering
-        \includegraphics[width=\linewidth]{figures/arch_bb_caption_generator.png}
-        \caption{Simplified architecture of the bounding box RE generator}
-        \label{fig:bb_re_generator_architecture}
-\end{figure}
+% \begin{figure}[ht]
+%         \centering
+%         \includegraphics[width=\linewidth]{figures/arch_bb_caption_generator.png}
+%         \caption{Simplified architecture of the bounding box RE generator}
+%         \label{fig:bb_re_generator_architecture}
+% \end{figure}
 
 During testing, the LSTM is always forced to generate three tokens, with an embedded start-of-sequence token as first input to the LSTM.
 Each token in the sequence is determined greedily, by selecting the highest logit in the output of each step in the LSTM.
@@ -513,48 +511,35 @@ Furthermore, the low recall of the size tokens shows that the model produces too
 
 \subsection{Referring expression resolution (receiver)}
 As before, the setup of the receiver model stays the same for this experiment, but instead of interpreting the sender's message, natural language referring expressions are passed to the model.
+As we know that the referring expressions are grounded in the scene, we can now compare the results to the language games, where the agents needed to learn and ground the arbitary vocabulary first.
 
-\begin{figure}[ht]
-        \centering
-        \includegraphics[width=.4\linewidth]{figures/arch_attention_predictor.png}
-        \caption{Simplified architecture of the attention predictor}
-        \label{fig:attention_predictor_architecture}
-\end{figure}
-
-A central problem in the models' predictions is therefore the focussing on precise locations in the image and connecting them to the referring expression.
-The \textbf{attention reference resolver} is meant to solve this problem in two ways.
-First, the predictions must not be as precise, as only regions in a 14$\times$14 grid need to be identified.
-Second, the referring expressions are naturally combined with each region in the image.
-While the \emph{coordinate reference resolver} only combines the complete feature map with the encoded referring expression, the \emph{attention reference resolver} calculates the similarity of each region with the referring expression separately.
-This should connect both encodings easier.
-As Table \ref{tab:results:attention-reference-resolver} shows, this hypothesis seems to be confirmed.
-Across all datasets, the model is able focus on the correct region in the image with high precision.
-On the 'Dale-2' dataset, the model is able to make 96,57\% of its predictions in the correct regions around the target object with a projection size of $p=500$.
-The worst result with $p=300$ still only lies around 3\% points below and therefore identifies the target object almost always correctly.
-These results still hold, when more distractors and more complex referring expressions are introduced.
-On the 'Dale-5' dataset, the model can achieve similar performances, with a probability mass of 93,61\% with $p=300$, while three of the remaining configurations stay above 92\%.
-When the \emph{color} is the only discriminating attribute, the model achieves again similar results to the 'Dale-2' dataset, despite the higher number of distractors of up to 10.
-The best performance of 95,33\% is achieved with $p=100$, but all configurations beat are almost reach 94\%.
-In conclusion, the models are able to easily understand the referring expression and to ground them in the target object in the image.
-While more complex referring expressions challenge the model slightly more, it still can focus on the correct object.
+% \begin{figure}[ht]
+%         \centering
+%         \includegraphics[width=.4\linewidth]{figures/arch_attention_predictor.png}
+%         \caption{Simplified architecture of the attention predictor}
+%         \label{fig:attention_predictor_architecture}
+% \end{figure}
 
 \begin{table}[ht]
         \centering
-        \begin{tabular}{c|c|c|c}
+        \begin{tabular}{c|c}
                 \toprule
-                       & \multicolumn{1}{c}{\textbf{Dale-2}} & \multicolumn{1}{c}{\textbf{Dale-5}} & \multicolumn{1}{c}{\textbf{color}} \\  \cmidrule(lr){2-2}\cmidrule(lr){3-3}\cmidrule(lr){4-4}
-                $p$    & \textbf{$P$ mass}                   & \textbf{$P$ mass}                   & \textbf{$P$ mass}                  \\\midrule
-                {50}   & {94,47\%}                           & {89,69\%}                           & {94,36\%}                          \\
-                {100}  & {95,16\%}                           & {92,19\%}                           & {95,33\%}                          \\
-                {300}  & {93,65\%}                           & {93,61\%}                           & {94,15\%}                          \\
-                {500}  & {96,57\%}                           & {92,29\%}                           & {94,15\%}                          \\
-                {1000} & {95,93\%}                           & {92,93\%}                           & {93,82\%}                          \\
+                                          & \textbf{Probability mass}  \\\midrule
+                    \textbf{Dale-2}       & {95,16\%}                  \\
+                    \textbf{Dale-5}       & {92,19\%}                  \\
+                    \textbf{CLEVR color}  & {95,33\%}                  \\
                 \bottomrule
         \end{tabular}
-        \caption{Probability masses for different projection sizes $p$ of the model after 20 epochs with $LSTM_e=15$ and $LSTM_o=1500$}
+        \caption{Probability masses of the model after 20 epochs with $LSTM_e=15$ and $LSTM_o=1500$.}
         \label{tab:results:attention-reference-resolver}
 \end{table}
 
+The results are shown in Table \ref{tab:results:attention-reference-resolver}.
+Across all datasets, the model is able focus on the correct region in the image with high precision of over 90\%.
+Interestingly, a different pattern emerges when comparing the results to the language games.
+While both agents and the single model achieved the best scores with the 'Dale-2' dataset, the single model can achieve similar results on the 'CLEVR color' dataset.
+On the 'Dale-5' dataset, the performance is slightly worse.
+In contrast, the agents achieved better results on the 'Dale-5' dataset, and struggled mostly with learning and grounding colors.
 
 \section{Discussion and Conclusion}
 
@@ -563,9 +548,24 @@ While more complex referring expressions challenge the model slightly more, it s
 
 \appendix
 
+\section{Technical details of the language games}
+\label{app:technical-details-language-games}
+The sender extracts the features of each bounding box using ResNet-101 and projects them to an image embedding dimension $e_r=100$ with a linear layer.
+All encoded bounding boxes are concatenated and again compressed to the decoder output dimension $h_s=500$ using another linear layer.
+This representation of all objects serves as the initial hidden state of an LSTM, which generates the referring expression.
+Tokens used in the LSTM are embedded with embedding dimension $LSTM_{s,e}=100$.
+During training, teacher forcing is applied by using embeddings of the ground truth tokens as the input sequence for the LSTM, instead of the output of the LSTM.
+
+The receiver decodes the sender's message using an LSTM with a hidden size $h_r=500$ and token embedding dimension of $LSTM_{r,e}=100$.
+The image is encoded using a combination of ResNet-101 and several convolutional layers described in Section \ref{sec:image-processing}.
+Bothe encodings are passed through a $tanh$ non-linearity, and the results are combined using a dot product.
+The resulting vector is passed through a $softmax$ function to produce a probability distribution over the 14$\times$14 regions of the image.
+
+The experiments are conducted with the following hyperparameters: a learning rate of $2\times10^{-4}$, a temperature for the Gumbel-Softmax relaxation of 1 and \emph{Adam} \citep{Kingma2015} as optimizer.
+
 \section{Examples of errors in attention prediction}
 \label{app:attention-errors}
-\begin{figure*}[ht]
+\begin{figure*}[!htbp]
         \centering
         \subfigure['Dale-2']{
                 \includegraphics[width=.839\linewidth]{figures/visualization_games_dale-2_attention.png}
