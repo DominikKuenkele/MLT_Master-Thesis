@@ -8,7 +8,7 @@
 % but it will improve the layout of the manuscript,
 % and will typically save some space.
 \usepackage{microtype}
- 
+\usepackage{inconsolata}
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{booktabs}
@@ -62,8 +62,9 @@
 
 \maketitle
 \begin{abstract}
-  This paper explores how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
-  One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes like shape, color, and size. Learning is guided by feedback from successful interactions.
+  We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
+  One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes like shape, color, and size.
+  Learning is guided by feedback from successful interactions.
   We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
 \end{abstract}
 
@@ -76,13 +77,13 @@ Referring expressions require systems to map visual attributes onto linguistic d
 \citet{Dale1995} formalized this process through an incremental generation algorithm that constructs descriptions by systematically adding distinguishing properties in order of salience until achieving unique identification.
 By this, referring expression only contain attributes that are necessary to discriminate the target from the surroundings.
 
-Reserch in this area investigates how artificial agents can develop referential abilities through language games — interactive scenarios where communication protocols emerge from repeated coordination attempts \citep{Clark1996,Bartlett2005,Kirby2008,Steels2009,Kharitonov2019,Lazaridou2017}. 
+Research in this area investigates how artificial agents can develop referential abilities through language games - interactive scenarios where communication protocols emerge from repeated coordination attempts \citep{Clark1996,Bartlett2005,Kirby2008,Steels2009,Kharitonov2019,Lazaridou2017}. 
 Modern implementations use deep neural networks as agents that exchange discrete messages to solve visual discrimination tasks, allowing systematic study of how symbol meaning emerges from interaction.
 
 This paper examines emergent referential communication in neural agents tasked with identifying objects in 3D visual scenes.
 Using a highly controlled extension of the CLEVR dataset \citep{Johnson2017a}, we are able to manipulate the bias the neural agents are able to use in the emergent communication.
 We are able to vary the complexity of referential scenarios to understand the constraints governing successful symbol grounding.
-Our work is  a study of how increasing the complexity of the scene and therefore the space of potential referential expressions to be learned affects learning through interraction of particular configurations of neural networks.
+Our work is  a study of how increasing the complexity of the scene and therefore the space of potential referential expressions to be learned affects learning through interaction of particular configurations of neural networks.
 
 \section{Dataset}
 \begin{figure*}[!htbp]
@@ -103,18 +104,18 @@ Our work is  a study of how increasing the complexity of the scene and therefore
         \label{fig:clevr-examples}
 \end{figure*}
 
-We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{Source code on GitHub}}
+We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{Github-Link} % \footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{Source code on GitHub}}
 By this, the objects in the generated images are controlled to have different human-recognizable attributes, namely the \emph{shape}, \emph{size} and \emph{color}.
 These attributes also correspond to referring expressions in natural language such as English which effectively biases the agents to learn a language that is comparable to a human language.
 
 The objects in the scene are separated into two categories: one \emph{target object} and a controlled number of \emph{distractor} objects.
-The target object is the main object in the scene and the models are trained to identify and communicate between each other.
+The target object is the main object in the scene and the models are trained to identify and communicate it between each other.
 This object is unique in the scene in respect to the attributes.
 The distractor group contains objects that can share a maximum of two attributes per object.
 Distractors are not required to be unique.
 
-Using these rules, we generate three datasets with the following contraints:
-(i) the size of the generated images is 480x320 pixels;
+Using these rules, we generate three datasets with the following constraints:
+(i) the size of the generated images is 480$\times$320 pixels;
 (ii) 10.000 images are created for each of the datasets;
 (iii) each image contains a maximum of 10 objects, that are not intersecting, have the same minimum distance between objects and are at least partially visible from the camera.
 
@@ -157,7 +158,7 @@ To do this, all experiments rely on the \emph{\textbf{E}mergence of lan\textbf{G
 This framework allows the implementation of language games in code, where two neural models agents communicate through a unidirectional discrete channel.
 A sender agent processes visual input.
 The result is used as the initial hidden state for the encoder LSTM.
-This LSTM is then producing symbols until it generates an /texttt{<eos>} symbol.
+This LSTM is then producing symbols until it generates an \texttt{<eos>} symbol.
 The receivers' decoder LSTM processes the message symbol by symbol with a randomly initialized hidden state.
 After each time, a symbol is processed by the LSTM, the resulting new hidden state is passed to the receiver's neural model as the parsed message.
 The receiver agent is combining it with its representation of the image input and is predicting an output.
@@ -173,7 +174,7 @@ Two agents are tasked to solve a referring problem together.
 The receiver needs to 'point' to the target object in the visual scene that the sender is describing.
 However, only the sender is aware of which of the shown objects is the target object.
 To solve the task correctly the sender is required to generate a referring expression about the target object through the discrete channel while the receiver needs to resolve it.
-The experiment is set up in a way that avoids explicit human language information as human referring expressions or one-hot encoded attributes.
+The experiment is set up in a way that avoids explicit human language information as e.g. human referring expressions or one-hot encoded attributes.
 Messages by the sender can only be based on the highly controlled implicit bias in the visual scenes.
 
 \begin{figure}[ht]
@@ -185,7 +186,7 @@ Messages by the sender can only be based on the highly controlled implicit bias 
 
 Figure \ref{fig:attention_predictor_game_architecture} shows the simplified architecture of the language game.
 The sender is given a set of bounding boxes of all objects in the scene, whereas the target object is always the first bounding box and the distractors are shuffled.
-The features of each bounding box are extracted using ResNet-101, combined and passed to an LSTM to produce a message.
+The features of each bounding box are extracted using ResNet-101, combined and passed to the LSTM to produce a message.
 The receiver is shown the whole scene including the spatial information.
 Given the sender's message, the task is to predict the region around target object.
 For this, the image is divided into 14$\times$14 regions.
@@ -314,7 +315,7 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
                 {6}                           & {100}     & \textcolor{red}{60,27\%}            & \textcolor{red}{46,92\%}            & \textcolor{red}{41,98\%}           \\
                 \bottomrule
         \end{tabular}
-        \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes. Results in red didn't pass the baseline. The results are sorted by the product of $n$ and $|V|$ which corresponds to available space for the message. The best results are achieved with a medium-sized messages space across all datasets.}
+        \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes. Results in red didn't pass the baseline. The results are sorted by the product of $n$ and $|V|$ which corresponds to available space for the message. The best results are achieved with a medium-sized message space across all datasets.}
         \label{tab:results:attention-reference-resolver-game}
 \end{table}
 
@@ -370,7 +371,7 @@ In contrast, the share of errors of the latter type is drastically higher.
 While a general pattern is difficult to identify, the receiver tends to confuse the target object with distractors that share multiple attributes with each other.
 In the central and right image, the wrongly identified distractors share both \emph{size} and \emph{shape} with the target object.
 
-\subsection{Sender and receiver with narural language referring expressions}
+\subsection{Sender and receiver with natural language referring expressions}
 Two further experiments are conducted to have a closer look at the sender and receiver models.
 More precisely, we evaluate how introducing explicit natural language bias into the models changes the training and ability to solve the tasks.
 This is done by training both the sender and receiver models separately outside a language game context, while the architecture stays the same.
@@ -389,14 +390,13 @@ By this, the model needs to describe the target object with respect to the distr
 %         \label{fig:bb_re_generator_architecture}
 % \end{figure}
 
-During testing, the LSTM is always forced to generate three tokens, with an embedded start-of-sequence token as first input to the LSTM.
+During testing, the LSTM is always forced to generate three tokens, with an embedded \texttt{<sos>} token as first input to the LSTM.
 Each token in the sequence is determined greedily, by selecting the highest logit in the output of each step in the LSTM.
 Training is done for 30 epochs and with a learning rate of $2\times10^{-4}$.
 The loss is calculated using cross entropy.
 
 This task can be interpreted as a classification task rather than a natural language generation task, as the model is tasked to assign specific attributes to the target object instead of producing free text with a large vocabulary.
 Following, the model's success is validated on accuracy, recall and precision scores.
-These are calculated in the following ways.
 The \textbf{overall accuracy} is a measure if the model predicted every word in the referring expression correctly.
 
 \begin{table}[ht]
@@ -413,7 +413,7 @@ The \textbf{overall accuracy} is a measure if the model predicted every word in 
         \label{tab:results:bb-re-generator}
 \end{table}
 
-Table \ref{tab:results:bb-re-generator} shows the \emph{overall accuracy}, \emph{F1 scores} for each word.
+Table \ref{tab:results:bb-re-generator} shows the \emph{overall accuracy} and \emph{F1 scores} for each word.
 As can be seen, the overall accuracies, in other words perfect matches of the generated referring expression depend very much on the dataset.
 With the 'Dale-2' and 'CLEVR color' dataset, the model can achieve high scores of 99\% and 93\% if the samples.
 Opposed to that the model can only generate perfect referring expressions in 69\% of the samples of the 'Dale-5' dataset.
@@ -545,7 +545,7 @@ During training, teacher forcing is applied by using embeddings of the ground tr
 
 The receiver decodes the sender's message using an LSTM with a hidden size $h_r=500$ and token embedding dimension of $LSTM_{r,e}=100$.
 The image is encoded using a combination of ResNet-101 and several convolutional layers described in Section \ref{sec:image-processing}.
-Bothe encodings are passed through a $tanh$ non-linearity, and the results are combined using a dot product.
+Both encodings are passed through a $tanh$ non-linearity, and the results are combined using a dot product.
 The resulting vector is passed through a $softmax$ function to produce a probability distribution over the 14$\times$14 regions of the image.
 
 The experiments are conducted with the following hyperparameters: a learning rate of $2\times10^{-4}$, a temperature for the Gumbel-Softmax relaxation of 1 and \emph{Adam} \citep{Kingma2015} as optimizer.
@@ -566,7 +566,7 @@ The experiments are conducted with the following hyperparameters: a learning rat
                 \includegraphics[width=\linewidth]{figures/visualization_games_colour_attention.png}
                 \label{fig:visualizations_game_colour_attention}
         }
-        \caption{Examples of the \emph{attention reference resolvers'} predictions in games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
+        \caption{Examples of the predictions in language games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed for ResNet-101. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
         \label{fig:visualizations_game_attention}
 \end{figure}
 
