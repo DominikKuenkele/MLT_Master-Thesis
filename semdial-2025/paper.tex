@@ -67,27 +67,24 @@
   We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction and Background}
+How do cognitive systems bridge the gap between rich, continuous sensory experiences and the sparse, discrete symbols used in communication? 
+While perception operates through continuous signals, linguistic communication relies on finite vocabularies that must ground meaning about the perceived world \citep{Regier1996,Roy2005,Cooper2023}.
+This representational challenge, known as the symbol grounding problem \citep{Harnad1990}, becomes particularly acute in artificial systems where discrete symbols must acquire meaning through interaction rather than pre-programmed associations. 
 
+Referring expressions require systems to map visual attributes onto linguistic descriptions that uniquely identify target objects and thus can be use to study symbol grounding.
+\citet{Dale1995} formalized this process through an incremental generation algorithm that constructs descriptions by systematically adding distinguishing properties in order of salience until achieving unique identification.
+By this, referring expression only contain attributes that are necessary to discriminate the target from the surroundings.
 
-Agents interact with the physical world through their actions and perception, and with other agents through language.
-Their sensors and actuators allow them to sample the world and their own state using measures that are continuous in nature such as intensity of light, distance, angles, velocity and others which can be measured with a high degree of accuracy.
-On the other hand, the language that is used to communicate with other agents is based on representations that are composed of a limited set of discrete and arbitrarily chosen symbols.
-How can both domains and representations arising from these interactions be combined? How are the ranges of measurements expressed in a continuous domain mapped to discrete linguistic labels?
-How is ambiguity and underspecification resolved?
-How can agents achieve it through interactive grounding \citep{Regier1996,Roy2005,Cooper2023}?
+Reserch in this area investigates how artificial agents can develop referential abilities through language games — interactive scenarios where communication protocols emerge from repeated coordination attempts \citep{Clark1996,Bartlett2005,Kirby2008,Steels2009,Kharitonov2019,Lazaridou2017}. 
+Modern implementations use deep neural networks as agents that exchange discrete messages to solve visual discrimination tasks, allowing systematic study of how symbol meaning emerges from interaction.
 
-In this paper we explore how agents based on artificial neural networks learn referential grounding of entities in images of 3-dimensional scenes through language games \citep{Clark1996,Bartlett2005,Kirby2008,Steels2009,Zaslavsky2018}.
-One agent is describing the entities represented as features within bounding boxes of objects, inventing new vocabulary as necessary. The other agent learns to interpret the reference of symbols by identifying one of the bounding boxes based on object attributes such as shape, colour and size.
-Both agents learn through the success of interaction which is communicated through feedback.
-The objective we would like us to achive is to model constraints on the model that enable learning language through communication.
-The novelty of our work, compared with the previous work with this setup \citep{Kharitonov2019,Lazaridou2017}, consists the extension of the popular CLEVR dataset \citep{Johnson2017a} with new artificially generated 3-d scenes of objects. These can be referred to based on attributes such as \emph{shape}, \emph{colour} and \emph{size} and discriminated based on different overlaps of these attributes between the target and the distractor objects.
+This paper examines emergent referential communication in neural agents tasked with identifying objects in 3D visual scenes.
+Using a highly controlled extension of the CLEVR dataset \citep{Johnson2017a}, we are able to manipulate the bias the neural agents are able to use in the emergent communication.
+We are able to vary the complexity of referential scenarios to understand the constraints governing successful symbol grounding.
 Our work is  a study of how increasing the complexity of the scene and therefore the space of potential referential expressions to be learned affects learning through interraction of particular configurations of neural networks.
 
-\section{Background}
-
 \section{Dataset}
-
 \begin{figure*}[!htbp]
         \centering
         \subfigure['CLEVR color', \emph{small brown cylinder}]{
@@ -106,8 +103,6 @@ Our work is  a study of how increasing the complexity of the scene and therefore
         \label{fig:clevr-examples}
 \end{figure*}
 
-% complete control to have emergent languages.
-% For this research
 We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{Source code on GitHub}}
 By this, the objects in the generated images are controlled to have different human-recognizable attributes, namely the \emph{shape}, \emph{size} and \emph{color}.
 These attributes also correspond to referring expressions in natural language such as English which effectively biases the agents to learn a language that is comparable to a human language.
@@ -160,18 +155,16 @@ This matrix represents the encoded image with its extracted features.
 The goal of this research is to run and compare different setups of language games systematically.
 To do this, all experiments rely on the \emph{\textbf{E}mergence of lan\textbf{G}uage in \textbf{G}ames} (EGG) framework \citep{Kharitonov2019}.
 This framework allows the implementation of language games in code, where two neural models agents communicate through a unidirectional discrete channel.
-A sender neural model processes visual input.
-% TODO neural model vs agent
+A sender agent processes visual input.
 The result is used as the initial hidden state for the encoder LSTM.
-This LSTM is then producing symbols until it generates an end-of-sequence symbol.
+This LSTM is then producing symbols until it generates an /texttt{<eos>} symbol.
 The receivers' decoder LSTM processes the message symbol by symbol with a randomly initialized hidden state.
-The received message sequence is processed symbol by symbol.
 After each time, a symbol is processed by the LSTM, the resulting new hidden state is passed to the receiver's neural model as the parsed message.
 The receiver agent is combining it with its representation of the image input and is predicting an output.
 In other words the receiver agent produces as many outputs as symbols are present in the message.
 The loss is calculated for each of these outputs separately.
 These losses are summed up to a total loss that is used to adapt the weights in both agents as well as in both LSTMs.
-As the discrete sampled categorical distribtion of the message can't be differentiated, we use Gumbel-Softmax relaxation \citep{Jang2017} to turn it into a continuous distribution, thus allowing backpropagation.
+As the discrete sampled categorical distribtion of the message can't be differentiated, we use Gumbel-Softmax relaxation \citep{Jang2017} to turn it into a continuous distribution, thus allowing backpropagation through the whole language game.
 
 \section{Experiments}
 \subsection{Attending in a language game}
@@ -229,6 +222,7 @@ All results are compared to a baseline in which the sender is generating random 
 Any increase in performance requires information being transferred between the agents and the emergence of a language.
 
 % SD 2025-06-02 19:34:52 +0200: Some of the technical details about the exact structure of the LSTMs and the parameters could be moved to Appendix (and referenced) to save space.
+% DK 2025-06-03 10:00:00 +0200: (done)
 
 \subsubsection*{Results}
 The learning curves are shown in Figure \ref{fig:learning-curves_attention-predictor}.
@@ -237,10 +231,9 @@ However, when the agents start to learn to communicate, the probability mass is 
 On the 'Dale-2' dataset, the boost is around 40\% points.
 Most of the learning takes place in the first 40.000 games, but there are also two configurations that increase the performance very late after 70.000 and 105.000 games respectively.
 Hereby, agents tend to learn faster the smaller their vocabulary size is.
-The same applies as well to the message length. % SD 2025-06-02 19:41:31 +0200: Add that is shown by different versions of the same coloured curve.
 Using the 'Dale-5' dataset, the probability masses are boosted around 30\% points when the agents start to communicate successfully.
 Compared to the 'Dale-2' dataset, fewer configurations start to converge, while most achieve performances close to the baseline. % SD 2025-06-02 19:48:52 +0200: What is the baseline?
-The smaller number of learning curves makes the analysis more difficult, but the same trend about the vocabulary size and the message length is still visible.
+The smaller number of learning curves makes the analysis more difficult, but the same trend about the vocabulary size is still visible.
 Interestingly, only one configuration with $|V|=2$ beats the baseline, but behaves relatively unstable over the remaining training.
 On the other hand no configuration with $|V|=100$ is successful.
 This indicates that one symbol is too few to encode all meaning, but too many symbols pose a too high difficulty to learn.
@@ -334,10 +327,11 @@ The probability mass is higher than a uniform distribution ($\approx$ 4,6\%) and
 It reaches 62,16\% on the 'Dale-2' dataset, 49,61\% on the 'Dale-5' dataset and 41,68\% on the 'CLEVR color' dataset.
 Looking at the 'Dale-2' dataset, almost all configurations beat the baseline and achieve performances of over 90\%, the best configurations reach even 96\%.
 Only three configurations stay on the level of the baseline. % SD 2025-06-02 19:53:41 +0200: Shown in red.
+% DK 2025-06-03 10:50:12+0200: added to table caption
 When comparing the results, mostly the message length $n$ seems to have an influence on the performance.
 While configurations with $n=6$ can perform well, this is not constant.
 All three configurations that don't pass the baseline are allowed to produce message with $n=6$.
-$n \in \{3,4\}$ seem to help the agents the most to perform consistently well, but the difference to configurations with $n \in \{1,2\}$ is very small.
+$n \in \{3,4\}$ seem to help the agents the most to perform consistently well, but the difference to configurations with $n=2$ is very small.
 In both cases, the target object is unambiguously identified.
 The small number of experiments doesn't allow definite conclusions on the influence of the vocabulary size $|V|$, though $|V|=2$ performs slightly worse than the remaining vocabulary sizes.
 A correlation between $n$ and $|V|$ is not identifiable.
@@ -345,19 +339,21 @@ A correlation between $n$ and $|V|$ is not identifiable.
 On the 'Dale-5' dataset, the agents already have bigger problems to beat the baseline.
 Only 8 out of 30 configuration perform better and reach probability masses around 76\% to 84\%.
 However, the increase compared to the baseline is as high as on the 'Dale-2' dataset, with around 30\% points.
-Smaller message lengths ($n \in \{1,2,3\}$) as well as a medium-sized vocabulary ($|V| \in \{10,16,50\}$) tend to help the agents more, to solve the task successfully.
+Smaller message lengths ($n \in \{2,3\}$) as well as a medium-sized vocabulary ($|V| \in \{10,16,50\}$) tend to help the agents more, to solve the task successfully.
 As before, no correlation is visible with the few successful games.
 That the agents struggle more with the 'Dale-5' dataset is not surprising.
 First, the larger number of distractors makes it more difficult for the receiver to focus, as can be seen already in the baseline performances.
-Additionally, in case the sender communicates the attributes of the target object to the receiver, more information needs to be encoded to uniquely describe the target object.
+Additionally, the larger number of objects also influences the referring expression needed to uniquely describe the target object.
+With an increasing number of distractors, the probability rises that the target object shares attributes with any distractor.
+Therefore, it is more likely that the sender needs to use two or three attributes to describe the target object on the 'Dale-5' dataset compared to the 'Dale-2' dataset.
 This is naturally more complex to learn for the agents. % SD 2025-06-02 20:01:28 +0200: is this really the case? In Figure 1 we have several objects and attributes but "the brown" can only be distinguished by one attribute. The goal is to always control the number of the attributes that are needed to describe the target rather than the number of attributes that are shared in the image, right? In this experiment we do not distinguish this because all are agreggated for the dataset, right? There is a difference between the complexity of the scene in terms of the attributes and the complexity of the shortest referring expresssion needed to identify the target. This is something that I still have a hard time to remember which one we are doing in this work. Can we expand on this a bit more?
+% DK 2025-06-03 10:50:12+0200: (done)
 Finally, since more objects are present, they are more likely clustered closer together, which can result in the identification of adjacent regions to the target regions.
-
 
 The agents struggle the most on the 'CLEVR color' dataset.
 Hereby, only two configurations perform better than the baseline and reach a probability mass of around 64\% to 67\%.
 Both utilize a medium message length of $n \in \{3,4\}$ and a medium-sized vocabulary of $|V| \in \{10,16\}$.
-Interestingly, several configurations with short message lengths of $n \in \{1,2\}$ perform worse than the baseline.
+Interestingly, several configurations with short message lengths of $n=2$ perform worse than the baseline.
 This indicates that there is communication between the agents, but it rather distracts the receiver from the target object towards the distractors.
 The same point for a more difficult task when more objects are involved can be made for the 'CLEVR color' dataset.
 This dataset includes even up to 10 objects present in the scene which increases the likelihood that the receiver focuses on a wrong object.
@@ -365,7 +361,7 @@ This dataset includes even up to 10 objects present in the scene which increases
 Appendix \ref{app:attention-errors} shows examples of the wrongly identified regions on each dataset.
 These are predictions by the agents that are wrong even though a language emerged successfully.
 Main problems seemed to be target objects not being in the actual frame of the scene that the receiver was processing.
-This happens due to center cropping the image to prepare it for the ResNet model. % SD 2025-06-02 20:10:47 +0200: How could this happen? The scene has been trimmed, right?
+This happens due to center cropping the image to prepare it as input for the ResNet model. % SD 2025-06-02 20:10:47 +0200: How could this happen? The scene has been trimmed, right?
 % DK 2025-06-03 10:00:00 +0200: (done)
 However, in several cases (as in the central image), especially for the 'Dale-5' dataset, all objects are visible, and the agents still don't attend solely on the target object.
 Rather than choosing one of the distractors, the agents usually attend to both objects relatively equally.
@@ -374,17 +370,16 @@ In contrast, the share of errors of the latter type is drastically higher.
 While a general pattern is difficult to identify, the receiver tends to confuse the target object with distractors that share multiple attributes with each other.
 In the central and right image, the wrongly identified distractors share both \emph{size} and \emph{shape} with the target object.
 
-\subsection{Sender and receiver on their own}
+\subsection{Sender and receiver with narural language referring expressions}
 Two further experiments are conducted to have a closer look at the sender and receiver models.
 More precisely, we evaluate how introducing explicit natural language bias into the models changes the training and ability to solve the tasks.
 This is done by training both the sender and receiver models separately outside a language game context, while the architecture stays the same.
 Instead of generating and respectively understanding a message of an emergent language, natural language referring expressions are used.
-% TODO we know how natural langugae RE are groudnde in scense while we don't know this about emergend langauge RE
+Here, we know that the symbols are grounded in the visual scenes and correspond to attributes of the objects.
 
 \subsubsection{Referring expression generation (sender)}
 First, instead of generating a message for the receiver, the sender is now tasked to generate natural language referring expressions.
 The referring expressions for the target object are generated using the incremental GRE-algorithm \citep{Dale1995}. % , described in Section \ref{sec:background:re}.
-% TODO incremental?
 By this, the model needs to describe the target object with respect to the distractor objects.
 
 % \begin{figure}[ht]
@@ -404,13 +399,6 @@ Following, the model's success is validated on accuracy, recall and precision sc
 These are calculated in the following ways.
 The \textbf{overall accuracy} is a measure if the model predicted every word in the referring expression correctly.
 
-\subsubsection*{Results}
-Table \ref{tab:results:bb-re-generator} shows the \emph{overall accuracy}, \emph{F1 scores} for each word.
-As can be seen, the overall accuracies, in other words perfect matches of the generated referring expression depend very much on the dataset.
-With the 'Dale-2' dataset, the model can achieve perfect matches in 99\% of the cases in its best configuration.
-Also the 'CLEVR color' dataset allows the model to predict the correct referring expression in 93\% of the samples.
-Opposed to that the model can only generate perfect referring expressions in 69\% of the samples of the 'Dale-5' dataset.
-
 \begin{table}[ht]
         \centering
         \begin{tabular}{c|cc}
@@ -425,40 +413,16 @@ Opposed to that the model can only generate perfect referring expressions in 69\
         \label{tab:results:bb-re-generator}
 \end{table}
 
-Tables \ref{tab:results:bb-re-generator_size-shape} and \ref{tab:results:bb-re-generator_color} give a more detailed insight in the results and especially what mistakes the model is making for both the 'Dale-5' and 'CLEVR color' datasets.
-They list \emph{precision} and \emph{recall} metrics for each token for the best configuration of the model with $e=100$, $LSTM_o=500$ and $LSTM_e=30$.
-The tokens are grouped by attribute and also show the metrics averaged over each of the attributes.
-Since the overall results for the 'Dale-2' dataset are already close to perfect, the focus for this analysis lies on the remaining two datasets.
-The metrics of the \emph{$<pad>$} token indicate if the model produced the correct length of the referring expression, in other words if it was able to determine which attributes are necessary to discriminate the target object from the distractors.
-For the 'CLEVR color' dataset, the scores are perfect.
-This is not surprising, because all referring expressions for the 'CLEVR color' dataset consist of exactly two attributes, shape and color, and the first generated token will always be the only \emph{<pad>} token in the referring expression (corresponding to the unspecified size).
-The \emph{<pad>} token is therefore easy to learn.
-For the 'Dale-5' dataset, the model struggles more to predict the correct length of the referring expression.
-
-When looking at the tokens for the shape, it can be seen that the model is able to identify it very well across all datasets.
-The model predicts the correct shape for all samples using the 'CLEVR color' dataset, while both \emph{precision} and \emph{recall} lie around 98,3\% when using the 'Dale-5' dataset.
-Even though the score is almost perfect, the slight difference might stem from the fact that all distractors have the same shape in the first case, while distractors can be different in the second case.
-Consequently, the model is only exposed to one shape at a time for each sample, which might simplify its identification.
-
-For the color attribute, the metrics drop significantly for both 'Dale-5' and 'CLEVR color' to an average of around 93\%.
-Hereby, no meaningful difference can be seen across the datasets, but there are differences between the colors.
-Some colors are predicted with \emph{precision} and \emph{recall} around 95\% to 96\%, while others are only around 90\%.
-However, these differences are not reproducible across multiple runs and configurations.
-The best and worst predicted colors vary and no conclusions can be drawn which colors are easier to predict for the model.
-
-Finally, the size is the most difficult attribute to predict for the model.
-Apart from the 'CLEVR color' dataset, where a size never needs to be predicted and also is never predicted, the metrics for the prediction of size tokens are the lowest across all tokens.
-They are the only mistakes, the model makes, when exposed to the 'Dale-2' dataset and the average \emph{precision} lies around 23\% below the average of predictions of the color for the 'Dale-5' dataset, while the average \emph{recall} lies around 28,82\% below.
-The reason why the \emph{precision} is higher than the \emph{recall} is the \emph{<pad>} token, which is predicted very often instead of a token specifying the size.
-In fact, the opposite relationship is visible for the \emph{precision} and \emph{recall} for said token.
-The much higher absolute number of \emph{<pad>} tokens leads to a smaller relative difference of \%-points shown in the table.
-Again, no conclusion can be drawn if larger or smaller objects are easier to predict, since the results vary across runs and configurations.
+Table \ref{tab:results:bb-re-generator} shows the \emph{overall accuracy}, \emph{F1 scores} for each word.
+As can be seen, the overall accuracies, in other words perfect matches of the generated referring expression depend very much on the dataset.
+With the 'Dale-2' and 'CLEVR color' dataset, the model can achieve high scores of 99\% and 93\% if the samples.
+Opposed to that the model can only generate perfect referring expressions in 69\% of the samples of the 'Dale-5' dataset.
 
 \begin{table*}[ht]
         \centering
         \begin{tabular}{rr|cc|c|ccc|c|c}
                 \toprule
-                                                 &             & {small} & {large} & \textbf{size}  & {cube}  & {cylinder} & {sphere} & \textbf{shape} & {$<pad>$} \\\midrule
+                                                 &             & {small} & {large} & \textbf{size}  & {cube}  & {cylinder} & {sphere} & \textbf{shape} & {\texttt{<pad>}} \\\midrule
                 \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \textbf{98,73} & {99,86} & {99,71}    & {99,67}  & \textbf{99,75} & {99,64} \\
                                                  & {Recall}    & {97,54} & {94,26} & \textbf{95,9}  & {100}   & {99,56}    & {99,67}  & \textbf{99,74} & {99,77} \\\midrule
                 \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \textbf{69,43} & {98,19} & {98,32}    & {98,39}  & \textbf{98,3}  & {82,22} \\
@@ -467,7 +431,7 @@ Again, no conclusion can be drawn if larger or smaller objects are easier to pre
                                                  & {Recall}    & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
                 \bottomrule
         \end{tabular}
-        \caption{Precision and Recall in \% for $<pad>$, size and shape tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The columns \textbf{shape} and \textbf{size} show the average across all tokens of the respective attribute.}
+        \caption{Precision and Recall in \% for \texttt{<pad>}, size and shape tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The columns \textbf{shape} and \textbf{size} show the average across all tokens of the respective attribute.}
         \label{tab:results:bb-re-generator_size-shape}
 \end{table*}
 
@@ -488,24 +452,34 @@ Again, no conclusion can be drawn if larger or smaller objects are easier to pre
         \label{tab:results:bb-re-generator_color}
 \end{table*}
 
-In conclusion, it can be said that the model is able to extract discriminative features from the shown bounding boxes and produce referring expressions.
-However, the result highly depends on the amount of distractors and the resulting need of more discriminative features to describe the target object.
-While the shape is easily identified, the model has bigger problems to identify the color and especially the size of the target object.
+Tables \ref{tab:results:bb-re-generator_size-shape} and \ref{tab:results:bb-re-generator_color} give a more detailed insight in the results and especially what mistakes the model is making for both the 'Dale-5' and 'CLEVR color' datasets.
+The tokens are grouped by attribute and also show the metrics averaged over each of the attributes.
+The metrics of the \texttt{<pad>} token indicate if the model produced the correct length of the referring expression, in other words if it was able to determine which attributes are necessary to discriminate the target object from the distractors.
+For the 'CLEVR color' dataset, the scores are perfect.
+This is not surprising, since all referring expressions for the 'CLEVR color' dataset consist of exactly two attributes, shape and color, and the first generated token will always be the only \texttt{<pad>} token in the referring expression (corresponding to the unspecified size).
+The \texttt{<pad>} token is therefore easy to learn.
+For the 'Dale-5' dataset, the model struggles more to predict the correct length of the referring expression.
 
-There are two main explanations for these results.
-First, as already seen in the previous experiments, a bigger number of distractors confuses the model more where to focus on.
-In the 'Dale-2' dataset, there are only two possibilities, while the four distractors in the 'Dale-5' dataset and up to nine distractors in the 'CLEVR color' give the model a bigger choice.
-Moreover, having only one attribute to discriminate the target object, poses the model with more difficulties.
-The second explanation lies in the incremental GRE-algorithm.
-For instance using the 'Dale-2' dataset, when only two random objects are placed in a scene, a second (or third) attribute to discriminate the objects is only needed, when the shape is the same.
-Otherwise, the shape is enough, and the RE is only one word long.
-The probability for this lies at 66,6\%.
-For shape and color being enough, the probability lies at 29,2\% and that all three attributes are necessary is 4,1\%.
-Opposed to that the probabilities with four distractors as in the 'Dale-5' dataset are 19,8\%, 47\% and 33,2\% respectively.
-With four distractors the algorithm is much more likely to produce longer referring expressions.
-These are harder to learn and generate for the model since it needs to take more extracted attributes into account to discriminate the target object from the distractors.
-This is verified by the lower precisions and recalls of the size and color tokens.
-Furthermore, the low recall of the size tokens shows that the model produces too short referring expressions too often.
+The shape can be identified very well across all datasets.
+The model predicts the correct shape for all samples using the 'CLEVR color' dataset, while both \emph{precision} and \emph{recall} lie around 98,3\% when using the 'Dale-5' dataset.
+Even though the score is almost perfect, the slight difference might stem from the fact that all distractors have the same shape in the first case, while distractors can be different in the second case.
+Consequently, the model is only exposed to one shape at a time for each sample, which might simplify its identification.
+
+For the color attribute, the metrics drop significantly for both 'Dale-5' and 'CLEVR color' to an average of around 93\%.
+Hereby, no meaningful difference can be seen across the datasets, but there are differences between the colors.
+Some colors are predicted with \emph{precision} and \emph{recall} around 95\% to 96\%, while others are only around 90\%.
+However, these differences are not reproducible across multiple runs and configurations.
+The best and worst predicted colors vary and no conclusions can be drawn which colors are easier to predict for the model.
+
+Finally, the size is the most difficult attribute to predict for the model.
+Apart from the 'CLEVR color' dataset, where a size never needs to be predicted and also is never predicted, the metrics for the prediction of size tokens are the lowest across all tokens.
+They are the only mistakes, the model makes, when exposed to the 'Dale-2' dataset and the average \emph{precision} lies around 23\% below the average of predictions of the color for the 'Dale-5' dataset, while the average \emph{recall} lies around 28,82\% below.
+The reason why the \emph{precision} is higher than the \emph{recall} is the \texttt{<pad>} token, which is predicted very often instead of a token specifying the size.
+In fact, the opposite relationship is visible for the \emph{precision} and \emph{recall} for said token.
+The much higher absolute number of \texttt{<pad>} tokens leads to a smaller relative difference of \%-points shown in the table.
+Again, no conclusion can be drawn if larger or smaller objects are easier to predict, since the results vary across runs and configurations.
+
+In conclusion, the model successfully extracts discriminative features and produces referring expressions, though performance depends heavily on the number of distractors. Shape attributes are most easily identified, while size attributes prove most challenging.
 
 \subsection{Referring expression resolution (receiver)}
 As before, the setup of the receiver model stays the same for this experiment, but instead of interpreting the sender's message, natural language referring expressions are passed to the model.
@@ -540,16 +514,21 @@ On the 'Dale-5' dataset, the performance is slightly worse.
 In contrast, the agents achieved better results on the 'Dale-5' dataset, and struggled mostly with learning and grounding colors.
 
 \section{Discussion and Conclusion}
-This paper explored how artificial neural networks can learn referential grounding of entities in 3D scenes through language games. We extended the CLEVR dataset with new artificially generated scenes, allowing for more controlled variations in object attributes and their overlaps. Our experiments systematically compared different setups of language games using the EGG framework.
+This paper investigated how neural agents learn referential grounding through emergent communication versus natural language.
+We conducted three complementary experiments: (1) language games with emergent communication, (2) natural language referring expression generation, and (3) natural language referring expression resolution.
 
-In the central experiment, where two agents solved a referring task, we observed that agents were able to learn to communicate and significantly boost their performance over a baseline of random messages. This boost was more pronounced on simpler datasets like 'Dale-2' (around 40\% points) compared to more complex ones like 'Dale-5' (around 30\% points) and 'CLEVR color' (less consistent, with only two configurations beating the baseline). We found that smaller vocabulary sizes and message lengths generally led to faster learning, although very small vocabularies could also be too restrictive. The 'Dale-5' and 'CLEVR color' datasets posed greater challenges, likely due to the increased number of distractors and the need to encode more complex information for unique object identification. Errors in attention prediction often involved the receiver being uncertain between the target and distractors sharing multiple attributes.
+Our language games revealed that agents can successfully develop communication protocols, achieving substantial performance gains over baselines (30-40\% improvement).
+However, emergent communication faces constraints: medium-sized vocabularies (10-16 symbols) and message lengths (2-4 tokens) proved most effective.
+Scene complexity significantly impacts learning, with simpler scenes ('Dale-2') enabling near-perfect communication (96\%) while complex scenes ('Dale-5' and'CLEVR color') challenged most configurations.
+Especially grounding color in the emergent langauge provided the biggest difficulties.
 
-Two additional experiments investigated the sender and receiver models in isolation, introducing explicit natural language bias. For the referring expression generation (sender) task, the model successfully extracted discriminative features and produced referring expressions. Performance was highly dependent on the number of distractors, with the 'Dale-2' dataset yielding near-perfect accuracy (99\%), while 'Dale-5' and 'CLEVR color' showed lower accuracies (69\% and 93\% respectively). The model found it easier to identify shape than color, and especially size, which we attribute to the increasing complexity of discrimination with more distractors and the nature of the incremental GRE-algorithm used for generating referring expressions.
+The natural language experiments provided crucial insights into these limitations.
+When generating referring expressions, models achieved high accuracy on simple scenes ('Dale-2': 99\%) but struggled with complex discriminations ('Dale-5': 69\%).
+Critically, the \emph{size} attributes proved most difficult to learn across all tasks, followed by the \emph{color}, while the \emph{shape} was consistently well-identified.
+This suggests that even with pre-grounded color terms, the model struggles to reliably identify and discriminate colors in visual scenes, which explains why agents face significant challenges when trying to establish color grounding from scratch in emergent communication.
 
-In the referring expression resolution (receiver) task, the models demonstrated a strong ability to understand natural language referring expressions and ground them in the target object within the image. High probability masses (over 90\% in most cases) were achieved across all datasets, indicating that the attention reference resolver effectively connected the encoded referring expressions with specific regions in the image. Even with more complex referring expressions and a higher number of distractors, the receiver models maintained high accuracy in focusing on the correct object.
-
-In conclusion, our work demonstrates the efficacy of language games for learning referential grounding in visual scenes. While the complexity of the scene and the number of distractors significantly impact the learning process and the performance of the emergent language, the models show a robust ability to learn and utilize communicative signals. The insights gained from analyzing the sender and receiver models separately highlight the challenges in generating precise referring expressions in complex environments and the robustness of the attention mechanism in resolving them. Future work could explore more dynamic and interactive language games, as well as investigate the emergence of more compositional and human-like language structures.
-
+Future work should investigate the linguistic properties of the emergent languages to better understand how agents encode visual attributes in their communicative protocols.
+Detailed analysis of message patterns could reveal whether emergent languages develop similar structures seen in natural languages.
 
 % Entries for the entire Anthology, followed by custom entries
 \bibliography{custom}
@@ -573,23 +552,23 @@ The experiments are conducted with the following hyperparameters: a learning rat
 
 \section{Examples of errors in attention prediction}
 \label{app:attention-errors}
-\begin{figure*}[!htbp]
+\begin{figure}[!htbp]
         \centering
         \subfigure['Dale-2']{
-                \includegraphics[width=.839\linewidth]{figures/visualization_games_dale-2_attention.png}
+                \includegraphics[width=\linewidth]{figures/visualization_games_dale-2_attention.png}
                 \label{fig:visualizations_game_dale-2_attention}
         }
         \subfigure['Dale-5']{
-                \includegraphics[width=.839\linewidth]{figures/visualization_games_dale-5_attention.png}
+                \includegraphics[width=\linewidth]{figures/visualization_games_dale-5_attention.png}
                 \label{fig:visualizations_game_dale-5_attention}
         }
         \subfigure['CLEVR color']{
-                \includegraphics[width=.839\linewidth]{figures/visualization_games_colour_attention.png}
+                \includegraphics[width=\linewidth]{figures/visualization_games_colour_attention.png}
                 \label{fig:visualizations_game_colour_attention}
         }
         \caption{Examples of the \emph{attention reference resolvers'} predictions in games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
         \label{fig:visualizations_game_attention}
-\end{figure*}
+\end{figure}
 
 \end{document}
 %%% Local Variables:
