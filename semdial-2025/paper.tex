@@ -4,6 +4,9 @@
 % Remove the "review" option to generate the final version.
 \usepackage[review]{acl}
 
+\usepackage{latexsym}
+\usepackage[utf8]{inputenc}
+
 % This is not strictly necessary, and may be commented out,
 % but it will improve the layout of the manuscript,
 % and will typically save some space.
@@ -62,22 +65,22 @@
 
 \maketitle
 \begin{abstract}
-  We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
-  One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes like shape, color, and size.
-  Learning is guided by feedback from successful interactions.
-  We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
+        We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
+        One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes like shape, color, and size.
+        Learning is guided by feedback from successful interactions.
+        We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
 \end{abstract}
 
 \section{Introduction and Background}
-How do cognitive systems bridge the gap between rich, continuous sensory experiences and the sparse, discrete symbols used in communication? 
+How do cognitive systems bridge the gap between rich, continuous sensory experiences and the sparse, discrete symbols used in communication?
 While perception operates through continuous signals, linguistic communication relies on finite vocabularies that must ground meaning about the perceived world \citep{Regier1996,Roy2005,Cooper2023}.
-This representational challenge, known as the symbol grounding problem \citep{Harnad1990}, becomes particularly acute in artificial systems where discrete symbols must acquire meaning through interaction rather than pre-programmed associations. 
+This representational challenge, known as the symbol grounding problem \citep{Harnad1990}, becomes particularly acute in artificial systems where discrete symbols must acquire meaning through interaction rather than pre-programmed associations.
 
 Referring expressions require systems to map visual attributes onto linguistic descriptions that uniquely identify target objects and thus can be use to study symbol grounding.
 \citet{Dale1995} formalized this process through an incremental generation algorithm that constructs descriptions by systematically adding distinguishing properties in order of salience until achieving unique identification.
 By this, referring expression only contain attributes that are necessary to discriminate the target from the surroundings.
 
-Research in this area investigates how artificial agents can develop referential abilities through language games - interactive scenarios where communication protocols emerge from repeated coordination attempts \citep{Clark1996,Bartlett2005,Kirby2008,Steels2009,Kharitonov2019,Lazaridou2017}. 
+Research in this area investigates how artificial agents can develop referential abilities through language games - interactive scenarios where communication protocols emerge from repeated coordination attempts \citep{Clark1996,Bartlett2005,Kirby2008,Steels2009,Kharitonov2019,Lazaridou2017}.
 Modern implementations use deep neural networks as agents that exchange discrete messages to solve visual discrimination tasks, allowing systematic study of how symbol meaning emerges from interaction.
 
 This paper examines emergent referential communication in neural agents tasked with identifying objects in 3D visual scenes.
@@ -270,14 +273,14 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
 %     \begin{center}
 %       \includegraphics[width=0.9\textwidth]{jpg}
 %       % \vspace{\textwidth}
-      
+
 %       Text 
 %     \end{center}
 %   \end{minipage}%
 %   \begin{minipage}{.5\textwidth}
 %    \begin{center} 
 %      \includegraphics[width=0.9\textwidth]{jpg}
-     
+
 %      Text
 %      \end{center}
 %    \end{minipage}%
@@ -423,12 +426,12 @@ Opposed to that the model can only generate perfect referring expressions in 69\
         \begin{tabular}{rr|cc|c|ccc|c|c}
                 \toprule
                                                  &             & {small} & {large} & \textbf{size}  & {cube}  & {cylinder} & {sphere} & \textbf{shape} & {\texttt{<pad>}} \\\midrule
-                \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \textbf{98,73} & {99,86} & {99,71}    & {99,67}  & \textbf{99,75} & {99,64} \\
-                                                 & {Recall}    & {97,54} & {94,26} & \textbf{95,9}  & {100}   & {99,56}    & {99,67}  & \textbf{99,74} & {99,77} \\\midrule
-                \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \textbf{69,43} & {98,19} & {98,32}    & {98,39}  & \textbf{98,3}  & {82,22} \\
-                                                 & {Recall}    & {62,11} & {66,15} & \textbf{64,13} & {98,79} & {97,87}    & {98,25}  & \textbf{98,3}  & {84,59} \\\midrule
-                \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                          \\\textbf{color}} & {Precision}  & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
-                                                 & {Recall}    & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
+                \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \textbf{98,73} & {99,86} & {99,71}    & {99,67}  & \textbf{99,75} & {99,64}          \\
+                                                 & {Recall}    & {97,54} & {94,26} & \textbf{95,9}  & {100}   & {99,56}    & {99,67}  & \textbf{99,74} & {99,77}          \\\midrule
+                \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \textbf{69,43} & {98,19} & {98,32}    & {98,39}  & \textbf{98,3}  & {82,22}          \\
+                                                 & {Recall}    & {62,11} & {66,15} & \textbf{64,13} & {98,79} & {97,87}    & {98,25}  & \textbf{98,3}  & {84,59}          \\\midrule
+                \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                                   \\\textbf{color}} & {Precision}  & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
+                                                 & {Recall}    & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}            \\
                 \bottomrule
         \end{tabular}
         \caption{Precision and Recall in \% for \texttt{<pad>}, size and shape tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The columns \textbf{shape} and \textbf{size} show the average across all tokens of the respective attribute.}
@@ -496,10 +499,10 @@ As we know that the referring expressions are grounded in the scene, we can now 
         \centering
         \begin{tabular}{c|c}
                 \toprule
-                                          & \textbf{Probability mass}  \\\midrule
-                    \textbf{Dale-2}       & {95,16\%}                  \\
-                    \textbf{Dale-5}       & {92,19\%}                  \\
-                    \textbf{CLEVR color}  & {95,33\%}                  \\
+                                     & \textbf{Probability mass} \\\midrule
+                \textbf{Dale-2}      & {95,16\%}                 \\
+                \textbf{Dale-5}      & {92,19\%}                 \\
+                \textbf{CLEVR color} & {95,33\%}                 \\
                 \bottomrule
         \end{tabular}
         \caption{Probability masses of the model after 20 epochs with $LSTM_e=15$ and $LSTM_o=1500$.}
@@ -514,18 +517,20 @@ On the 'Dale-5' dataset, the performance is slightly worse.
 In contrast, the agents achieved better results on the 'Dale-5' dataset, and struggled mostly with learning and grounding colors.
 
 \section{Discussion and Conclusion}
-This paper investigated how neural agents learn referential grounding through emergent communication versus natural language.
-We conducted three complementary experiments: (1) language games with emergent communication, (2) natural language referring expression generation, and (3) natural language referring expression resolution.
+We demonstrate a method for conducting focused experiments on artificial data through which we gain valuable insights what particular models are capable of learning from data and their dependence on the structure and representations in the data in the context of linguistic coordination and learning over a visual scene.
+This knowledge can be transferred to the design of larger systems that are trained on real data to gain insights about learning architectures, representations of features and datasets.
+They can also be used as a diagnostic probes for systems trained on real data.
 
-Our language games revealed that agents can successfully develop communication protocols, achieving substantial performance gains over baselines (30-40\% improvement).
-However, emergent communication faces constraints: medium-sized vocabularies (10-16 symbols) and message lengths (2-4 tokens) proved most effective.
-Scene complexity significantly impacts learning, with simpler scenes ('Dale-2') enabling near-perfect communication (96\%) while complex scenes ('Dale-5' and'CLEVR color') challenged most configurations.
-Especially grounding color in the emergent langauge provided the biggest difficulties.
+Our language games revealed that agents can successfully develop communication protocols, achieving substantial performance gains over baselines.
+However, emergent communication faces constraints: medium-sized vocabularies and message lengths proved most effective.
+Scene complexity significantly impacts learning, with simpler scenes enabling near-perfect communication while complex scenes challenged most configurations.
 
 The natural language experiments provided crucial insights into these limitations.
-When generating referring expressions, models achieved high accuracy on simple scenes ('Dale-2': 99\%) but struggled with complex discriminations ('Dale-5': 69\%).
+When generating referring expressions, models achieved high accuracy on simple scenes but struggled with complex discriminations.
 Critically, the \emph{size} attributes proved most difficult to learn across all tasks, followed by the \emph{color}, while the \emph{shape} was consistently well-identified.
-This suggests that even with pre-grounded color terms, the model struggles to reliably identify and discriminate colors in visual scenes, which explains why agents face significant challenges when trying to establish color grounding from scratch in emergent communication.
+This indicates that humans and artificial neural networks have quite different learning biases that facilitate learning for humans (e.g. pragmatic referring described in the Dale-Reiter algorithm) is difficult to learn for systems.
+The experiments demonstrate that once we add such learning biases (e.g. modelling focused attention) learning becomes more successful.
+Overall, the results indicate that to be successful, learning language and vision models needs to go beyond mere observation of pixels and words.
 
 Future work should investigate the linguistic properties of the emergent languages to better understand how agents encode visual attributes in their communicative protocols.
 Detailed analysis of message patterns could reveal whether emergent languages develop similar structures seen in natural languages.
