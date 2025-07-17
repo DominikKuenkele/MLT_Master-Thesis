@@ -1,0 +1,620 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+% \usepackage[review]{acl}
+\usepackage[final]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+% This is also not strictly necessary, and may be commented out.
+% However, it will improve the aesthetics of text in
+% the typewriter font.
+\usepackage{inconsolata}
+
+%Including images in your LaTeX document requires adding
+%additional package(s)
+\usepackage{graphicx}
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+%%%%%
+
+\def\tightlist{} % ignore this command
+
+\title{Learning to Refer: How Scene Complexity Affects Emergent Communication in Neural Agents}
+
+% Author information can be set in various styles:
+% For several authors from the same institution:
+% \author{Author 1 \and ... \and Author n \\
+%         Address line \\ ... \\ Address line}
+% if the names do not fit well on one line use
+%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
+% For authors from different institutions:
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \And  ... \And
+%         Author n \\ Address line \\ ... \\ Address line}
+% To start a seperate ``row'' of authors use \AND, as in
+% \author{Author 1 \\ Address line \\  ... \\ Address line
+%         \AND
+%         Author 2 \\ Address line \\ ... \\ Address line \And
+%         Author 3 \\ Address line \\ ... \\ Address line}
+
+\author{Dominik Künkele$^{1}$ \and Simon Dobnik$^{1,2}$ \\
+        Department of Philosophy, Linguistics and Theory of Science$^{1}$ \\ 
+        Centre for Linguistic Theory and Studies in Probability (CLASP)$^{2}$ \\
+        University of Gothenburg, Sweden \\
+        \texttt{contact@dominik-kuenkele.de} \and \texttt{simon.dobnik@gu.se}}
+
+\begin{document}
+
+\maketitle
+
+Here's a \textbf{\textasciitilde2000-word summary} of the paper you
+provided, which explores how artificial neural agents develop
+referential communication in visually grounded environments:
+
+\textbf{Summary of the Paper on Emergent Referential Communication in
+Neural Agents}
+
+\textbf{1. Introduction and Motivation}
+
+The paper addresses the \textbf{symbol grounding problem}---how
+cognitive or artificial systems connect \textbf{continuous sensory
+input} (like vision) with \textbf{discrete symbolic representations}
+(like language). This challenge is central to building AI systems that
+can understand and use language meaningfully in the real world.
+
+A key focus is on \textbf{referring expressions}---linguistic phrases
+that uniquely identify objects in a scene. The authors build on the
+\textbf{Dale and Reiter (1995)} algorithm, which incrementally adds
+attributes to descriptions until the target object is uniquely
+identified. The study investigates how \textbf{neural agents} can learn
+to generate and interpret such expressions through \textbf{language
+games}, where communication protocols emerge from interaction rather
+than being pre-programmed.
+
+\textbf{2. Dataset Design}
+
+To study this, the authors extend the \textbf{CLEVR dataset}, a
+synthetic visual dataset designed for reasoning tasks. They generate
+three new datasets with increasing complexity:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{CLEVR Color}: The target object is uniquely identifiable by
+  color alone. Shape and size are shared with distractors.
+\item
+  \textbf{Dale-2}: One target and one distractor. The target is uniquely
+  identifiable by a minimal combination of attributes (color, shape,
+  size).
+\item
+  \textbf{Dale-5}: One target and four distractors. The target may share
+  multiple attributes with distractors, requiring more complex referring
+  expressions.
+\end{itemize}
+
+Each image contains up to 10 non-overlapping objects, and the datasets
+are designed to mimic the structure of natural language referring
+expressions.
+
+\textbf{3. Methodology}
+
+\textbf{Image Processing}
+
+Images are processed using a \textbf{ResNet-101} model followed by
+convolutional layers to extract feature maps. These features are used by
+the agents to generate or interpret messages.
+
+\textbf{Language Games Framework}
+
+The experiments use the \textbf{EGG (Emergence of Language in Games)}
+framework. Two agents---a \textbf{sender} and a
+\textbf{receiver}---communicate through a discrete channel:
+
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{sender} sees the target object and generates a message
+  using an LSTM.
+\item
+  The \textbf{receiver} sees the full scene and interprets the message
+  to identify the target.
+\end{itemize}
+
+To enable backpropagation through discrete messages, the
+\textbf{Gumbel-Softmax} trick is used.
+
+\textbf{Attention Prediction Task}
+
+The receiver must predict a \textbf{3×3 region} around the target object
+in a \textbf{14×14 grid} over the image. The model outputs a probability
+distribution over regions, and performance is measured by the
+\textbf{probability mass} assigned to the correct region.
+
+\textbf{4. Experiments and Results}
+
+\textbf{Language Game Performance}
+
+The agents are trained on 128,000 games across different configurations
+of \textbf{message length (n)} and \textbf{vocabulary size (V)}. Key
+findings:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dale-2}: Most configurations outperform the baseline (random
+  sender), with top models achieving over \textbf{96\% probability
+  mass}.
+\item
+  \textbf{Dale-5}: Only 8 out of 30 configurations beat the baseline.
+  Best models reach \textbf{84\%}, but many struggle due to increased
+  complexity.
+\item
+  \textbf{CLEVR Color}: Only two configurations outperform the baseline,
+  achieving \textbf{64--68\%}. Many configurations perform worse,
+  indicating that communication can sometimes mislead the receiver.
+\end{itemize}
+
+\textbf{Optimal configurations} tend to have \textbf{medium-sized
+vocabularies (V = 10--16)} and \textbf{message lengths (n = 3--4)}. Too
+few symbols limit expressiveness; too many hinder learning.
+
+\textbf{Error Analysis}
+
+Errors often occur when:
+
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{target object is cropped out} during preprocessing.
+\item
+  The \textbf{receiver is confused} by distractors sharing multiple
+  attributes with the target.
+\item
+  The \textbf{message is too ambiguous}, especially in complex scenes.
+\end{itemize}
+
+\textbf{5. Natural Language Experiments}
+
+To better understand the agents' capabilities, the authors conduct two
+additional experiments using \textbf{natural language referring
+expressions} instead of emergent symbols.
+
+\textbf{Referring Expression Generation (Sender)}
+
+The sender is trained to generate expressions like ``small red cube''
+using the \textbf{Dale-Reiter GRE algorithm} as ground truth.
+Performance is evaluated using \textbf{accuracy, precision, and recall}.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dale-2}: 99\% accuracy, near-perfect precision and recall.
+\item
+  \textbf{Dale-5}: 69\% accuracy, with lower scores for size attributes.
+\item
+  \textbf{CLEVR Color}: 93\% accuracy, perfect shape prediction, but
+  some color confusion.
+\end{itemize}
+
+\textbf{Size} is the hardest attribute to predict, followed by
+\textbf{color}, while \textbf{shape} is easiest. This suggests that
+\textbf{neural models struggle with attributes that are less visually
+salient or more context-dependent}.
+
+\textbf{Referring Expression Resolution (Receiver)}
+
+The receiver is trained to interpret natural language expressions and
+identify the correct region in the image.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dale-2}: 95.16\% probability mass.
+\item
+  \textbf{Dale-5}: 92.19\%.
+\item
+  \textbf{CLEVR Color}: 95.33\%.
+\end{itemize}
+
+Interestingly, the receiver performs \textbf{better with natural
+language} than with emergent communication in complex scenes, suggesting
+that \textbf{grounded language provides a strong inductive bias}.
+
+\textbf{6. Discussion and Insights}
+
+The study provides several key insights:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Emergent communication is possible} and effective in simple
+  environments.
+\item
+  \textbf{Scene complexity} significantly affects learning. More
+  distractors and overlapping attributes make it harder for agents to
+  learn effective communication.
+\item
+  \textbf{Medium-sized vocabularies and message lengths} strike the best
+  balance between expressiveness and learnability.
+\item
+  \textbf{Natural language grounding} improves performance, especially
+  in complex scenes.
+\item
+  \textbf{Attribute difficulty}: Shape is easiest to learn, followed by
+  color, with size being the hardest. This mirrors findings in human
+  cognition and suggests that \textbf{neural networks may benefit from
+  similar inductive biases}.
+\end{itemize}
+
+\textbf{7. Implications and Future Work}
+
+The paper demonstrates how \textbf{controlled synthetic environments}
+can be used to probe the capabilities and limitations of neural agents
+in referential communication. These insights can inform the design of
+\textbf{larger, real-world systems} and help diagnose learning failures.
+
+Future directions include:
+
+\begin{itemize}
+\tightlist
+\item
+  Analyzing the \textbf{structure of emergent languages} to see if they
+  resemble natural languages.
+\item
+  Investigating how agents encode \textbf{compositionality} and
+  \textbf{pragmatics}.
+\item
+  Exploring \textbf{transfer learning} from synthetic to real-world
+  datasets.
+\end{itemize}
+
+Would you like a visual summary or a slide deck version of this summary
+as well?
+
+Here is an expanded version of the summary, now approximately
+\textbf{2500 words}, providing a more detailed and nuanced overview of
+the paper:
+
+\textbf{Emergent Referential Communication in Neural Agents: A
+Comprehensive Summary}
+
+\textbf{1. Introduction and Background}
+
+The paper investigates a fundamental challenge in artificial
+intelligence and cognitive science: how systems can bridge the gap
+between \textbf{continuous sensory input} (like vision) and
+\textbf{discrete symbolic communication} (like language). This is known
+as the \textbf{symbol grounding problem}, first articulated by Harnad
+(1990). It refers to the difficulty of connecting abstract symbols to
+real-world referents in a meaningful way, especially in artificial
+systems where symbols must acquire meaning through interaction rather
+than pre-programmed associations.
+
+One promising approach to studying this problem is through
+\textbf{referring expressions}---linguistic phrases that uniquely
+identify objects in a scene. These expressions require a system to map
+visual attributes (like color, shape, and size) to symbolic
+representations that can be communicated and understood by another
+agent. The \textbf{Dale and Reiter (1995)} algorithm formalized this
+process by incrementally adding attributes to a description until the
+target object is uniquely identified.
+
+The paper builds on this foundation by exploring how \textbf{neural
+agents} can develop such referential abilities through \textbf{language
+games}---interactive scenarios where communication protocols emerge from
+repeated coordination attempts. These games simulate the process by
+which language might evolve or be learned in artificial systems. The
+authors use \textbf{deep neural networks} as agents that exchange
+discrete messages to solve visual discrimination tasks, allowing them to
+study how symbol meaning emerges from interaction.
+
+\textbf{2. Dataset Design and Construction}
+
+To systematically study emergent communication, the authors extend the
+\textbf{CLEVR dataset}---a synthetic dataset designed for visual
+reasoning. They create three new datasets with increasing complexity and
+control over object attributes:
+
+\textbf{2.1 CLEVR Color}
+
+In this dataset, the target object is uniquely identifiable by
+\textbf{color alone}. All distractors share the same shape and size as
+the target, making color the only distinguishing feature. This setup is
+relatively simple and allows the study of how agents learn to use a
+single attribute for reference.
+
+\textbf{2.2 Dale-2}
+
+Inspired by the Dale-Reiter algorithm, this dataset includes \textbf{one
+target and one distractor}. The target is uniquely identifiable by a
+minimal combination of attributes (color, shape, size), but the specific
+shared attributes are randomly assigned. This setup introduces more
+variability and requires agents to learn which attributes are most
+informative in each context.
+
+\textbf{2.3 Dale-5}
+
+This dataset increases complexity by including \textbf{one target and
+four distractors}. The target may share multiple attributes with
+different distractors, requiring more complex referring expressions.
+This setup closely mirrors real-world scenarios where objects often
+share overlapping features.
+
+Each dataset contains 10,000 images, with up to 10 non-overlapping
+objects per image. The images are 480×320 pixels, and objects are placed
+to ensure visibility and spatial separation.
+
+\textbf{3. Methodology}
+
+\textbf{3.1 Image Processing}
+
+Images are processed using a \textbf{ResNet-101} model, followed by two
+convolutional layers with ReLU activations. These layers reduce the
+feature maps to 128 channels, producing a compact representation of the
+image that captures essential visual information.
+
+\textbf{3.2 Language Games Framework}
+
+The experiments are implemented using the \textbf{EGG (Emergence of
+Language in Games)} framework. This framework allows two neural
+agents---a \textbf{sender} and a \textbf{receiver}---to communicate
+through a discrete channel:
+
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{sender} sees the target object and generates a message
+  using an LSTM.
+\item
+  The \textbf{receiver} sees the full scene and interprets the message
+  to identify the target.
+\end{itemize}
+
+The sender's message is a sequence of discrete symbols, sampled from a
+categorical distribution. To enable backpropagation through this
+non-differentiable process, the authors use the \textbf{Gumbel-Softmax
+relaxation}, which approximates the categorical distribution with a
+differentiable one.
+
+\textbf{3.3 Attention Prediction Task}
+
+The receiver's task is to predict a \textbf{3×3 region} around the
+target object in a \textbf{14×14 grid} over the image. The model outputs
+a probability distribution over all regions, and performance is measured
+by the \textbf{probability mass} assigned to the correct region.
+
+The sender encodes object features using ResNet-101 and passes them
+through an LSTM to generate a message. The receiver decodes the message
+and combines it with its own visual representation of the scene to
+predict the target region.
+
+\textbf{4. Experiments and Results}
+
+\textbf{4.1 Experimental Setup}
+
+The agents are trained on 128,000 games across different configurations
+of \textbf{message length (n)} and \textbf{vocabulary size (V)}. The
+goal is to evaluate how these parameters affect the emergence of
+effective communication.
+
+\textbf{4.2 Performance Across Datasets}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dale-2}: Most configurations outperform the baseline (random
+  sender), with top models achieving over \textbf{96\% probability
+  mass}. This indicates that agents can learn to communicate effectively
+  in simple environments.
+\item
+  \textbf{Dale-5}: Only 8 out of 30 configurations beat the baseline.
+  Best models reach \textbf{84\%}, but many struggle due to increased
+  complexity. The larger number of distractors increases the likelihood
+  of attribute overlap, making it harder to uniquely identify the
+  target.
+\item
+  \textbf{CLEVR Color}: Only two configurations outperform the baseline,
+  achieving \textbf{64--68\%}. Many configurations perform worse,
+  suggesting that communication can sometimes mislead the receiver.
+\end{itemize}
+
+\textbf{4.3 Optimal Configurations}
+
+The best results are achieved with \textbf{medium-sized vocabularies (V
+= 10--16)} and \textbf{message lengths (n = 3--4)}. Too few symbols
+limit expressiveness, while too many make learning difficult. This
+finding highlights the importance of balancing expressiveness and
+learnability in emergent communication systems.
+
+\textbf{4.4 Error Analysis}
+
+Errors often occur when:
+
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{target object is cropped out} during preprocessing.
+\item
+  The \textbf{receiver is confused} by distractors sharing multiple
+  attributes with the target.
+\item
+  The \textbf{message is too ambiguous}, especially in complex scenes.
+\end{itemize}
+
+Interestingly, even when communication emerges successfully, the
+receiver sometimes distributes attention across multiple objects,
+indicating uncertainty.
+
+\textbf{5. Natural Language Experiments}
+
+To better understand the agents' capabilities, the authors conduct two
+additional experiments using \textbf{natural language referring
+expressions} instead of emergent symbols.
+
+\textbf{5.1 Referring Expression Generation (Sender)}
+
+The sender is trained to generate expressions like ``small red cube''
+using the \textbf{Dale-Reiter GRE algorithm} as ground truth.
+Performance is evaluated using \textbf{accuracy, precision, and recall}.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dale-2}: 99\% accuracy, near-perfect precision and recall.
+\item
+  \textbf{Dale-5}: 69\% accuracy, with lower scores for size attributes.
+\item
+  \textbf{CLEVR Color}: 93\% accuracy, perfect shape prediction, but
+  some color confusion.
+\end{itemize}
+
+\textbf{Size} is the hardest attribute to predict, followed by
+\textbf{color}, while \textbf{shape} is easiest. This suggests that
+neural models struggle with attributes that are less visually salient or
+more context-dependent.
+
+\textbf{5.2 Referring Expression Resolution (Receiver)}
+
+The receiver is trained to interpret natural language expressions and
+identify the correct region in the image.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dale-2}: 95.16\% probability mass.
+\item
+  \textbf{Dale-5}: 92.19\%.
+\item
+  \textbf{CLEVR Color}: 95.33\%.
+\end{itemize}
+
+Interestingly, the receiver performs \textbf{better with natural
+language} than with emergent communication in complex scenes, suggesting
+that \textbf{grounded language provides a strong inductive bias}.
+
+\textbf{6. Detailed Attribute Analysis}
+
+The authors analyze performance across individual attributes:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Shape}: Most reliably predicted across all datasets. Likely
+  due to its strong visual salience and categorical nature.
+\item
+  \textbf{Color}: Moderately difficult. Some colors are predicted more
+  accurately than others, but no consistent pattern emerges.
+\item
+  \textbf{Size}: Most difficult to predict. Errors often involve
+  confusing size with the token, indicating uncertainty about whether
+  size is a necessary attribute.
+\end{itemize}
+
+This analysis reveals that \textbf{neural models have different learning
+biases than humans}, who often rely on pragmatic reasoning to select the
+most informative attributes.
+
+\textbf{7. Discussion and Implications}
+
+The study provides several key insights:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Emergent communication is possible} and effective in simple
+  environments.
+\item
+  \textbf{Scene complexity} significantly affects learning. More
+  distractors and overlapping attributes make it harder for agents to
+  learn effective communication.
+\item
+  \textbf{Medium-sized vocabularies and message lengths} strike the best
+  balance between expressiveness and learnability.
+\item
+  \textbf{Natural language grounding} improves performance, especially
+  in complex scenes.
+\item
+  \textbf{Attribute difficulty}: Shape is easiest to learn, followed by
+  color, with size being the hardest. This mirrors findings in human
+  cognition and suggests that \textbf{neural networks may benefit from
+  similar inductive biases}.
+\end{itemize}
+
+The authors argue that successful language-vision models must go beyond
+mere observation of pixels and words. They must incorporate
+\textbf{structured representations}, \textbf{attention mechanisms}, and
+\textbf{pragmatic reasoning} to handle real-world complexity.
+
+\textbf{8. Future Directions}
+
+The paper outlines several avenues for future research:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Linguistic analysis of emergent languages}: Do they exhibit
+  compositionality, syntax, or other properties of natural language?
+\item
+  \textbf{Transfer learning}: Can agents trained in synthetic
+  environments generalize to real-world data?
+\item
+  \textbf{Pragmatic reasoning}: How can models learn to select the most
+  informative attributes, as humans do?
+\item
+  \textbf{Interactive learning}: Can agents learn more effectively
+  through dialogue and feedback?
+\end{itemize}
+
+These directions aim to bridge the gap between synthetic experiments and
+real-world applications, ultimately leading to more robust and
+interpretable AI systems.
+
+Would you like this summary formatted as a PDF or PowerPoint
+presentation? I can also generate visual diagrams or tables to accompany
+it.
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{anthology,custom}
+% Custom bibliography entries only
+\bibliography{custom}
+
+% \appendix
+
+% \section{Example Appendix}
+% \label{sec:appendix}
+
+% This is an appendix.
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% mode: flyspell
+%%% TeX-master: t
+%%% TeX-PDF-mode: t
+%%% coding: utf-8
+%%% ispell-local-dictionary: "british"
+%%% End:
