@@ -295,7 +295,7 @@
 % as well?
 
 
-\section{Introduction and Background}
+\section{Introduction} % and background}
 
 We investigate a core challenge in artificial
 intelligence and cognitive science: how systems can bridge the gap
@@ -305,7 +305,7 @@ as the \textbf{symbol grounding problem} \citep{Harnad1990}. It refers to the di
 real-world referents in a meaningful way, especially in artificial
 systems where symbols must acquire meaning through interaction rather
 than pre-programmed associations.
-
+%
 We study symbol grounding through \textbf{generation and interpretation of referring expressions} which
 % One promising approach to studying this problem is through
 % \textbf{referring expressions}---linguistic phrases that uniquely
@@ -316,7 +316,8 @@ representations that can be communicated and understood by another
 agent. % The \textbf{Dale and Reiter (1995)} algorithm formalized this
 % process by incrementally adding attributes to a description until the
 % target object is uniquely identified.
-More specifically, we explore  % The paper builds on this foundation by exploring
+% More specifically,
+We explore  % The paper builds on this foundation by exploring
 how neural
 agents can develop such referential abilities through \textbf{language
 games}---interactive scenarios where communication protocols emerge from
@@ -338,7 +339,7 @@ insights what neural models like these are capable of learning in
 inetractive scenarios with natural, human language.
 
 
-\section{Dataset Design and Construction}
+\section{Dataset} %  design and construction}
 
 Our dataset conists of images of contrasting scenes and objects.  The
 scenes are generated from an adapted code that was used to generate
@@ -360,7 +361,7 @@ the target. %, making color the only distinguishing feature. This setup is
 % relatively simple and
 This allows the study of how agents learn to use a
 single attribute for reference.
-
+%
 \textbf{Dale-2}
 % Inspired by the Dale-Reiter algorithm, this dataset
 includes \textbf{one
@@ -369,29 +370,25 @@ minimal combination of attributes (color, shape, size), but the specific
 shared attributes are randomly assigned. This setup introduces more
 variability and requires agents to learn which attributes are most
 informative in each context.
-
-\textbf{2.3 Dale-5}
-
-This dataset increases complexity by including \textbf{one target and
+%
+\textbf{Dale-5} increases complexity by including \textbf{one target and
 four distractors}. The target may share multiple attributes with
 different distractors, requiring more complex referring expressions.
 This setup closely mirrors real-world scenarios where objects often
 share overlapping features.
-
+%
 Each dataset contains 10,000 images, with up to 10 non-overlapping
-objects per image. The images are 480×320 pixels, and objects are placed
+objects per image. The images are $480\times 320$ pixels, and objects are placed
 to ensure visibility and spatial separation.
 
-\textbf{3. Methodology}
-
-\textbf{3.1 Image Processing}
+% \textbf{3.1 Image Processing}
 
 Images are processed using a \textbf{ResNet-101} model, followed by two
 convolutional layers with ReLU activations. These layers reduce the
 feature maps to 128 channels, producing a compact representation of the
 image that captures essential visual information.
 
-\textbf{3.2 Language Games Framework}
+\section{Language games framework}
 
 The experiments are implemented using the \textbf{EGG (Emergence of
 Language in Games)} framework. This framework allows two neural
