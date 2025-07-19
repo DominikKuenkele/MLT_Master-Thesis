@@ -329,7 +329,7 @@ repeated coordination attempts in interaction---by exchanging discrete messages 
 
 In this setup one can study the proprties of \textbf{artifical
   languages} the agents develop and whether these resemble human
-languages. However, our focus here is investigation of
+languages \citep{Bartlett2005,Kirby2008,Steels2009,Kharitonov2019,Lazaridou2017}. However, our focus here is investigation of
 \textbf{conditions and protocols that lead learning successful
   interaction}. These include different configurations and
 complexities of discriminating features between the target object and
@@ -549,64 +549,50 @@ This analysis reveals that \textbf{neural models have different learning
 biases than humans}, who often rely on pragmatic reasoning to select the
 most informative attributes.
 
-\textbf{7. Discussion and Implications}
+\section{Findings and future directions}
 
-The study provides several key insights:
+Our study shows (i) that \textbf{emergent communication is possible}
+and in the studied environments and network configurations but (ii)
+\textbf{scene complexity} significantly affects learning. More
+distractors and overlapping attributes make it harder for agents to
+learn effective communication. (iii) \textbf{Medium-sized vocabularies
+  and message lengths} strike the best balance between expressiveness
+and learnability.
+% \textbf{Natural language grounding} improves performance, especially in complex scenes. %% % SD 2025-07-19 09:48:09 +0200: Not sure where it got this from!
+(iv) \textbf{Attribute difficulty}: shape is easiest to learn,
+followed by color, with size being the hardest. This mirrors findings
+in human cognition and suggests that (v) \textbf{neural networks may
+  benefit from similar inductive biases}. The findings suggest that
+that successful language-vision models must go beyond mere observation
+of pixels and words where such biases would be provided. They must
+incorporate \textbf{structured representations}, \textbf{attention
+  mechanisms}, and \textbf{pragmatic reasoning} to handle real-world
+complexity.
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Emergent communication is possible} and effective in simple
-  environments.
-\item
-  \textbf{Scene complexity} significantly affects learning. More
-  distractors and overlapping attributes make it harder for agents to
-  learn effective communication.
-\item
-  \textbf{Medium-sized vocabularies and message lengths} strike the best
-  balance between expressiveness and learnability.
-\item
-  \textbf{Natural language grounding} improves performance, especially
-  in complex scenes.
-\item
-  \textbf{Attribute difficulty}: Shape is easiest to learn, followed by
-  color, with size being the hardest. This mirrors findings in human
-  cognition and suggests that \textbf{neural networks may benefit from
-  similar inductive biases}.
-\end{itemize}
+% \textbf{8. Future Directions}
 
-The authors argue that successful language-vision models must go beyond
-mere observation of pixels and words. They must incorporate
-\textbf{structured representations}, \textbf{attention mechanisms}, and
-\textbf{pragmatic reasoning} to handle real-world complexity.
+% The paper outlines several avenues for future research:
 
-\textbf{8. Future Directions}
+% \begin{itemize}
+% \tightlist
+% \item
+%   \textbf{Linguistic analysis of emergent languages}: Do they exhibit
+%   compositionality, syntax, or other properties of natural language?
+% \item
+%   \textbf{Transfer learning}: Can agents trained in synthetic
+%   environments generalize to real-world data?
+% \item
+%   \textbf{Pragmatic reasoning}: How can models learn to select the most
+%   informative attributes, as humans do?
+% \item
+%   \textbf{Interactive learning}: Can agents learn more effectively
+%   through dialogue and feedback?
+% \end{itemize}
 
-The paper outlines several avenues for future research:
+% These directions aim to bridge the gap between synthetic experiments and
+% real-world applications, ultimately leading to more robust and
+% interpretable AI systems.
 
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Linguistic analysis of emergent languages}: Do they exhibit
-  compositionality, syntax, or other properties of natural language?
-\item
-  \textbf{Transfer learning}: Can agents trained in synthetic
-  environments generalize to real-world data?
-\item
-  \textbf{Pragmatic reasoning}: How can models learn to select the most
-  informative attributes, as humans do?
-\item
-  \textbf{Interactive learning}: Can agents learn more effectively
-  through dialogue and feedback?
-\end{itemize}
-
-These directions aim to bridge the gap between synthetic experiments and
-real-world applications, ultimately leading to more robust and
-interpretable AI systems.
-
-Would you like this summary formatted as a PDF or PowerPoint
-presentation? I can also generate visual diagrams or tables to accompany
-it.
 
 % Bibliography entries for the entire Anthology, followed by custom entries
 %\bibliography{anthology,custom}
