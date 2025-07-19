@@ -65,10 +65,10 @@
 
 \maketitle
 \begin{abstract}
-        We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
-        One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes like shape, color, and size.
-        Learning is guided by feedback from successful interactions.
-        We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
+  We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
+  One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes like shape, color, and size.
+  Learning is guided by feedback from successful interactions.
+  We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
 \end{abstract}
 
 \section{Introduction and Background}
@@ -90,21 +90,21 @@ Our work is  a study of how increasing the complexity of the scene and therefore
 
 \section{Dataset}
 \begin{figure*}[!htbp]
-        \centering
-        \subfigure['CLEVR color', \emph{small brown cylinder}]{
-                \includegraphics[width=0.3\linewidth]{figures/CLEVR_color.png}
-                \label{fig:clevr-color}
-        }
-        \subfigure['Dale-2', \emph{small green cylinder}]{
-                \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-2.png}
-                \label{fig:clevr-dale-2}
-        }
-        \subfigure['Dale-5', \emph{large purple cylinder}]{
-                \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-5.png}
-                \label{fig:clevr-dale-5}
-        }
-        \caption{Example images of each dataset, with the target object specified.}
-        \label{fig:clevr-examples}
+  \centering
+  \subfigure['CLEVR color', \emph{small brown cylinder}]{
+    \includegraphics[width=0.3\linewidth]{figures/CLEVR_color.png}
+    \label{fig:clevr-color}
+  }
+  \subfigure['Dale-2', \emph{small green cylinder}]{
+    \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-2.png}
+    \label{fig:clevr-dale-2}
+  }
+  \subfigure['Dale-5', \emph{large purple cylinder}]{
+    \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-5.png}
+    \label{fig:clevr-dale-5}
+  }
+  \caption{Example images of each dataset, with the target object specified.}
+  \label{fig:clevr-examples}
 \end{figure*}
 
 We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{Github-Link} % \footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{Source code on GitHub}}
@@ -181,10 +181,10 @@ The experiment is set up in a way that avoids explicit human language informatio
 Messages by the sender can only be based on the highly controlled implicit bias in the visual scenes.
 
 \begin{figure}[ht]
-        \centering
-        \includegraphics[width=\linewidth]{figures/arch_attention_predictor_game.png}
-        \caption{Simplified architecture of the attention predictor game.}
-        \label{fig:attention_predictor_game_architecture}
+  \centering
+  \includegraphics[width=\linewidth]{figures/arch_attention_predictor_game.png}
+  \caption{Simplified architecture of the attention predictor game.}
+  \label{fig:attention_predictor_game_architecture}
 \end{figure}
 
 Figure \ref{fig:attention_predictor_game_architecture} shows the simplified architecture of the language game.
@@ -196,11 +196,11 @@ For this, the image is divided into 14$\times$14 regions.
 The target area is located around the center of the target object, consisting of 3$\times$3 regions.
 The model is then tasked to predict the matrix $A = (a_{ij})$, where:
 \begin{align*}
-        a_{ij} =
-        \begin{cases}
-                1, & \text{if region $i,j$ in target area} \\
-                0, & \text{otherwise}
-        \end{cases}
+  a_{ij} =
+  \begin{cases}
+    1, & \text{if region $i,j$ in target area} \\
+    0, & \text{otherwise}
+  \end{cases}
 \end{align*}
 
 The image is encoded using a combination of ResNet-101 and several convolutional layers described in Section \ref{sec:image-processing}.
@@ -246,21 +246,21 @@ Only two configurations beat the baseline, both with a medium-sized vocabulary s
 In both cases, the learning takes place relatively late, after 15.000 and 30.000 games respectively.
 
 \begin{figure*}[ht!]
-        \centering
-        \subfigure['Dale-2' dataset with different $|V|$ highlighted]{
-                \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
-                \label{fig:learning-curve_attention-predictor_dale-2_vocab-size}
-        }
-        \subfigure['Dale-5' dataset with different $|V|$ highlighted]{
-                \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}
-                \label{fig:learning-curve_attention-predictor_dale-5_vocab-size}
-        }
-        \subfigure['CLEVR color' dataset with different $|V|$ highlighted]{
-                \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
-                \label{fig:learning-curve_attention-predictor_colour_vocab-size}
-        }
-        \caption{Learning curves of all language games on each dataset. The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black.}
-        \label{fig:learning-curves_attention-predictor}
+  \centering
+  \subfigure['Dale-2' dataset with different $|V|$ highlighted]{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
+    \label{fig:learning-curve_attention-predictor_dale-2_vocab-size}
+  }
+  \subfigure['Dale-5' dataset with different $|V|$ highlighted]{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}
+    \label{fig:learning-curve_attention-predictor_dale-5_vocab-size}
+  }
+  \subfigure['CLEVR color' dataset with different $|V|$ highlighted]{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
+    \label{fig:learning-curve_attention-predictor_colour_vocab-size}
+  }
+  \caption{Learning curves of all language games on each dataset. The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black.}
+  \label{fig:learning-curves_attention-predictor}
 \end{figure*}
 
 % SD 2025-06-02 19:33:31 +0200: Add explanations what different versions of the same coloured curve mean.
@@ -289,37 +289,37 @@ In both cases, the learning takes place relatively late, after 15.000 and 30.000
 
 
 \begin{table}[ht]
-        \footnotesize
-        \centering
-        \begin{tabular}{cc|c|c|c}
-                \toprule
-                                              &           & \multicolumn{1}{c}{\textbf{Dale-2}} & \multicolumn{1}{c}{\textbf{Dale-5}} & \multicolumn{1}{c}{\textbf{color}} \\  \cmidrule(lr){3-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}
-                $n$                           & $|V|$     & \textbf{$P$ mass}                   & \textbf{$P$ mass}                   & \textbf{$P$ mass}                  \\\midrule
-                \multicolumn{2}{c|}{baseline} & {62,16\%} & {49,61\%}                           & {41,68\%}                                                                \\\midrule
-                {2}                           & {2}       & {92,27\%}                           & \textcolor{red}{52,15\%}            & \textcolor{red}{33,64\%}           \\
-                {3}                           & {2}       & {94,52\%}                           & \textcolor{red}{51,97\%}            & \textcolor{red}{37,09\%}           \\
-                {4}                           & {2}       & {89,15\%}                           & \textcolor{red}{51,98\%}            & \textcolor{red}{39,68\%}           \\
-                {6}                           & {2}       & \textcolor{red}{59,68\%}            & \textcolor{red}{53,57\%}            & \textcolor{red}{38,43\%}           \\
-                {2}                           & {10}      & \textbf{96,16\%}                    & {80,26\%}                           & \textcolor{red}{36,53\%}           \\
-                {3}                           & {10}      & {94,9\%}                            & \textcolor{red}{53,47\%}            & \textcolor{red}{38,24\%}           \\
-                {2}                           & {16}      & {95,84\%}                           & \textbf{84,03\%}                    & \textcolor{red}{39,65\%}           \\
-                {4}                           & {10}      & \textbf{96,08\%}                    & \textcolor{red}{48,03\%}            & \textbf{64,31\%}                   \\
-                {3}                           & {16}      & {94,59\%}                           & \textbf{81,46\%}                    & \textbf{67,88\%}                   \\
-                {6}                           & {10}      & \textcolor{red}{63,46\%}            & \textbf{82,12\%}                    & \textcolor{red}{40,11\%}           \\
-                {4}                           & {16}      & {94,14\%}                           & \textcolor{red}{49,81\%}            & \textcolor{red}{40,84\%}           \\
-                {6}                           & {16}      & {95,86\%}                           & \textcolor{red}{50,71\%}            & \textcolor{red}{40,61\%}           \\
-                {2}                           & {50}      & {93,78\%}                           & \textcolor{red}{52,24\%}            & \textcolor{red}{39,56\%}           \\
-                {3}                           & {50}      & {93,88\%}                           & {79,65\%}                           & \textcolor{red}{40,36\%}           \\
-                {2}                           & {100}     & {92,43\%}                           & \textcolor{red}{53,23\%}            & \textcolor{red}{37,68\%}           \\
-                {4}                           & {50}      & \textbf{96,24\%}                    & \textcolor{red}{48,79\%}            & \textcolor{red}{43,61\%}           \\
-                {3}                           & {100}     & {95,25\%}                           & \textcolor{red}{48,52\%}            & \textcolor{red}{42,55\%}           \\
-                {6}                           & {50}      & {91,27\%}                           & \textcolor{red}{52,55\%}            & \textcolor{red}{40,21\%}           \\
-                {4}                           & {100}     & {95,55\%}                           & \textcolor{red}{49,65\%}            & \textcolor{red}{42,85\%}           \\
-                {6}                           & {100}     & \textcolor{red}{60,27\%}            & \textcolor{red}{46,92\%}            & \textcolor{red}{41,98\%}           \\
-                \bottomrule
-        \end{tabular}
-        \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes. Results in red didn't pass the baseline. The results are sorted by the product of $n$ and $|V|$ which corresponds to available space for the message. The best results are achieved with a medium-sized message space across all datasets.}
-        \label{tab:results:attention-reference-resolver-game}
+  \footnotesize
+  \centering
+  \begin{tabular}{cc|c|c|c}
+    \toprule
+                                  &           & \multicolumn{1}{c}{\textbf{Dale-2}} & \multicolumn{1}{c}{\textbf{Dale-5}} & \multicolumn{1}{c}{\textbf{color}} \\  \cmidrule(lr){3-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}
+    $n$                           & $|V|$     & \textbf{$P$ mass}                   & \textbf{$P$ mass}                   & \textbf{$P$ mass}                  \\\midrule
+    \multicolumn{2}{c|}{baseline} & {62,16\%} & {49,61\%}                           & {41,68\%}                                                                \\\midrule
+    {2}                           & {2}       & {92,27\%}                           & \textcolor{red}{52,15\%}            & \textcolor{red}{33,64\%}           \\
+    {3}                           & {2}       & {94,52\%}                           & \textcolor{red}{51,97\%}            & \textcolor{red}{37,09\%}           \\
+    {4}                           & {2}       & {89,15\%}                           & \textcolor{red}{51,98\%}            & \textcolor{red}{39,68\%}           \\
+    {6}                           & {2}       & \textcolor{red}{59,68\%}            & \textcolor{red}{53,57\%}            & \textcolor{red}{38,43\%}           \\
+    {2}                           & {10}      & \textbf{96,16\%}                    & {80,26\%}                           & \textcolor{red}{36,53\%}           \\
+    {3}                           & {10}      & {94,9\%}                            & \textcolor{red}{53,47\%}            & \textcolor{red}{38,24\%}           \\
+    {2}                           & {16}      & {95,84\%}                           & \textbf{84,03\%}                    & \textcolor{red}{39,65\%}           \\
+    {4}                           & {10}      & \textbf{96,08\%}                    & \textcolor{red}{48,03\%}            & \textbf{64,31\%}                   \\
+    {3}                           & {16}      & {94,59\%}                           & \textbf{81,46\%}                    & \textbf{67,88\%}                   \\
+    {6}                           & {10}      & \textcolor{red}{63,46\%}            & \textbf{82,12\%}                    & \textcolor{red}{40,11\%}           \\
+    {4}                           & {16}      & {94,14\%}                           & \textcolor{red}{49,81\%}            & \textcolor{red}{40,84\%}           \\
+    {6}                           & {16}      & {95,86\%}                           & \textcolor{red}{50,71\%}            & \textcolor{red}{40,61\%}           \\
+    {2}                           & {50}      & {93,78\%}                           & \textcolor{red}{52,24\%}            & \textcolor{red}{39,56\%}           \\
+    {3}                           & {50}      & {93,88\%}                           & {79,65\%}                           & \textcolor{red}{40,36\%}           \\
+    {2}                           & {100}     & {92,43\%}                           & \textcolor{red}{53,23\%}            & \textcolor{red}{37,68\%}           \\
+    {4}                           & {50}      & \textbf{96,24\%}                    & \textcolor{red}{48,79\%}            & \textcolor{red}{43,61\%}           \\
+    {3}                           & {100}     & {95,25\%}                           & \textcolor{red}{48,52\%}            & \textcolor{red}{42,55\%}           \\
+    {6}                           & {50}      & {91,27\%}                           & \textcolor{red}{52,55\%}            & \textcolor{red}{40,21\%}           \\
+    {4}                           & {100}     & {95,55\%}                           & \textcolor{red}{49,65\%}            & \textcolor{red}{42,85\%}           \\
+    {6}                           & {100}     & \textcolor{red}{60,27\%}            & \textcolor{red}{46,92\%}            & \textcolor{red}{41,98\%}           \\
+    \bottomrule
+  \end{tabular}
+  \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes. Results in red didn't pass the baseline. The results are sorted by the product of $n$ and $|V|$ which corresponds to available space for the message. The best results are achieved with a medium-sized message space across all datasets.}
+  \label{tab:results:attention-reference-resolver-game}
 \end{table}
 
 % SD 2025-06-02 19:58:12 +0200: An idea: if we multiply n * V we get the number of possible cominations, right? If we rankend the results this way they would be comperable and show the interaction between the vocabulary size and message length.
@@ -403,17 +403,17 @@ Following, the model's success is validated on accuracy, recall and precision sc
 The \textbf{overall accuracy} is a measure if the model predicted every word in the referring expression correctly.
 
 \begin{table}[ht]
-        \centering
-        \begin{tabular}{c|cc}
-                \toprule
-                                     & \textbf{Accuracy} & \textbf{F1-Score} \\\midrule
-                \textbf{Dale-2}      & 99\%              & 98,57\%           \\
-                \textbf{Dale-5}      & 69\%              & 89,53\%           \\
-                \textbf{CLEVR color} & 93\%              & 95,17\%           \\
-                \bottomrule
-        \end{tabular}
-        \caption{Overall accuracies (Accuracy) and F1-Scores after 30 epochs with embedding size $e=100$, $LSTM_o=500$ and $LSTM_e=30$.}
-        \label{tab:results:bb-re-generator}
+  \centering
+  \begin{tabular}{c|cc}
+    \toprule
+                         & \textbf{Accuracy} & \textbf{F1-Score} \\\midrule
+    \textbf{Dale-2}      & 99\%              & 98,57\%           \\
+    \textbf{Dale-5}      & 69\%              & 89,53\%           \\
+    \textbf{CLEVR color} & 93\%              & 95,17\%           \\
+    \bottomrule
+  \end{tabular}
+  \caption{Overall accuracies (Accuracy) and F1-Scores after 30 epochs with embedding size $e=100$, $LSTM_o=500$ and $LSTM_e=30$.}
+  \label{tab:results:bb-re-generator}
 \end{table}
 
 Table \ref{tab:results:bb-re-generator} shows the \emph{overall accuracy} and \emph{F1 scores} for each word.
@@ -422,37 +422,37 @@ With the 'Dale-2' and 'CLEVR color' dataset, the model can achieve high scores o
 Opposed to that the model can only generate perfect referring expressions in 69\% of the samples of the 'Dale-5' dataset.
 
 \begin{table*}[ht]
-        \centering
-        \begin{tabular}{rr|cc|c|ccc|c|c}
-                \toprule
-                                                 &             & {small} & {large} & \textbf{size}  & {cube}  & {cylinder} & {sphere} & \textbf{shape} & {\texttt{<pad>}} \\\midrule
-                \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \textbf{98,73} & {99,86} & {99,71}    & {99,67}  & \textbf{99,75} & {99,64}          \\
-                                                 & {Recall}    & {97,54} & {94,26} & \textbf{95,9}  & {100}   & {99,56}    & {99,67}  & \textbf{99,74} & {99,77}          \\\midrule
-                \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \textbf{69,43} & {98,19} & {98,32}    & {98,39}  & \textbf{98,3}  & {82,22}          \\
-                                                 & {Recall}    & {62,11} & {66,15} & \textbf{64,13} & {98,79} & {97,87}    & {98,25}  & \textbf{98,3}  & {84,59}          \\\midrule
-                \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                                   \\\textbf{color}} & {Precision}  & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
-                                                 & {Recall}    & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}            \\
-                \bottomrule
-        \end{tabular}
-        \caption{Precision and Recall in \% for \texttt{<pad>}, size and shape tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The columns \textbf{shape} and \textbf{size} show the average across all tokens of the respective attribute.}
-        \label{tab:results:bb-re-generator_size-shape}
+  \centering
+  \begin{tabular}{rr|cc|c|ccc|c|c}
+    \toprule
+                                     &             & {small} & {large} & \textbf{size}  & {cube}  & {cylinder} & {sphere} & \textbf{shape} & {\texttt{<pad>}} \\\midrule
+    \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \textbf{98,73} & {99,86} & {99,71}    & {99,67}  & \textbf{99,75} & {99,64}          \\
+                                     & {Recall}    & {97,54} & {94,26} & \textbf{95,9}  & {100}   & {99,56}    & {99,67}  & \textbf{99,74} & {99,77}          \\\midrule
+    \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \textbf{69,43} & {98,19} & {98,32}    & {98,39}  & \textbf{98,3}  & {82,22}          \\
+                                     & {Recall}    & {62,11} & {66,15} & \textbf{64,13} & {98,79} & {97,87}    & {98,25}  & \textbf{98,3}  & {84,59}          \\\midrule
+    \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                                   \\\textbf{color}} & {Precision}  & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
+                                     & {Recall}    & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}            \\
+    \bottomrule
+  \end{tabular}
+  \caption{Precision and Recall in \% for \texttt{<pad>}, size and shape tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The columns \textbf{shape} and \textbf{size} show the average across all tokens of the respective attribute.}
+  \label{tab:results:bb-re-generator_size-shape}
 \end{table*}
 
 \begin{table*}[ht]
-        \centering
-        \begin{tabular}{rr|cccccccc|c}
-                \toprule
-                                                 &             & {blue}  & {brown} & {cyan}  & {gray}  & {green} & {purple} & {red}   & {yellow} & \textbf{color} \\\midrule
-                \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {94,51} & {98,77} & {97,59} & {98,68} & {98,89} & {98,8}   & {97,47} & {100}    & \textbf{98,09} \\
-                                                 & {Recall}    & {97,73} & {100}   & {98,78} & {97,4}  & {96,74} & {98,8}   & {100}   & {98,8}   & \textbf{98,53} \\\midrule
-                \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {92,12} & {93,82} & {89,13} & {89,12} & {92,63} & {91,12}  & {97,24} & {94,36}  & \textbf{92,44} \\
-                                                 & {Recall}    & {92,12} & {89,78} & {94,91} & {94,51} & {95,71} & {92,42}  & {89,34} & {94,85}  & \textbf{92,95} \\\midrule
-                \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                           \\\textbf{color}} & {Precision}           & {93,46} & {92,37} & {94,47} & {93,86} & {92,04} & {91,13}  & {90,07} & {94,7}   & \textbf{92,76} \\
-                                                 & {Recall}    & {92,75} & {92}    & {95,98} & {89,92} & {94,12} & {91,13}  & {94,23} & {91,91}  & \textbf{92,76} \\
-                \bottomrule
-        \end{tabular}
-        \caption{Precision and Recall in \% for color tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The column \textbf{color} shows the average across all colors.}
-        \label{tab:results:bb-re-generator_color}
+  \centering
+  \begin{tabular}{rr|cccccccc|c}
+    \toprule
+                                     &             & {blue}  & {brown} & {cyan}  & {gray}  & {green} & {purple} & {red}   & {yellow} & \textbf{color} \\\midrule
+    \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {94,51} & {98,77} & {97,59} & {98,68} & {98,89} & {98,8}   & {97,47} & {100}    & \textbf{98,09} \\
+                                     & {Recall}    & {97,73} & {100}   & {98,78} & {97,4}  & {96,74} & {98,8}   & {100}   & {98,8}   & \textbf{98,53} \\\midrule
+    \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {92,12} & {93,82} & {89,13} & {89,12} & {92,63} & {91,12}  & {97,24} & {94,36}  & \textbf{92,44} \\
+                                     & {Recall}    & {92,12} & {89,78} & {94,91} & {94,51} & {95,71} & {92,42}  & {89,34} & {94,85}  & \textbf{92,95} \\\midrule
+    \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                           \\\textbf{color}} & {Precision}           & {93,46} & {92,37} & {94,47} & {93,86} & {92,04} & {91,13}  & {90,07} & {94,7}   & \textbf{92,76} \\
+                                     & {Recall}    & {92,75} & {92}    & {95,98} & {89,92} & {94,12} & {91,13}  & {94,23} & {91,91}  & \textbf{92,76} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Precision and Recall in \% for color tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The column \textbf{color} shows the average across all colors.}
+  \label{tab:results:bb-re-generator_color}
 \end{table*}
 
 Tables \ref{tab:results:bb-re-generator_size-shape} and \ref{tab:results:bb-re-generator_color} give a more detailed insight in the results and especially what mistakes the model is making for both the 'Dale-5' and 'CLEVR color' datasets.
@@ -496,17 +496,17 @@ As we know that the referring expressions are grounded in the scene, we can now 
 % \end{figure}
 
 \begin{table}[ht]
-        \centering
-        \begin{tabular}{c|c}
-                \toprule
-                                     & \textbf{Probability mass} \\\midrule
-                \textbf{Dale-2}      & {95,16\%}                 \\
-                \textbf{Dale-5}      & {92,19\%}                 \\
-                \textbf{CLEVR color} & {95,33\%}                 \\
-                \bottomrule
-        \end{tabular}
-        \caption{Probability masses of the model after 20 epochs with $LSTM_e=15$ and $LSTM_o=1500$.}
-        \label{tab:results:attention-reference-resolver}
+  \centering
+  \begin{tabular}{c|c}
+    \toprule
+                         & \textbf{Probability mass} \\\midrule
+    \textbf{Dale-2}      & {95,16\%}                 \\
+    \textbf{Dale-5}      & {92,19\%}                 \\
+    \textbf{CLEVR color} & {95,33\%}                 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Probability masses of the model after 20 epochs with $LSTM_e=15$ and $LSTM_o=1500$.}
+  \label{tab:results:attention-reference-resolver}
 \end{table}
 
 The results are shown in Table \ref{tab:results:attention-reference-resolver}.
@@ -558,21 +558,21 @@ The experiments are conducted with the following hyperparameters: a learning rat
 \section{Examples of errors in attention prediction}
 \label{app:attention-errors}
 \begin{figure}[!htbp]
-        \centering
-        \subfigure['Dale-2']{
-                \includegraphics[width=\linewidth]{figures/visualization_games_dale-2_attention.png}
-                \label{fig:visualizations_game_dale-2_attention}
-        }
-        \subfigure['Dale-5']{
-                \includegraphics[width=\linewidth]{figures/visualization_games_dale-5_attention.png}
-                \label{fig:visualizations_game_dale-5_attention}
-        }
-        \subfigure['CLEVR color']{
-                \includegraphics[width=\linewidth]{figures/visualization_games_colour_attention.png}
-                \label{fig:visualizations_game_colour_attention}
-        }
-        \caption{Examples of the predictions in language games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed for ResNet-101. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
-        \label{fig:visualizations_game_attention}
+  \centering
+  \subfigure['Dale-2']{
+    \includegraphics[width=\linewidth]{figures/visualization_games_dale-2_attention.png}
+    \label{fig:visualizations_game_dale-2_attention}
+  }
+  \subfigure['Dale-5']{
+    \includegraphics[width=\linewidth]{figures/visualization_games_dale-5_attention.png}
+    \label{fig:visualizations_game_dale-5_attention}
+  }
+  \subfigure['CLEVR color']{
+    \includegraphics[width=\linewidth]{figures/visualization_games_colour_attention.png}
+    \label{fig:visualizations_game_colour_attention}
+  }
+  \caption{Examples of the predictions in language games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed for ResNet-101. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
+  \label{fig:visualizations_game_attention}
 \end{figure}
 
 \end{document}

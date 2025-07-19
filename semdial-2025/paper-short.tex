@@ -32,6 +32,14 @@
 %additional package(s)
 \usepackage{graphicx}
 
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{subfigure}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
 %\setlength\titlebox{<dim>}
@@ -69,7 +77,11 @@
 \begin{document}
 
 \maketitle
-
+\begin{abstract}
+  We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
+  One agent describes objects in 3D scenes using invented vocabulary; the other interprets references based on attributes.
+  We extend the CLEVR dataset with more complex scenes to study how increased referential complexity impacts language acquisition and symbol grounding in artificial agents.
+\end{abstract}
 % Here's a \textbf{\textasciitilde2000-word summary} of the paper you
 % provided, which explores how artificial neural agents develop
 % referential communication in visually grounded environments:
@@ -320,7 +332,7 @@ agent. % The \textbf{Dale and Reiter (1995)} algorithm formalized this
 We explore  % The paper builds on this foundation by exploring
 how neural
 agents can develop such referential abilities through \textbf{language
-games}---interactive scenarios where communication protocols emerge from
+  games}---interactive scenarios where communication protocols emerge from
 repeated coordination attempts in interaction---by exchanging discrete messages toi solve a visual diuscrimiantion task. % These games simulate the process by
 % which language might evolve or be learned in artificial systems. The
 % authors use \textbf{deep neural networks} as agents that exchange
@@ -341,13 +353,29 @@ inetractive scenarios with natural, human language.
 
 \section{Dataset} %  design and construction}
 
+\begin{figure*}[ht!]
+  \centering
+  \subfigure['Dale-2' dataset]{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
+    \label{fig:learning-curve_attention-predictor_dale-2_vocab-size}
+  }
+  \subfigure['Dale-5' dataset]{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}
+    \label{fig:learning-curve_attention-predictor_dale-5_vocab-size}
+  }
+  \subfigure['CLEVR color' dataset]{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
+    \label{fig:learning-curve_attention-predictor_colour_vocab-size}
+  }
+  \caption{Learning curves of all language games on each dataset. The colors correspond to different vocabulary sizes $|V|$. The baseline is marked in black.}
+  \label{fig:learning-curves_attention-predictor}
+\end{figure*}
+
 Our dataset conists of images of contrasting scenes and objects.  The
 scenes are generated from an adapted code that was used to generate
 the \textbf{CLEVR dataset}. Instead of focusing on compositional
-proprties of descriptions, we generate scenes with increasing
-complexity and control over object attributes. In terms of how
-features are cointrolled to discriminate between the target objects
-and distractos, our inspiration comes from \citep{Dale1995}, but we
+properties of descriptions, we generate scenes with increasing
+complexity and control over object attributes, inspired by \citep{Dale1995}, but we
 used the \textbf{feature hirerachy} to generate visual scenes rather
 than generate descriptions. We create the following datasets:
 % To systematically study emergent communication, the authors extend the
@@ -355,7 +383,7 @@ than generate descriptions. We create the following datasets:
 % reasoning. They create three new datasets with increasing complexity and
 % control over object attributes:
 
-In \textbf{CLEVR Color}, the target object is uniquely identifiable by
+In \textbf{CLEVR color}, the target object is uniquely identifiable by
 \textbf{color alone}. All distractors share the same shape and size as
 the target. %, making color the only distinguishing feature. This setup is
 % relatively simple and
@@ -365,14 +393,13 @@ single attribute for reference.
 \textbf{Dale-2}
 % Inspired by the Dale-Reiter algorithm, this dataset
 includes \textbf{one
-target and one distractor}. The target is uniquely identifiable by a
-minimal combination of attributes (color, shape, size), but the specific
-shared attributes are randomly assigned. This setup introduces more
+  target and one distractor}. The target is uniquely identifiable by a
+minimal combination of attributes (color, shape, size). This setup introduces more
 variability and requires agents to learn which attributes are most
 informative in each context.
 %
 \textbf{Dale-5} increases complexity by including \textbf{one target and
-four distractors}. The target may share multiple attributes with
+  four distractors}. The target may share multiple attributes with
 different distractors, requiring more complex referring expressions.
 This setup closely mirrors real-world scenarios where objects often
 share overlapping features.
@@ -385,169 +412,34 @@ to ensure visibility and spatial separation.
 
 Images are processed using a \textbf{ResNet-101} model, followed by two
 convolutional layers with ReLU activations. These layers reduce the
-feature maps to 128 channels, producing a compact representation of the
-image that captures essential visual information.
+feature maps to 128 channels.
 
-\section{Language games framework}
 
-The experiments are implemented using the \textbf{EGG (Emergence of
-Language in Games)} framework. This framework allows two neural
-agents---a \textbf{sender} and a \textbf{receiver}---to communicate
-through a discrete channel:
+\section{Experiments}
+The games are set up through the \textbf{EGG framework} \citep{Kharitonov2019} that allows communication through a discrete channel with an LSTM.
+Backpropagation is enabled through \textbf{Gumbel-Softmax  relaxation}.
 
-\begin{itemize}
-\tightlist
-\item
-  The \textbf{sender} sees the target object and generates a message
-  using an LSTM.
-\item
-  The \textbf{receiver} sees the full scene and interprets the message
-  to identify the target.
-\end{itemize}
+The receiver's task is to predict a $3 \times 3$ region around the target object in a $14 \times 14$ grid over the image (see Appendix \ref{app:architecture}).
+The model outputs a probability distribution over all regions, and performance is measured by the \textbf{probability mass} assigned to the correct region.
+The sender encodes bounding boxes of all objects and passes them through an LSTM to generate a message.
+The receiver decodes the message and combines it with its own visual representation of the scene to predict the target region.
+The receiver does not have enough information to solve the task on its own.
+A total of 128.000 games are played.
+Furthermore, we allow different message lengths vocabulary sizes.
+All results are compared to a baseline in which the sender is generating random messages.
 
-The sender's message is a sequence of discrete symbols, sampled from a
-categorical distribution. To enable backpropagation through this
-non-differentiable process, the authors use the \textbf{Gumbel-Softmax
-relaxation}, which approximates the categorical distribution with a
-differentiable one.
-
-\textbf{3.3 Attention Prediction Task}
-
-The receiver's task is to predict a \textbf{3×3 region} around the
-target object in a \textbf{14×14 grid} over the image. The model outputs
-a probability distribution over all regions, and performance is measured
-by the \textbf{probability mass} assigned to the correct region.
-
-The sender encodes object features using ResNet-101 and passes them
-through an LSTM to generate a message. The receiver decodes the message
-and combines it with its own visual representation of the scene to
-predict the target region.
-
-\textbf{4. Experiments and Results}
-
-\textbf{4.1 Experimental Setup}
-
-The agents are trained on 128,000 games across different configurations
-of \textbf{message length (n)} and \textbf{vocabulary size (V)}. The
-goal is to evaluate how these parameters affect the emergence of
-effective communication.
-
-\textbf{4.2 Performance Across Datasets}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Dale-2}: Most configurations outperform the baseline (random
-  sender), with top models achieving over \textbf{96\% probability
-  mass}. This indicates that agents can learn to communicate effectively
-  in simple environments.
-\item
-  \textbf{Dale-5}: Only 8 out of 30 configurations beat the baseline.
-  Best models reach \textbf{84\%}, but many struggle due to increased
-  complexity. The larger number of distractors increases the likelihood
-  of attribute overlap, making it harder to uniquely identify the
-  target.
-\item
-  \textbf{CLEVR Color}: Only two configurations outperform the baseline,
-  achieving \textbf{64--68\%}. Many configurations perform worse,
-  suggesting that communication can sometimes mislead the receiver.
-\end{itemize}
-
-\textbf{4.3 Optimal Configurations}
-
-The best results are achieved with \textbf{medium-sized vocabularies (V
-= 10--16)} and \textbf{message lengths (n = 3--4)}. Too few symbols
-limit expressiveness, while too many make learning difficult. This
-finding highlights the importance of balancing expressiveness and
-learnability in emergent communication systems.
-
-\textbf{4.4 Error Analysis}
-
-Errors often occur when:
-
-\begin{itemize}
-\tightlist
-\item
-  The \textbf{target object is cropped out} during preprocessing.
-\item
-  The \textbf{receiver is confused} by distractors sharing multiple
-  attributes with the target.
-\item
-  The \textbf{message is too ambiguous}, especially in complex scenes.
-\end{itemize}
-
-Interestingly, even when communication emerges successfully, the
-receiver sometimes distributes attention across multiple objects,
-indicating uncertainty.
-
-\textbf{5. Natural Language Experiments}
-
-To better understand the agents' capabilities, the authors conduct two
-additional experiments using \textbf{natural language referring
-expressions} instead of emergent symbols.
-
-\textbf{5.1 Referring Expression Generation (Sender)}
-
-The sender is trained to generate expressions like ``small red cube''
-using the \textbf{Dale-Reiter GRE algorithm} as ground truth.
-Performance is evaluated using \textbf{accuracy, precision, and recall}.
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Dale-2}: 99\% accuracy, near-perfect precision and recall.
-\item
-  \textbf{Dale-5}: 69\% accuracy, with lower scores for size attributes.
-\item
-  \textbf{CLEVR Color}: 93\% accuracy, perfect shape prediction, but
-  some color confusion.
-\end{itemize}
-
-\textbf{Size} is the hardest attribute to predict, followed by
-\textbf{color}, while \textbf{shape} is easiest. This suggests that
-neural models struggle with attributes that are less visually salient or
-more context-dependent.
-
-\textbf{5.2 Referring Expression Resolution (Receiver)}
-
-The receiver is trained to interpret natural language expressions and
-identify the correct region in the image.
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Dale-2}: 95.16\% probability mass.
-\item
-  \textbf{Dale-5}: 92.19\%.
-\item
-  \textbf{CLEVR Color}: 95.33\%.
-\end{itemize}
-
-Interestingly, the receiver performs \textbf{better with natural
-language} than with emergent communication in complex scenes, suggesting
-that \textbf{grounded language provides a strong inductive bias}.
-
-\textbf{6. Detailed Attribute Analysis}
-
-The authors analyze performance across individual attributes:
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Shape}: Most reliably predicted across all datasets. Likely
-  due to its strong visual salience and categorical nature.
-\item
-  \textbf{Color}: Moderately difficult. Some colors are predicted more
-  accurately than others, but no consistent pattern emerges.
-\item
-  \textbf{Size}: Most difficult to predict. Errors often involve
-  confusing size with the token, indicating uncertainty about whether
-  size is a necessary attribute.
-\end{itemize}
-
-This analysis reveals that \textbf{neural models have different learning
-biases than humans}, who often rely on pragmatic reasoning to select the
-most informative attributes.
+On the 'Dale-2' dataset, almost all configurations outperform the baseline, with top-configurations achieving over 96\% probability mass (see Appendix \ref{app:results}).
+Message length primarily influences performance, with $n \in \{3,4\}$ yielding consistent results.
+While $n=6$ configurations can succeed, they are less reliable.
+Vocabulary size shows less impact, though $|V|=2$ performs slightly worse.
+No clear correlation between $n$ and $|V|$ emerges.
+On the 'Dale-5' dataset, only 8 out of 30 configurations beat the baseline.
+Best models reach 84\%, but many struggle due to the increased complexity.
+Shorter messages ($n \in \{2,3\}$) and medium vocabularies ($|V| \in \{10,16,50\}$) are most effective.
+The increased number of distractors complicates the task: objects share more attributes, requiring more complex descriptions, and their spatial proximity can lead to confusion in region identification.
+Performance is weakest on the 'CLEVR color' dataset, with only two configurations beating the baseline (64-67\%), both using medium message lengths ($n \in \{3,4\}$) and vocabularies ($|V| \in \{10,16\}$).
+Notably, short messages ($n=2$) often mislead the receiver.
+The presence of up to 10 objects increases the likelihood of focusing on incorrect targets.
 
 \section{Findings and future directions}
 
@@ -599,12 +491,55 @@ complexity.
 % Custom bibliography entries only
 \bibliography{custom}
 
-% \appendix
+\appendix
 
-% \section{Example Appendix}
-% \label{sec:appendix}
+\section{Architecture of the language game}
+\label{app:architecture}
 
-% This is an appendix.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/arch_attention_predictor_game.png}
+  \caption{Simplified architecture of the attention predictor game.}
+  \label{fig:attention_predictor_game_architecture}
+\end{figure}
+
+
+\section{Results}
+\label{app:results}
+
+\begin{table}[ht!]
+  \footnotesize
+  \centering
+  \begin{tabular}{cc|c|c|c}
+    \toprule
+                                  &           & \multicolumn{1}{c}{\textbf{Dale-2}} & \multicolumn{1}{c}{\textbf{Dale-5}} & \multicolumn{1}{c}{\textbf{color}} \\  \cmidrule(lr){3-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}
+    $n$                           & $|V|$     & \textbf{$P$ mass}                   & \textbf{$P$ mass}                   & \textbf{$P$ mass}                  \\\midrule
+    \multicolumn{2}{c|}{baseline} & {62,16\%} & {49,61\%}                           & {41,68\%}                                                                \\\midrule
+    {2}                           & {2}       & {92,27\%}                           & \textcolor{red}{52,15\%}            & \textcolor{red}{33,64\%}           \\
+    {3}                           & {2}       & {94,52\%}                           & \textcolor{red}{51,97\%}            & \textcolor{red}{37,09\%}           \\
+    {4}                           & {2}       & {89,15\%}                           & \textcolor{red}{51,98\%}            & \textcolor{red}{39,68\%}           \\
+    {6}                           & {2}       & \textcolor{red}{59,68\%}            & \textcolor{red}{53,57\%}            & \textcolor{red}{38,43\%}           \\
+    {2}                           & {10}      & \textbf{96,16\%}                    & {80,26\%}                           & \textcolor{red}{36,53\%}           \\
+    {3}                           & {10}      & {94,9\%}                            & \textcolor{red}{53,47\%}            & \textcolor{red}{38,24\%}           \\
+    {2}                           & {16}      & {95,84\%}                           & \textbf{84,03\%}                    & \textcolor{red}{39,65\%}           \\
+    {4}                           & {10}      & \textbf{96,08\%}                    & \textcolor{red}{48,03\%}            & \textbf{64,31\%}                   \\
+    {3}                           & {16}      & {94,59\%}                           & \textbf{81,46\%}                    & \textbf{67,88\%}                   \\
+    {6}                           & {10}      & \textcolor{red}{63,46\%}            & \textbf{82,12\%}                    & \textcolor{red}{40,11\%}           \\
+    {4}                           & {16}      & {94,14\%}                           & \textcolor{red}{49,81\%}            & \textcolor{red}{40,84\%}           \\
+    {6}                           & {16}      & {95,86\%}                           & \textcolor{red}{50,71\%}            & \textcolor{red}{40,61\%}           \\
+    {2}                           & {50}      & {93,78\%}                           & \textcolor{red}{52,24\%}            & \textcolor{red}{39,56\%}           \\
+    {3}                           & {50}      & {93,88\%}                           & {79,65\%}                           & \textcolor{red}{40,36\%}           \\
+    {2}                           & {100}     & {92,43\%}                           & \textcolor{red}{53,23\%}            & \textcolor{red}{37,68\%}           \\
+    {4}                           & {50}      & \textbf{96,24\%}                    & \textcolor{red}{48,79\%}            & \textcolor{red}{43,61\%}           \\
+    {3}                           & {100}     & {95,25\%}                           & \textcolor{red}{48,52\%}            & \textcolor{red}{42,55\%}           \\
+    {6}                           & {50}      & {91,27\%}                           & \textcolor{red}{52,55\%}            & \textcolor{red}{40,21\%}           \\
+    {4}                           & {100}     & {95,55\%}                           & \textcolor{red}{49,65\%}            & \textcolor{red}{42,85\%}           \\
+    {6}                           & {100}     & \textcolor{red}{60,27\%}            & \textcolor{red}{46,92\%}            & \textcolor{red}{41,98\%}           \\
+    \bottomrule
+  \end{tabular}
+  \caption{Probability masses of the attention reference resolver after 128.000 games: $n$ are different maximum message lengths and $|V|$ are different vocabulary sizes. Results in red didn't pass the baseline. The results are sorted by the product of $n$ and $|V|$ which corresponds to available space for the message. The best results are achieved with a medium-sized message space across all datasets.}
+  \label{tab:results:attention-reference-resolver-game}
+\end{table}
 
 \end{document}
 
