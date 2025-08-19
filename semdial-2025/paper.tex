@@ -1,11 +1,23 @@
-% This file compiles with both LuaLaTeX and XeLaTeX
-\documentclass[11pt]{article}
+%
+% File acl2021.tex
+%
+%% Based on the style files for EMNLP 2020, which were
+%% Based on the style files for ACL 2020, which were
+%% Based on the style files for ACL 2018, NAACL 2018/19, which were
+%% Based on the style files for ACL-2015, with some improvements
+%%  taken from the NAACL-2016 style
+%% Based on the style files for ACL-2014, which were, in turn,
+%% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
+%% EACL-2009, IJCNLP-2008...
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
 
-% Remove the "review" option to generate the final version.
-\usepackage[review]{acl}
-
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{acl2021}
+\usepackage{times}
 \usepackage{latexsym}
-\usepackage[utf8]{inputenc}
+\renewcommand{\UrlFont}{\ttfamily\small}
 
 % This is not strictly necessary, and may be commented out,
 % but it will improve the layout of the manuscript,
@@ -21,38 +33,18 @@
 \usepackage{amssymb}
 \usepackage{enumitem}
 
-% If the title and author information does not fit in the area allocated, uncomment the following
-%
-%\setlength\titlebox{<dim>}
-%
-% and set <dim> to something 5cm or larger.
+\aclfinalcopy % Uncomment this line for the final submission
+%\def\aclpaperid{***} %  Enter the acl Paper ID here
 
-%%% include whatever languages you need below this line
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
 
-%\usepackage{polyglossia}
-% \setdefaultlanguage{english}
-%\setotherlanguages{arabic,russian,thai,hindi,kannada}
-
-%%%%%
-
+\newcommand\BibTeX{B\textsc{ib}\TeX}
 
 \title{Learning to Refer: How Scene Complexity Affects Emergent Communication in Neural Agents}
-
-% Author information can be set in various styles:
-% For several authors from the same institution:
-% \author{Author 1 \and ... \and Author n \\
-%         Address line \\ ... \\ Address line}
-% if the names do not fit well on one line use
-%         Author 1 \\ {\bf Author 2} \\ ... \\ {\bf Author n} \\
-% For authors from different institutions:
-% \author{Author 1 \\ Address line \\  ... \\ Address line
-%         \And  ... \And
-%         Author n \\ Address line \\ ... \\ Address line}
-% To start a seperate ``row'' of authors use \AND, as in
-% \author{Author 1 \\ Address line \\  ... \\ Address line
-%         \AND
-%         Author 2 \\ Address line \\ ... \\ Address line \And
-%         Author 3 \\ Address line \\ ... \\ Address line}
 
 \author{Dominik Künkele$^{1}$ \and Simon Dobnik$^{1,2}$ \\
         Department of Philosophy, Linguistics and Theory of Science$^{1}$ \\ 
@@ -60,9 +52,9 @@
         University of Gothenburg, Sweden \\
         \texttt{contact@dominik-kuenkele.de} \and \texttt{simon.dobnik@gu.se}}
 
+\date{2025-08-19}
 
 \begin{document}
-
 \maketitle
 \begin{abstract}
   We explore how neural network-based agents learn to map continuous sensory input to discrete linguistic symbols through interactive language games.
@@ -86,7 +78,7 @@ Modern implementations use deep neural networks as agents that exchange discrete
 This paper examines emergent referential communication in neural agents tasked with identifying objects in 3D visual scenes.
 Using a highly controlled extension of the CLEVR dataset \citep{Johnson2017a}, we are able to manipulate the bias the neural agents are able to use in the emergent communication.
 We are able to vary the complexity of referential scenarios to understand the constraints governing successful symbol grounding.
-Our work is  a study of how increasing the complexity of the scene and therefore the space of potential referential expressions to be learned affects learning through interaction of particular configurations of neural networks.
+Our work is a study of how increasing the complexity of the scene (and therefore the space of potential referential expressions to be learned) affects learning through interaction of particular configurations of neural networks.
 
 \section{Dataset}
 \begin{figure*}[!htbp]
@@ -107,7 +99,7 @@ Our work is  a study of how increasing the complexity of the scene and therefore
   \label{fig:clevr-examples}
 \end{figure*}
 
-We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{Github-Link} % \footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{Source code on GitHub}}
+We extend the original CLEVR framework \citep{Johnson2017a} to have more control over the generated scenes.\footnote{\href{https://github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}{github.com/DominikKuenkele/MLT\_Master-Thesis\_clevr-dataset-gen}}
 By this, the objects in the generated images are controlled to have different human-recognizable attributes, namely the \emph{shape}, \emph{size} and \emph{color}.
 These attributes also correspond to referring expressions in natural language such as English which effectively biases the agents to learn a language that is comparable to a human language.
 
@@ -148,7 +140,7 @@ Consider Figure \ref{fig:clevr-dale-5}, with the target object being the \emph{l
 \section{Method}
 \subsection{Image processing}
 \label{sec:image-processing}
-The extract the features and process the images of the datasets, we build upon the proposed architecture in \citet{Johnson2017} which was used to train baseline models on the original CLEVR dataset.
+To extract the features and process the images of the datasets, we build upon the proposed architecture in \citet{Johnson2017} which was used to train baseline models on the original CLEVR dataset.
 Hereby, the image is first passed through a frozen ResNet-101 model \citep{He2016}.
 Two convolutional layers with subsequent \emph{ReLU} non-linearities condense the important information from the output of the feature extractor.
 The convolutional layers reduce the channels to 128 channels, using a kernel size of 3 and a stride and padding of 1.
@@ -176,7 +168,7 @@ As the discrete sampled categorical distribtion of the message can't be differen
 Two agents are tasked to solve a referring problem together.
 The receiver needs to 'point' to the target object in the visual scene that the sender is describing.
 However, only the sender is aware of which of the shown objects is the target object.
-To solve the task correctly the sender is required to generate a referring expression about the target object through the discrete channel while the receiver needs to resolve it.
+To solve the task correctly the sender is required to generate a referring expressions about the target object through the discrete channel while the receiver needs to resolve it.
 The experiment is set up in a way that avoids explicit human language information as e.g. human referring expressions or one-hot encoded attributes.
 Messages by the sender can only be based on the highly controlled implicit bias in the visual scenes.
 
@@ -188,7 +180,7 @@ Messages by the sender can only be based on the highly controlled implicit bias 
 \end{figure}
 
 Figure \ref{fig:attention_predictor_game_architecture} shows the simplified architecture of the language game.
-The sender is given a set of bounding boxes of all objects in the scene, whereas the target object is always the first bounding box and the distractors are shuffled.
+The sender is given a set of bounding boxes of all objects in the scene, where the target object is always the first bounding box and the distractors are shuffled.
 The features of each bounding box are extracted using ResNet-101, combined and passed to the LSTM to produce a message.
 The receiver is shown the whole scene including the spatial information.
 Given the sender's message, the task is to predict the region around target object.
@@ -535,10 +527,8 @@ Overall, the results indicate that to be successful, learning language and visio
 Future work should investigate the linguistic properties of the emergent languages to better understand how agents encode visual attributes in their communicative protocols.
 Detailed analysis of message patterns could reveal whether emergent languages develop similar structures seen in natural languages.
 
-% Entries for the entire Anthology, followed by custom entries
+\bibliographystyle{acl_natbib}
 \bibliography{custom}
-
-\appendix
 
 \section{Technical details of the language games}
 \label{app:technical-details-language-games}
@@ -575,8 +565,6 @@ The experiments are conducted with the following hyperparameters: a learning rat
   \label{fig:visualizations_game_attention}
 \end{figure}
 
+
+
 \end{document}
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
