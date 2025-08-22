@@ -68,7 +68,7 @@ How do cognitive systems bridge the gap between rich, continuous sensory experie
 While perception operates through continuous signals, linguistic communication relies on finite vocabularies that must ground meaning about the perceived world \citep{Regier1996,Roy2005,Cooper2023}.
 This representational challenge, known as the symbol grounding problem \citep{Harnad1990}, becomes particularly acute in artificial systems where discrete symbols must acquire meaning through interaction rather than pre-programmed associations.
 
-Referring expressions require systems to map visual attributes onto linguistic descriptions that uniquely identify target objects and thus can be use to study symbol grounding.
+Referring expressions require systems to map visual attributes onto linguistic descriptions that uniquely identify target objects and thus can be used to study symbol grounding.
 \citet{Dale1995} formalized this process through an incremental generation algorithm that constructs descriptions by systematically adding distinguishing properties in order of salience until achieving unique identification.
 By this, referring expression only contain attributes that are necessary to discriminate the target from the surroundings.
 
@@ -196,7 +196,7 @@ The model is then tasked to predict the matrix $A = (a_{ij})$, where:
 \end{align*}
 
 The image is encoded using a combination of ResNet-101 and several convolutional layers described in Section \ref{sec:image-processing}.
-The resulting matrix has 128$\times$14$\times$14 dimension, corresponding to the 14$\times$14 regions.
+The resulting matrix has 128$\times$14$\times$14 dimensions, corresponding to the 14$\times$14 regions.
 
 The sender's message is decoded using an LSTM and the dot product is calculated between each encoded region of the image and the encoded message.
 The $softmax$ function is applied subsequently, which results in a 14$\times$14 matrix.
@@ -347,14 +347,32 @@ This is naturally more complex to learn for the agents. % SD 2025-06-02 20:01:28
 Finally, since more objects are present, they are more likely clustered closer together, which can result in the identification of adjacent regions to the target regions.
 
 The agents struggle the most on the 'CLEVR color' dataset.
-Hereby, only two configurations perform better than the baseline and reach a probability mass of around 64\% to 67\%.
+In this case, only two configurations perform better than the baseline and reach a probability mass of around 64\% to 67\%.
 Both utilize a medium message length of $n \in \{3,4\}$ and a medium-sized vocabulary of $|V| \in \{10,16\}$.
 Interestingly, several configurations with short message lengths of $n=2$ perform worse than the baseline.
 This indicates that there is communication between the agents, but it rather distracts the receiver from the target object towards the distractors.
 The same point for a more difficult task when more objects are involved can be made for the 'CLEVR color' dataset.
 This dataset includes even up to 10 objects present in the scene which increases the likelihood that the receiver focuses on a wrong object.
 
-Appendix \ref{app:attention-errors} shows examples of the wrongly identified regions on each dataset.
+\begin{figure}[!htbp]
+  \centering
+  \subfigure['Dale-2']{
+    \includegraphics[width=\linewidth]{figures/visualization_games_dale-2_attention.png}
+    \label{fig:visualizations_game_dale-2_attention}
+  }
+  \subfigure['Dale-5']{
+    \includegraphics[width=\linewidth]{figures/visualization_games_dale-5_attention.png}
+    \label{fig:visualizations_game_dale-5_attention}
+  }
+  \subfigure['CLEVR color']{
+    \includegraphics[width=\linewidth]{figures/visualization_games_colour_attention.png}
+    \label{fig:visualizations_game_colour_attention}
+  }
+  \caption{Examples of the predictions in language games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed for ResNet-101. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
+  \label{fig:visualizations_game_attention}
+\end{figure}
+
+Figure \ref{fig:visualizations_game_attention} shows examples of the wrongly identified regions on each dataset.
 These are predictions by the agents that are wrong even though a language emerged successfully.
 Main problems seemed to be target objects not being in the actual frame of the scene that the receiver was processing.
 This happens due to center cropping the image to prepare it as input for the ResNet model. % SD 2025-06-02 20:10:47 +0200: How could this happen? The scene has been trimmed, right?
@@ -391,7 +409,7 @@ Training is done for 30 epochs and with a learning rate of $2\times10^{-4}$.
 The loss is calculated using cross entropy.
 
 This task can be interpreted as a classification task rather than a natural language generation task, as the model is tasked to assign specific attributes to the target object instead of producing free text with a large vocabulary.
-Following, the model's success is validated on accuracy, recall and precision scores.
+Furthermore, the model's success is validated on accuracy, recall and precision scores.
 The \textbf{overall accuracy} is a measure if the model predicted every word in the referring expression correctly.
 
 \begin{table}[ht]
@@ -411,19 +429,19 @@ The \textbf{overall accuracy} is a measure if the model predicted every word in 
 Table \ref{tab:results:bb-re-generator} shows the \emph{overall accuracy} and \emph{F1 scores} for each word.
 As can be seen, the overall accuracies, in other words perfect matches of the generated referring expression depend very much on the dataset.
 With the 'Dale-2' and 'CLEVR color' dataset, the model can achieve high scores of 99\% and 93\% if the samples.
-Opposed to that the model can only generate perfect referring expressions in 69\% of the samples of the 'Dale-5' dataset.
+In contrast, the model can only generate perfect referring expressions in 69\% of the samples of the 'Dale-5' dataset.
 
 \begin{table*}[ht]
   \centering
   \begin{tabular}{rr|cc|c|ccc|c|c}
     \toprule
                                      &             & {small} & {large} & \textbf{size}  & {cube}  & {cylinder} & {sphere} & \textbf{shape} & {\texttt{<pad>}} \\\midrule
-    \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \textbf{98,73} & {99,86} & {99,71}    & {99,67}  & \textbf{99,75} & {99,64}          \\
-                                     & {Recall}    & {97,54} & {94,26} & \textbf{95,9}  & {100}   & {99,56}    & {99,67}  & \textbf{99,74} & {99,77}          \\\midrule
-    \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \textbf{69,43} & {98,19} & {98,32}    & {98,39}  & \textbf{98,3}  & {82,22}          \\
-                                     & {Recall}    & {62,11} & {66,15} & \textbf{64,13} & {98,79} & {97,87}    & {98,25}  & \textbf{98,3}  & {84,59}          \\\midrule
-    \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                                   \\\textbf{color}} & {Precision}  & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}   \\
-                                     & {Recall}    & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \textbf{100}   & {100}            \\
+    \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {99,17} & {98,29} & \emph{98,73} & {99,86} & {99,71}    & {99,67}  & \emph{99,75} & {99,64}          \\
+                                     & {Recall}    & {97,54} & {94,26} & \emph{95,9}  & {100}   & {99,56}    & {99,67}  & \emph{99,74} & {99,77}          \\\midrule
+    \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {69,65} & {69,21} & \emph{69,43} & {98,19} & {98,32}    & {98,39}  & \emph{98,3}  & {82,22}          \\
+                                     & {Recall}    & {62,11} & {66,15} & \emph{64,13} & {98,79} & {97,87}    & {98,25}  & \emph{98,3}  & {84,59}          \\\midrule
+    \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                                   \\\textbf{color}} & {Precision}  & {-}     & {-}     & \textbf{-}     & {100}   & {100}      & {100}    & \emph{100}   & {100}   \\
+                                     & {Recall}    & {-}     & {-}     & \emph{-}     & {100}   & {100}      & {100}    & \emph{100}   & {100}            \\
     \bottomrule
   \end{tabular}
   \caption{Precision and Recall in \% for \texttt{<pad>}, size and shape tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The columns \textbf{shape} and \textbf{size} show the average across all tokens of the respective attribute.}
@@ -435,12 +453,12 @@ Opposed to that the model can only generate perfect referring expressions in 69\
   \begin{tabular}{rr|cccccccc|c}
     \toprule
                                      &             & {blue}  & {brown} & {cyan}  & {gray}  & {green} & {purple} & {red}   & {yellow} & \textbf{color} \\\midrule
-    \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {94,51} & {98,77} & {97,59} & {98,68} & {98,89} & {98,8}   & {97,47} & {100}    & \textbf{98,09} \\
-                                     & {Recall}    & {97,73} & {100}   & {98,78} & {97,4}  & {96,74} & {98,8}   & {100}   & {98,8}   & \textbf{98,53} \\\midrule
-    \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {92,12} & {93,82} & {89,13} & {89,12} & {92,63} & {91,12}  & {97,24} & {94,36}  & \textbf{92,44} \\
-                                     & {Recall}    & {92,12} & {89,78} & {94,91} & {94,51} & {95,71} & {92,42}  & {89,34} & {94,85}  & \textbf{92,95} \\\midrule
-    \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                           \\\textbf{color}} & {Precision}           & {93,46} & {92,37} & {94,47} & {93,86} & {92,04} & {91,13}  & {90,07} & {94,7}   & \textbf{92,76} \\
-                                     & {Recall}    & {92,75} & {92}    & {95,98} & {89,92} & {94,12} & {91,13}  & {94,23} & {91,91}  & \textbf{92,76} \\
+    \multirow{2}{*}{\textbf{Dale-2}} & {Precision} & {94,51} & {98,77} & {97,59} & {98,68} & {98,89} & {98,8}   & {97,47} & {100}    & \emph{98,09} \\
+                                     & {Recall}    & {97,73} & {100}   & {98,78} & {97,4}  & {96,74} & {98,8}   & {100}   & {98,8}   & \emph{98,53} \\\midrule
+    \multirow{2}{*}{\textbf{Dale-5}} & {Precision} & {92,12} & {93,82} & {89,13} & {89,12} & {92,63} & {91,12}  & {97,24} & {94,36}  & \emph{92,44} \\
+                                     & {Recall}    & {92,12} & {89,78} & {94,91} & {94,51} & {95,71} & {92,42}  & {89,34} & {94,85}  & \emph{92,95} \\\midrule
+    \multirowcell{2}[0pt][r]{\textbf{CLEVR}                                                                                                           \\\textbf{color}} & {Precision}           & {93,46} & {92,37} & {94,47} & {93,86} & {92,04} & {91,13}  & {90,07} & {94,7}   & \emph{92,76} \\
+                                     & {Recall}    & {92,75} & {92}    & {95,98} & {89,92} & {94,12} & {91,13}  & {94,23} & {91,91}  & \emph{92,76} \\
     \bottomrule
   \end{tabular}
   \caption{Precision and Recall in \% for color tokens with $e=100$, $LSTM_o=500$ and $LSTM_e=30$. The column \textbf{color} shows the average across all colors.}
@@ -530,6 +548,8 @@ Detailed analysis of message patterns could reveal whether emergent languages de
 \bibliographystyle{acl_natbib}
 \bibliography{custom}
 
+\appendix
+
 \section{Technical details of the language games}
 \label{app:technical-details-language-games}
 The sender extracts the features of each bounding box using ResNet-101 and projects them to an image embedding dimension $e_r=100$ with a linear layer.
@@ -544,27 +564,5 @@ Both encodings are passed through a $tanh$ non-linearity, and the results are co
 The resulting vector is passed through a $softmax$ function to produce a probability distribution over the 14$\times$14 regions of the image.
 
 The experiments are conducted with the following hyperparameters: a learning rate of $2\times10^{-4}$, a temperature for the Gumbel-Softmax relaxation of 1 and \emph{Adam} \citep{Kingma2015} as optimizer.
-
-\section{Examples of errors in attention prediction}
-\label{app:attention-errors}
-\begin{figure}[!htbp]
-  \centering
-  \subfigure['Dale-2']{
-    \includegraphics[width=\linewidth]{figures/visualization_games_dale-2_attention.png}
-    \label{fig:visualizations_game_dale-2_attention}
-  }
-  \subfigure['Dale-5']{
-    \includegraphics[width=\linewidth]{figures/visualization_games_dale-5_attention.png}
-    \label{fig:visualizations_game_dale-5_attention}
-  }
-  \subfigure['CLEVR color']{
-    \includegraphics[width=\linewidth]{figures/visualization_games_colour_attention.png}
-    \label{fig:visualizations_game_colour_attention}
-  }
-  \caption{Examples of the predictions in language games with successful communication with a probability mass lower than 50\% on the 'Dale' and 'CLEVR color' datasets. The black rectangle shows the cropped section the model is actually seeing after the image is preprocessed for ResNet-101. The green rectangle surrounds the target region that needs to be predicted while the red regions show the actual predictions of the model. The more intense the red, the higher is the probability that the model assigned to this region.}
-  \label{fig:visualizations_game_attention}
-\end{figure}
-
-
 
 \end{document}
