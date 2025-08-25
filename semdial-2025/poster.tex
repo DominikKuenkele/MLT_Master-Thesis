@@ -1,0 +1,200 @@
+% simon.dobnik@gu.se
+
+\documentclass[a0,36pt,plainsections]{sciposter}
+\usepackage{gu-poster}
+\usepackage{tikz}
+% \usepackage{graphicx}
+% \usepackage{subfigure}
+% \usepackage{booktabs}
+% \usepackage{amsmath}
+% \usepackage{amssymb}
+
+% Set up colors
+\definecolor{highlightblue}{RGB}{41,128,185}
+\definecolor{lightgray}{RGB}{240,240,240}
+
+% Custom commands
+\newcommand{\sectiontitle}[1]{\textcolor{highlightblue}{\textbf{\Large #1}}}
+\newcommand{\subsectiontitle}[1]{\textcolor{black}{\textbf{\large #1}}}
+
+\title{Learning to Refer: How Scene Complexity Affects \\ \vspace{-2.25cm} Emergent Communication in Neural Agents}
+
+\author{Dominik Künkele$^{1}$ and Simon Dobnik$^{1,2}$}
+
+\institute{
+  $^1$Department of Philosophy, Linguistics and Theory of Science \\
+  $^2$Centre for Linguistic Theory and Studies in Probability (CLASP) \\
+  University of Gothenburg, Sweden
+}
+
+\email{contact@dominik-kuenkele.de simon.dobnik@gu.se}
+
+% Conference name in the footer
+\conference{IWCS 2025}
+
+% Adjust the font size if necessary
+
+\renewcommand{\titlesize}{\huge}
+% \renewcommand{\authorsize}{\Large}
+% \renewcommand{\instsize}{\large}
+
+\begin{document}
+
+\maketitle
+
+% Places the logo to the edge of the page
+
+\begin{tikzpicture}[remember picture,overlay]
+  \node [anchor=north east] at ([xshift=-6cm,yshift=-2cm]current page.north east) {\includegraphics[height=8cm]{pics/GU-logo.pdf}};
+  % \node [anchor=north east, inner sep=2.5cm] at ([xshift=-4cm,yshift=0cm]current page.north east)     {\includegraphics[height=8cm]{pics/GU-logo.pdf}}; 
+\end{tikzpicture}
+
+
+\begin{multicols}{3}
+
+  % Introduction
+  \section*{\sectiontitle{Introduction \& Motivation}}
+
+  \begin{itemize}
+    \item How do cognitive systems bridge continuous sensory input with discrete symbols used in communication?
+    \item Symbol grounding challenge: mapping visual features to meaningful linguistic descriptions
+    \item We explore how neural agents learn this mapping through interactive language games
+    \item Focus on referring expressions: describing objects uniquely in visual scenes
+  \end{itemize}
+
+  % Method
+  \section*{\sectiontitle{Method}}
+
+  \subsection*{\subsectiontitle{Dataset Creation}}
+  We extend CLEVR to create three controlled datasets:
+  \begin{itemize}
+    \item \textbf{CLEVR color}: Target uniquely identified by color
+    \item \textbf{Dale-2}: Target + 1 distractor
+    \item \textbf{Dale-5}: Target + 4 distractors
+  \end{itemize}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/CLEVR_color.png}
+    \includegraphics[width=\linewidth]{figures/CLEVR_dale-2.png}
+    \includegraphics[width=\linewidth]{figures/CLEVR_dale-5.png}
+    % \caption{Example scenes from each dataset variant. Target objects shown with attributes.}
+  \end{figure}
+
+  \subsection*{\subsectiontitle{Language Game Setup}}
+  \begin{itemize}
+    \item Two neural agents: Sender and Receiver
+    \item Sender sees target object, generates message
+    \item Receiver sees full scene, interprets message
+    \item Goal: Identify target object location
+    \item Learning through interaction feedback
+  \end{itemize}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/arch_attention_predictor_game.png}
+    % \caption{Architecture of the attention predictor game showing sender and receiver interaction.}
+  \end{figure}
+
+  % Results
+  \section*{\sectiontitle{Results}}
+
+  \subsection*{\subsectiontitle{Language Game Performance}}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
+    % \caption{Learning curves for Dale-2 dataset showing impact of vocabulary size.}
+  \end{figure}
+
+  \textbf{Key Findings:}
+  \begin{itemize}
+    \item Medium-sized vocabularies (10-16 symbols) perform best
+    \item Message length of 2-4 symbols optimal
+    \item Performance decreases with scene complexity:
+          \begin{itemize}
+            \item Dale-2: Up to 96\% accuracy
+            \item Dale-5: Up to 84\% accuracy
+            \item CLEVR color: Up to 68\% accuracy
+          \end{itemize}
+  \end{itemize}
+
+  \subsection*{\subsectiontitle{Error Analysis}}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/visualization_games_dale-5_attention.png}
+    % \caption{Visualization of attention prediction errors showing where the model focuses.}
+  \end{figure}
+
+  \textbf{Common Error Patterns:}
+  \begin{itemize}
+    \item Confusion between objects sharing multiple attributes
+    \item Split attention between similar objects
+    \item Edge cases with partially visible objects
+  \end{itemize}
+
+  % Conclusions
+  \section*{\sectiontitle{Conclusions}}
+
+  \begin{itemize}
+    \item Scene complexity significantly impacts emergent communication
+    \item Shape attributes are easiest to learn and communicate
+    \item Size attributes prove most challenging
+    \item Human-like pragmatic referring requires explicit modeling
+    \item Results inform design of language-vision systems
+  \end{itemize}
+
+  \vfill
+
+  \section*{\sectiontitle{References}}
+  \begin{itemize}
+    \item Dale, R., \& Reiter, E. (1995). Computational interpretations of the Gricean maxims in the generation of referring expressions. Cognitive Science.
+    \item Johnson, J., et al. (2017). CLEVR: A diagnostic dataset for compositional language and elementary visual reasoning.
+    \item Kharitonov, E., et al. (2019). EGG: a toolkit for research on emergence of lanGuage in games.
+  \end{itemize}
+
+  \vfill
+
+  \begin{center}
+    \includegraphics[height=2cm]{pics/CLASP-blue.pdf}
+    \hspace{2cm}
+    \includegraphics[height=2cm]{pics/GU-logo.pdf}
+  \end{center}
+
+\end{multicols}
+
+\end{document}
+
+%% \section*{Acknowledgements}
+
+
+
+
+
+%% Bibliography
+
+\small
+
+\bibliographystyle{acl_natbib}
+\bibliography{references.bib}
+
+
+
+
+
+\end{multicols}
+
+
+\end{document}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% mode: flyspell
+%%% TeX-master: t
+%%% TeX-PDF-mode: t
+%%% coding: utf-8
+%%% ispell-local-dictionary: "british"
+%%% End:
