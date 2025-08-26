@@ -52,117 +52,121 @@
 
 \begin{multicols}{3}
 
-  % Introduction
-  \section*{\sectiontitle{Introduction \& Motivation}}
-
+  % AIMS
+  \section*{\sectiontitle{Aims}}
   \begin{itemize}
-    \item How do cognitive systems bridge continuous sensory input with discrete symbols used in communication?
-    \item Symbol grounding challenge: mapping visual features to meaningful linguistic descriptions
-    \item We explore how neural agents learn this mapping through interactive language games
-    \item Focus on referring expressions: describing objects uniquely in visual scenes
+    \item Bridge continuous sensory input with discrete linguistic symbols
+    \item Study symbol grounding in neural agents through interactive communication
+    \item Investigate how scene complexity affects emergent language learning
+    \item Examine referring expression generation in controlled visual environments
+    \item Compare emergent vs. natural language communication protocols
   \end{itemize}
 
-  % Method
-  \section*{\sectiontitle{Method}}
-
-  \subsection*{\subsectiontitle{Dataset Creation}}
-  We extend CLEVR to create three controlled datasets:
-  \begin{itemize}
-    \item \textbf{CLEVR color}: Target uniquely identified by color
-    \item \textbf{Dale-2}: Target + 1 distractor
-    \item \textbf{Dale-5}: Target + 4 distractors
-  \end{itemize}
-
+  % ARCHITECTURE
+  \section*{\sectiontitle{Architecture}}
+  
   \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figures/CLEVR_color.png}
-    \includegraphics[width=\linewidth]{figures/CLEVR_dale-2.png}
-    \includegraphics[width=\linewidth]{figures/CLEVR_dale-5.png}
-    % \caption{Example scenes from each dataset variant. Target objects shown with attributes.}
+    \includegraphics[width=0.95\linewidth]{figures/arch_attention_predictor_game.png}
   \end{figure}
+  
+  % \textbf{Language Game Setup:}
+  % \begin{itemize}
+  %   \item \textbf{Sender}: Processes target object features via ResNet-101, generates discrete message using LSTM
+  %   \item \textbf{Receiver}: Encodes full scene, interprets message, predicts target location (14×14 attention map)
+  %   \item \textbf{Learning}: Gumbel-Softmax relaxation enables end-to-end training through discrete communication
+  %   \item \textbf{Evaluation}: Binary cross-entropy loss on 3×3 target regions
+  % \end{itemize}
 
-  \subsection*{\subsectiontitle{Language Game Setup}}
-  \begin{itemize}
-    \item Two neural agents: Sender and Receiver
-    \item Sender sees target object, generates message
-    \item Receiver sees full scene, interprets message
-    \item Goal: Identify target object location
-    \item Learning through interaction feedback
-  \end{itemize}
-
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/arch_attention_predictor_game.png}
-    % \caption{Architecture of the attention predictor game showing sender and receiver interaction.}
-  \end{figure}
-
-  % Results
-  \section*{\sectiontitle{Results}}
-
-  \subsection*{\subsectiontitle{Language Game Performance}}
-
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
-    % \caption{Learning curves for Dale-2 dataset showing impact of vocabulary size.}
-  \end{figure}
-
-  \textbf{Key Findings:}
-  \begin{itemize}
-    \item Medium-sized vocabularies (10-16 symbols) perform best
-    \item Message length of 2-4 symbols optimal
-    \item Performance decreases with scene complexity:
-          \begin{itemize}
-            \item Dale-2: Up to 96\% accuracy
-            \item Dale-5: Up to 84\% accuracy
-            \item CLEVR color: Up to 68\% accuracy
-          \end{itemize}
-  \end{itemize}
-
-  \subsection*{\subsectiontitle{Error Analysis}}
-
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/visualization_games_dale-5_attention.png}
-    % \caption{Visualization of attention prediction errors showing where the model focuses.}
-  \end{figure}
-
-  \textbf{Common Error Patterns:}
-  \begin{itemize}
-    \item Confusion between objects sharing multiple attributes
-    \item Split attention between similar objects
-    \item Edge cases with partially visible objects
-  \end{itemize}
-
-  % Conclusions
+  % CONCLUSIONS
   \section*{\sectiontitle{Conclusions}}
-
   \begin{itemize}
-    \item Scene complexity significantly impacts emergent communication
-    \item Shape attributes are easiest to learn and communicate
-    \item Size attributes prove most challenging
-    \item Human-like pragmatic referring requires explicit modeling
-    \item Results inform design of language-vision systems
+    \item Medium vocabularies (10-16 symbols) and message lengths (2-4) perform best
+    \item Scene complexity dramatically impacts communication success
+    \item Shape attributes easiest to learn, size attributes most challenging
+    \item Emergent protocols achieve substantial gains over baselines
+    \item Natural language bias improves performance significantly
+    \item Future: Analyze linguistic properties of emergent languages
   \end{itemize}
-
-  \vfill
-
-  \section*{\sectiontitle{References}}
-  \begin{itemize}
-    \item Dale, R., \& Reiter, E. (1995). Computational interpretations of the Gricean maxims in the generation of referring expressions. Cognitive Science.
-    \item Johnson, J., et al. (2017). CLEVR: A diagnostic dataset for compositional language and elementary visual reasoning.
-    \item Kharitonov, E., et al. (2019). EGG: a toolkit for research on emergence of lanGuage in games.
-  \end{itemize}
-
-  \vfill
-
-  \begin{center}
-    \includegraphics[height=2cm]{pics/CLASP-blue.pdf}
-    \hspace{2cm}
-    \includegraphics[height=2cm]{pics/GU-logo.pdf}
-  \end{center}
 
 \end{multicols}
+
+\vfill
+
+% DATASET RESULTS SECTION
+\begin{multicols}{3}
+  
+  % DALE-2 COLUMN
+  \section*{\sectiontitle{Dale-2 Dataset}}
+  
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/CLEVR_dale-2.png}\\
+    \textit{Target + 1 distractor}
+  \end{center}
+  
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}\\
+    \textit{Learning curves by vocabulary size}
+  \end{center}
+  
+  \textbf{RE Generation Results:}
+  \begin{itemize}
+    \item \textbf{Accuracy}: 99\%
+    \item \textbf{F1-Score}: 98.57\%
+    \item \textbf{Shape}: 99.75\% precision
+    \item \textbf{Color}: 98.09\% precision  
+    \item \textbf{Size}: 98.73\% precision
+  \end{itemize}
+
+  % DALE-5 COLUMN  
+  \section*{\sectiontitle{Dale-5 Dataset}}
+  
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/CLEVR_dale-5.png}\\
+    \textit{Target + 4 distractors}
+  \end{center}
+  
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}\\
+    \textit{Learning curves by vocabulary size}
+  \end{center}
+  
+  \textbf{RE Generation Results:}
+  \begin{itemize}
+    \item \textbf{Accuracy}: 69\%
+    \item \textbf{F1-Score}: 89.53\%
+    \item \textbf{Shape}: 98.30\% precision
+    \item \textbf{Color}: 92.44\% precision
+    \item \textbf{Size}: 69.43\% precision
+  \end{itemize}
+
+  % CLEVR COLOR COLUMN
+  \section*{\sectiontitle{CLEVR Color Dataset}}
+  
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/CLEVR_color.png}\\
+    \textit{Target identified by color only}
+  \end{center}
+  
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}\\
+    \textit{Learning curves by vocabulary size}
+  \end{center}
+  
+  \textbf{RE Generation Results:}
+  \begin{itemize}
+    \item \textbf{Accuracy}: 93\%
+    \item \textbf{F1-Score}: 95.17\%
+    \item \textbf{Shape}: 100\% precision
+    \item \textbf{Color}: 92.76\% precision
+    \item \textbf{Size}: N/A (not used)
+  \end{itemize}
+
+\end{multicols}
+
+\vfill
+
+
 
 \end{document}
 
