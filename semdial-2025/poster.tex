@@ -3,11 +3,6 @@
 \documentclass[a0,36pt,plainsections]{sciposter}
 \usepackage{gu-poster}
 \usepackage{tikz}
-% \usepackage{graphicx}
-% \usepackage{subfigure}
-% \usepackage{booktabs}
-% \usepackage{amsmath}
-% \usepackage{amssymb}
 
 % Set up colors
 \definecolor{highlightblue}{RGB}{41,128,185}
@@ -30,7 +25,7 @@
 \email{contact@dominik-kuenkele.de simon.dobnik@gu.se}
 
 % Conference name in the footer
-\conference{IWCS 2025}
+\conference{16th International Conference on Computational Semantics (IWCS 2025)}
 
 % Adjust the font size if necessary
 
@@ -54,22 +49,24 @@
 
   % AIMS
   \section*{\sectiontitle{Aims}}
+  \emph{A picture can say thousand words...}
   \begin{itemize}
-    \item Bridge continuous sensory input with discrete linguistic symbols
-    \item Study symbol grounding in neural agents through interactive communication
-    \item Investigate how scene complexity affects emergent language learning
-    \item Examine referring expression generation in controlled visual environments
-    \item Compare emergent vs. natural language communication protocols
+    % effect of environment on results, effects architecture
+    % \item Bridge continuous sensory input with discrete linguistic symbols
+    \item Study \textbf{emergence of discrete linguistic symbols} and \textbf{languages} from continuous sensory input in \textbf{interactive communication}
+    \item Study \textbf{constraints} on symbol grounding in interacting neural agents
+    \item Investigate the \textbf{role of scene complexity}, \textbf{discriminating features present}, and \textbf{message space} on emergent languages
+          % \item Examine referring expression generation in controlled visual environments
   \end{itemize}
 
   % ARCHITECTURE
   \section*{\sectiontitle{Architecture}}
-  
+
   \begin{figure}[h]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/arch_attention_predictor_game.png}
   \end{figure}
-  
+
   % \textbf{Language Game Setup:}
   % \begin{itemize}
   %   \item \textbf{Sender}: Processes target object features via ResNet-101, generates discrete message using LSTM
@@ -81,11 +78,11 @@
   % CONCLUSIONS
   \section*{\sectiontitle{Conclusions}}
   \begin{itemize}
-    \item Medium vocabularies (10-16 symbols) and message lengths (2-4) perform best
-    \item Scene complexity dramatically impacts communication success
+    \item Medium vocabularies ($|V| \in \{10,16\}$) and message lengths ($n \in \{2,4\}$) perform best
+          % \item Interactive communication leads to better performance over non-interactive 
+          % \item Interaction is a requirement for learning (see baseline)
+    \item Scene complexity (number of distractors, number of features) dramatically impacts communication success
     \item Shape attributes easiest to learn, size attributes most challenging
-    \item Emergent protocols achieve substantial gains over baselines
-    \item Natural language bias improves performance significantly
     \item Future: Analyze linguistic properties of emergent languages
   \end{itemize}
 
@@ -95,42 +92,42 @@
 
 % DATASET RESULTS SECTION
 \begin{multicols}{3}
-  
+
   % DALE-2 COLUMN
   \section*{\sectiontitle{Dale-2 Dataset}}
-  
+
   \begin{center}
     \includegraphics[width=0.9\linewidth]{figures/CLEVR_dale-2.png}\\
     \textit{Target + 1 distractor}
   \end{center}
-  
+
   \begin{center}
     \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}\\
     \textit{Learning curves by vocabulary size}
   \end{center}
-  
+
   \textbf{RE Generation Results:}
   \begin{itemize}
     \item \textbf{Accuracy}: 99\%
     \item \textbf{F1-Score}: 98.57\%
     \item \textbf{Shape}: 99.75\% precision
-    \item \textbf{Color}: 98.09\% precision  
+    \item \textbf{Color}: 98.09\% precision
     \item \textbf{Size}: 98.73\% precision
   \end{itemize}
 
   % DALE-5 COLUMN  
   \section*{\sectiontitle{Dale-5 Dataset}}
-  
+
   \begin{center}
     \includegraphics[width=0.9\linewidth]{figures/CLEVR_dale-5.png}\\
     \textit{Target + 4 distractors}
   \end{center}
-  
+
   \begin{center}
     \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}\\
     \textit{Learning curves by vocabulary size}
   \end{center}
-  
+
   \textbf{RE Generation Results:}
   \begin{itemize}
     \item \textbf{Accuracy}: 69\%
@@ -142,25 +139,27 @@
 
   % CLEVR COLOR COLUMN
   \section*{\sectiontitle{CLEVR Color Dataset}}
-  
+
   \begin{center}
     \includegraphics[width=0.9\linewidth]{figures/CLEVR_color.png}\\
     \textit{Target identified by color only}
   \end{center}
-  
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}\\
-    \textit{Learning curves by vocabulary size}
-  \end{center}
-  
-  \textbf{RE Generation Results:}
+
+  \textbf{Sender in supervised generation:}
   \begin{itemize}
-    \item \textbf{Accuracy}: 93\%
-    \item \textbf{F1-Score}: 95.17\%
+    \item \textbf{strict string accuracy}: 93\%
+    \item \textbf{avg F1-Score on attributes}: 95.17\%
     \item \textbf{Shape}: 100\% precision
     \item \textbf{Color}: 92.76\% precision
     \item \textbf{Size}: N/A (not used)
   \end{itemize}
+
+  \textbf{Sender and Receiver in interaction:}
+  \begin{center}
+    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}\\
+    \textit{Learning curves by vocabulary size}
+  \end{center}
+
 
 \end{multicols}
 
