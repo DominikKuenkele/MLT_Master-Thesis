@@ -64,7 +64,7 @@
 
   \begin{figure}[h]
     \centering
-    \includegraphics[width=0.95\linewidth]{figures/arch_attention_predictor_game.png}
+    \includegraphics[width=\linewidth]{figures/arch_attention_predictor_game.png}
   \end{figure}
 
   % \textbf{Language Game Setup:}
@@ -90,23 +90,38 @@
 
 \vfill
 
+\begin{figure}[!htbp]
+  \centering
+  \subfigure['Dale-2', \emph{small green cylinder}]{
+    \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-2.png}
+  }
+  \subfigure['Dale-5', \emph{large purple cylinder}]{
+    \includegraphics[width=0.3\linewidth]{figures/CLEVR_dale-5.png}
+  }
+  \subfigure['CLEVR color', \emph{small brown cylinder}]{
+    \includegraphics[width=0.3\linewidth]{figures/CLEVR_color.png}
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}
+  }
+  \subfigure{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}
+  }
+  \subfigure{
+    \includegraphics[width=0.3\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}
+  }
+\end{figure}
+
 % DATASET RESULTS SECTION
 \begin{multicols}{3}
 
   % DALE-2 COLUMN
   \section*{\sectiontitle{Dale-2 Dataset}}
 
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/CLEVR_dale-2.png}\\
-    \textit{Target + 1 distractor}
-  \end{center}
-
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-2_vocab-size.png}\\
-    \textit{Learning curves by vocabulary size}
-  \end{center}
-
-  \textbf{RE Generation Results:}
   \begin{itemize}
     \item \textbf{Accuracy}: 99\%
     \item \textbf{F1-Score}: 98.57\%
@@ -118,17 +133,7 @@
   % DALE-5 COLUMN  
   \section*{\sectiontitle{Dale-5 Dataset}}
 
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/CLEVR_dale-5.png}\\
-    \textit{Target + 4 distractors}
-  \end{center}
 
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_dale-5_vocab-size.png}\\
-    \textit{Learning curves by vocabulary size}
-  \end{center}
-
-  \textbf{RE Generation Results:}
   \begin{itemize}
     \item \textbf{Accuracy}: 69\%
     \item \textbf{F1-Score}: 89.53\%
@@ -140,12 +145,7 @@
   % CLEVR COLOR COLUMN
   \section*{\sectiontitle{CLEVR Color Dataset}}
 
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/CLEVR_color.png}\\
-    \textit{Target identified by color only}
-  \end{center}
 
-  \textbf{Sender in supervised generation:}
   \begin{itemize}
     \item \textbf{strict string accuracy}: 93\%
     \item \textbf{avg F1-Score on attributes}: 95.17\%
@@ -154,11 +154,7 @@
     \item \textbf{Size}: N/A (not used)
   \end{itemize}
 
-  \textbf{Sender and Receiver in interaction:}
-  \begin{center}
-    \includegraphics[width=0.9\linewidth]{figures/learning-curve_attention-predictor_colour_vocab-size.png}\\
-    \textit{Learning curves by vocabulary size}
-  \end{center}
+
 
 
 \end{multicols}
