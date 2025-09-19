@@ -1,0 +1,159 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fphw Assignment
+% LaTeX Template
+% Version 1.0 (27/04/2019)
+%
+% This template originates from:
+% https://www.LaTeXTemplates.com
+%
+% Authors:
+% Class by Felipe Portales-Oliva (f.portales.oliva@gmail.com) with template 
+% content and modifications by Vel (vel@LaTeXTemplates.com)
+%
+% Template (this file) License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+	11pt, % Default font size, values between 10pt-12pt are alloweds
+]{fphw}
+
+% Template-specific packages
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+
+\usepackage{booktabs} % Required for better horizontal rules in tables
+
+\usepackage{listings} % Required for insertion of code
+
+\usepackage{enumerate} % To modify the enumerate environment
+
+\usepackage{color}
+\usepackage{todonotes}
+\usepackage{dialogue}
+\usepackage{scrextend}
+\usepackage{caption}
+\usepackage{nameref}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{pifont}
+\usepackage{float}
+\usepackage{array}
+\usepackage{longtable}
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Master Thesis: Proposal} % Assignment title
+
+\date{January 30th, 2023} % Due date
+
+\author{Dominik Künkele}
+
+\institute{University of Gothenburg} % Institute or school name
+
+\class{Master project (LT2402)} % Course or class name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Output the assignment title, created automatically using the information in the custom commands above
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT CONTENT
+%----------------------------------------------------------------------------------------
+
+\begin{description}
+	\item[Tentative title:] On the table or on the shelf: Teaching a situated agent spatial relations
+	\item[Student's name:] Dominik Künkele (dominik.kuenkele@outlook.com, +49 151 56043266)
+	\item[Supervisor:] Simon Dobnik
+	\item[Examiner:] Asad Sayeed
+\end{description}
+
+\section*{Description and Motivation}
+While current models are getting better at grasping entities and actions of visual scenes, they still struggle to understand spatial relations between those entities. Models don't need to only understand their geometrical, but also their functional and pragmatic relations. An umbrella can for example be \emph{over} a person if it's protecting them from rain even though it's geometrically not directly above them (functional) \cite{Coventry2005}.
+
+Furthermore, referring to spatial relations depend on perspectives the speaker take \cite{Lee2022}, \cite{Steels2006a}. Speakers can for example take an egocentric view to describe the scene from their perspective, or they can take an allocentric view to describe it from another perspective. In both cases, a model would need to understand, which is used to resolve the ambiguity of the reference.
+
+When the model is used by a situated agent like a robot, the understanding of spatial relations gets even more important, since a core part is to interact directly with their environment. For this, they need this kind of knowledge to navigate or interact with objects and persons.
+
+The goal of the Master Thesis is to explore the understanding of spatial relations and their ambiguity deeper. It is not yet fixed, how exactly this will be done. One topic may be to interactively teach a robot to 'put a mug on the table' and 'put a mug on the shelf'. The final location in both cases would be different depending on the object involved. Therefore, the robot would need to understand the \emph{function} of the object (i.e. table, shelf) to derive the meaning of the \emph{spatial relation} (i.e. on the). This experiment would be done in \emph{Habitat Lab} \cite{szot2021habitat}, a 3D-world simulation, where the developer has control over the complete environment and a simulated robot can perceive this environment with different sensors. The work would include the creation of an artificial dataset in the 3D-world as well as teaching the robot the spatial relations based on this dataset.
+
+
+\section*{Required knowledge and skills}
+\begin{itemize}
+	\item Python
+	\item Image processing
+	\item Machine Learning
+	\item 3D simulations
+	\item Dialogue handling
+\end{itemize}
+
+\section*{List of resources}
+\begin{itemize}
+	\item Habitat Lab \cite{szot2021habitat}/Unity Engine
+	\item existing 3D worlds and objects (e.g. Habitat AI templates) \cite{szot2021habitat}
+	\item Python ML libraries
+\end{itemize}
+
+\section*{Work plan}
+\begin{longtable}{ | m{4cm} | m{7cm} | m{3cm} | }
+	\hline
+	\textbf{Start date}            & \textbf{Work packages}                                   & \textbf{duration} \\
+	\hline
+	\hline
+	30\textsuperscript{th} January
+	                               & \begin{itemize}
+		                                 \item reading background in papers
+		                                 \item getting familiar in 3D environments
+		                                       (Habitat Lab, Unity)
+	                                 \end{itemize}
+	                               & 2 weeks                                                                      \\
+	\hline
+	13\textsuperscript{th} Febuary
+	                               & \begin{itemize}
+		                                 \item reading about teaching situated agents in dialogue
+		                                 \item defining teaching/dialogue framework
+	                                 \end{itemize}
+	                               & 2 weeks                                                                      \\
+	\hline
+	27\textsuperscript{th} Febuary & \begin{itemize}
+		                                 \item creating 3D scenes dataset
+		                                 \item defining scope of experiments
+		                                 \item writing theoretical background and motivation
+	                                 \end{itemize}      & 3 weeks                           \\
+	\hline
+	20\textsuperscript{th} March   & \begin{itemize}
+		                                 \item teaching experiments
+		                                 \item analyzing results
+		                                 \item adapting parameters
+	                                 \end{itemize}                               & 4 weeks                        \\
+	\hline
+	17\textsuperscript{th} April   & \begin{itemize}
+		                                 \item writing
+	                                 \end{itemize}                                          & 3 weeks             \\
+	\hline
+	8\textsuperscript{th} May      & \begin{itemize}
+		                                 \item submission to supervisor
+		                                 \item revising and finishing
+	                                 \end{itemize}                           & 2 week                             \\
+	\hline
+	17\textsuperscript{th} May     & \begin{itemize}
+		                                 \item submission for defense
+	                                 \end{itemize}                             &                                  \\
+	\hline
+\end{longtable}
+
+\bibliography{references.bib}
+\bibliographystyle{plain}
+
+\end{document}
